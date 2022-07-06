@@ -1,0 +1,69 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.6'
+        architecture: 'x64'
+    - uses: actions-ecosystem/action-regex-match@v2
+      id: regex-match
+      with:
+        text: ${{ github.repository }}
+        regex: '^.*/(.*?)$'
+    - name: Install the library
+      run: |
+        pip install nbdev jupyter
+        pip install -e .
+    - name: Convert databricks notebooks to Jupyter
+      run: |
+        echo "Convert from Databricks to Jupyter"
+        python db2nb/convert_databricks_to_jupyter.py
+    - name: Convert databricks notebooks to Jupyter and commit/push to git repo
+      run: |
+        nbdev_install_git_hooks
+        git config --local user.name $github.actor
+        git checkout master
+        git add *.ipynb
+        #find . -name '*.ipynb' | xargs git add
+        git commit -am "Updating added jupyter files to git"
+    - name: Push jupyter notebooks # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+    - name: Read all notebooks
+      run: |
+        nbdev_read_nbs
+    - name: Check if all notebooks are cleaned
+      run: |
+        #echo "Check we are starting with clean git checkout"
+        #if [ -n "$(git status -uno -s)" ]; then echo "git status is not clean"; false; fi
+        #echo "Trying to strip out notebooks"
+        nbdev_clean_nbs
+        #echo "Check that strip out was unnecessary"
+        #git status -s # display the status to see which nbs need cleaning up
+        #if [ -n "$(git status -uno -s)" ]; then echo -e "!!! Detected unstripped out notebooks\n!!!Remember to run nbdev_install_git_hooks"; false; fi
+    - name: Run tests
+      run: |
+        nbdev_test_nbs
+    - name: Build library
+      run: |
+        nbdev_build_lib
+    - name: Generate documentation and add back to github
+      run: |
+        nbdev_build_docs
+    - name: Add built libraries and documentation back to github
+      run: |
+        git add ./docs
+        git add ./README.md
+        git add ./${{steps.regex-match.outputs.group1}}
+        git commit -am "Updating the repository GitHub html pages in the docs folder + README.md"
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
