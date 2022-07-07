@@ -521,6 +521,8 @@ class KOLsOnS2AG:
     if len(checked_edge_list) > 0: 
       print('adding %d new edges'%(len(checked_edge_list)))
       self.g.add_edges_from(checked_edge_list, label=label)
+      
+
 
 # COMMAND ----------
 
