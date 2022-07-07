@@ -118,8 +118,9 @@ def convert_databricks_nb(in_file, out_file):
          py_str = f.read()
 
       # We only convert nbdev notebooks - must have
-      nbdev_pattern = "\# default_exp \W+\nfrom nbdev import *"
-      if re.search(nbdev_pattern, py_str) is False:
+      nbdev_pattern = "from nbdev import \*"
+      if re.search(nbdev_pattern, py_str):
+         print('Converting ' + in_file)
          notebook = py2nb(py_str)
          with open(out_file, 'w') as f:
             json.dump(notebook, f, indent=2)
@@ -128,10 +129,9 @@ def convert_databricks_nb(in_file, out_file):
       raise (Exception('Extensions must be .ipynb and .py or vice versa'))
 
 def main():
-   for root, dirs, files in os.walk("databricks/scripts/", topdown=False):
+   for root, dirs, files in os.walk("databricks/", topdown=False):
       for name in files:
          ipynb_name = re.sub('.py', '.ipynb', name)
-         print('Converting ' + os.path.join(root, name))
          convert_databricks_nb(os.path.join(root, name), ipynb_name)
 
 if __name__ == '__main__':
