@@ -170,7 +170,7 @@ class QueryTranslator():
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:              
         t = self.id2terms[ex.name]
-        return '()"%s"[tiab])'%(t,t)
+        return '"%s"[tiab])'%(t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
@@ -191,119 +191,15 @@ class QueryTranslator():
 
 # COMMAND ----------
 
-qt.id2terms
-
-# COMMAND ----------
-
-(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-(subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed)
-pubmed_queries
-
-# COMMAND ----------
-
-sbt_list = []
-if pm_include == 'True':
-  if pm_interface == 'eutils':
-    for (i, q) in enumerate(pubmed_queries):
-      for (j, sq) in zip(subset_ids, ['']):
-        if len(sq)>0:
-          q = '(%s) AND (%s)'%(q,sq) 
-        q = re.sub('\s+','+',q)
-        esq = ESearchQuery(g_pubmed_api_key)
-        pubmed_pmids = esq.execute_query(q)
-        print(len(pubmed_pmids))
-        for pmid in pubmed_pmids:
-          sbt_list.append((pmid, i, 'eutils', j))
-          #print(pmid)
-  else:
-    for (i, q) in enumerate(pubmed_queries):
-      for (j, sq) in zip(subset_ids, ['']):
-        query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
-        if pm_order == 'date':
-          query += '&sort=date'
-        #print(query)
-        #query = quote_plus(query)
-        if len(sq)>0:
-          query = '(%s) AND (%s)'%(sq) 
-        response = urlopen(query)
-        data = response.read().decode('utf-8')
-        soup = BeautifulSoup(data, "lxml-xml")
-        pmids = re.split('\s+', soup.find('body').text.strip())
-        for pmid in pmids:
-          sbt_list.append((int(pmid), i, 'pubmed', 0))
-else:
-  print('Skip Pubmed')
-  sbt_list = []
-pubmed_df = DataFrame(sbt_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
-
-# COMMAND ----------
-
-# MAGIC %md ## SOLR Queries (less accurate but very fast)
-
-# COMMAND ----------
-
+import pandas as pd
 from tqdm import tqdm
-import requests
-import os
-import json
-import re
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
-BASE_URL = 'http://aps-solr-http.staging.meta-infra.org:80/v1/solr/paper/select'
-THIS_YEAR = 'AND paper_pub_date: [NOW-12MONTHS TO *]'
-
-(corpus_ids, solr_queries) = qt.generate_queries(QueryType.solr)
-(subset_ids, solr_subset_queries) = qt2.generate_queries(QueryType.solr)
-subset_ids = [0]
-solr_subset_queries = ['']
-
-def exec_query_with_timeout_and_repeat(url, post_data_hash):
-  r = requests.post(url, data=post_data_hash, timeout=10)
-  data = json.loads(r.text)
-  #print(data)
-  if data.get('error') is not None:
-      raise Exception("SOLR Error: " + data.get('error')['msg'])
-  i = 0
-  while(data.get('response') is None and i<10):
-    r = requests.get(url, timeout=10)
-    data = json.loads(r.text)
-    i += 1
-  if data.get('response') is None:
-    return []
-  return data
-
-META_API_URL = 'https://api.meta.org/work/'
-if solr_include == 'True':
-  dataset_list = []            
-  sbt_list = []
-  for (i, q) in enumerate(solr_queries):
-    for (j, sq) in zip(subset_ids, solr_subset_queries):
-      if len(sq)>0:
-        q = '(%s) AND (%s)'%(q,sq) 
-      numFound, solr_ids = run_solr_query(q)
-      for id in tqdm(solr_ids):
-        if '-' not in id:
-          sbt_list.append((id, i, 'solr', j))
-        elif 'Datafile-' in id: 
-          m = re.search('^Datafile-(\d+)$', id)
-          if m:
-            dfid = m.group(1)
-            r = requests.get(META_API_URL+'Dataset:'+dfid)
-            dataset_list.append(json.loads(r.text))
-      print("%d datasets found in KG"%(len(dataset_list)))
-      
-  solr_df = DataFrame(sbt_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
-  print("%d papers found in SOLR"%(len(sbt_list)))
-else:
-  print('Skipping SOLR.')
-  solr_df = pd.DataFrame()
-
-solr_df
-
-# COMMAND ----------
-
-print(len(dataset_list))
+df = pd.DataFrame([{'ID':0,'query':"Primary Ciliary Dyskinesia|Kartenger\'s Syndrome"}, {'ID':1,'query':'Alzheimer\'s Disease & machine learning'}])
+qt = QueryTranslator(df, "query")
+print(qt.id2terms)
+print(qt.terms2id)
+(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+pubmed_queries
 
 # COMMAND ----------
 
