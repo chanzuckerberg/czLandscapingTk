@@ -1,43 +1,43 @@
-# databricks to nbdev template
+# czLandscapingTk (Chan Zuckerberg Landscaping Toolkit)
+> This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. 
 
-Use this template to more easily create an [nbdev](https://nbdev.fast.ai/) project that builds itself from databricks scripts.
 
-This is a simple fork from [the existing nbdev template](https://github.com/fastai/nbdev_template) with a couple of 
-extra steps in the github action workflow.
+ ## Install
+
+ `pip install git+https://github.com/GullyBurns/czLandscapingTk.git`
+
+ ## How to use
+
+ 
+
+Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 
 ```
-1. install nbdev, jupyter, and the existing library (with dependencies)
-2. run a script (`./db2nb/convert_databricks_to_jupyter.py`) that descends 
-   the `databricks` directory tree and converts all the databricks workbooks
-   there into *.ipynb files at the top level. There is currently 
-   _no mirroring_ of the databricks file structure. 
-3. Runs git add+commit+push to add the notebooks to Github
-4. Uses nbdev to 
-    a. run tests
-    b. build library 
-    c. build documentation
-5. Runs git add+commit+push to add all generated material to Github  
+kolsGraph = KOLsOnS2AG('<API-KEY-FROM-S2AG-TEAM>')
 ```
 
-Thus, the ideal methodology is to provide a round-trip methodology 
-where coders can use Databricks to develop a script - and then seamlessly
-generate the notebooks, documentation, and libraries on github for easy reuse 
-and potential deployment to non-databricks environments.
+Maybe start by searching for a reseracher by name. e.g. [Daphne Koller](https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller) 
 
-This should facilitate code publication and documentation within CZI.
+```
+kolsGraph.search_for_disambiguated_author('Daphne Koller')
+```
 
-## Troubleshooting Tips
+Generating the following output: 
+<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;"><th></th>      <th>authorId</th>      <th>name</th>      <th>paperCount</th>      <th>hIndex</th>      <th>Top 10 Pubs</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1736370</td>      <td>D. Koller</td>      <td>351</td>      <td>130</td>      <td>Probabilistic Graphical Models - Principles and Techniques     |     The Genotype-Tissue Expression (GTEx) project     |     FastSLAM: a factored solution to the simultaneous localization and mapping problem     |     Support Vector Machine Active Learning with Applications to Text Classification     |     Max-Margin Markov Networks     |     SCAPE: shape completion and animation of people     |     Self-Paced Learning for Latent Variable Models     |     The Genotype-Tissue Expression (GTEx) pilot analysis: Multitissue gene regulation in humans     |     Decomposing a scene into geometric and semantically consistent regions     |     Toward Optimal Feature Selection</td>    </tr>    <tr>      <th>1</th>      <td>2081968396</td>      <td>D. Koller</td>      <td>5</td>      <td>1</td>      <td>Systematic Analysis of Breast Cancer Morphology Uncovers Stromal Features Associated with Survival     |     [Relevance of health geographic research for dermatology].     |     Convolutional neural networks of H&amp;E-stained biopsy images accurately quantify histologic features of non-alcoholic steatohepatitis     |     IDENTIFYING GENETIC DRIVERS OF CANCER MORPHOLOGY     |     Features Associated with Survival Systematic Analysis of Breast Cancer Morphology Uncovers Stromal</td>    </tr>    <tr>      <th>2</th>      <td>50678963</td>      <td>D. Koller</td>      <td>1</td>      <td>0</td>      <td>½º Äääöòòòò Èöóóóóóðð×øø Êêððøøóòòð Åóð×</td>    </tr>    <tr>      <th>3</th>      <td>2049948919</td>      <td>Daphne Koller</td>      <td>1</td>      <td>1</td>      <td>Team-Maxmin Equilibria☆</td>    </tr>    <tr>      <th>4</th>      <td>2081968988</td>      <td>Daphne Koller</td>      <td>1</td>      <td>0</td>      <td>Í××òò Øùöö Àààööö Blockin× Ò Ý×××ò Aeaeøûóöö Äääöòòòò´´üøøòòòò ×øöö Blockinøµ</td>    </tr>    <tr>      <th>5</th>      <td>2081968959</td>      <td>Daphne Koller</td>      <td>3</td>      <td>1</td>      <td>Abstract 1883: Large scale viability screening with PRISM underscores non-inhibitory properties of small molecules     |     Strategic and Tactical Decision-Making Under Uncertainty     |     2 . 1 Pursuit / Evader in the UAV / UGV domain</td>    </tr>    <tr>      <th>6</th>      <td>1753668669</td>      <td>Daphne Koller</td>      <td>4</td>      <td>1</td>      <td>A Data-Driven Lens to Understand Human Biology: An Interview with Daphne Koller     |     Conservation and divergence in modules of the transcriptional programs of the human and mouse immune systems [preprint]     |     ImmGen at 15     |     Speaker-specific terms and resources</td>    </tr>    <tr>      <th>7</th>      <td>46193831</td>      <td>D. Stanford</td>      <td>3</td>      <td>0</td>      <td>Unmanned Aircraft Systems     |     Inference : Exploiting Local Structure     |     Learning : Parameter Estimation</td>    </tr>  </tbody></table>
 
-- Start with a local copy of `settings.ini` and run `nbdev_build_lib && nbdev_clean_nbs && nbdev_build_docs` to instantiate your library.
-- Start with a local copy of the repo to set up the `settings.ini` file
-- Make sure you are using the latest version of nbdev with `pip install -U nbdev`
-- If you are using an older version of this template, see the instructions above on how to upgrade your template. 
-- It is important for you to spell the name of your user and repo correctly in `settings.ini` or the website will not have the correct address from which to source assets like CSS for your site.  When in doubt, you can open your browser's developer console and see if there are any errors related to fetching assets for your website due to an incorrect URL generated by misspelled values from `settings.ini`.
-- If you change the name of your repo, you have to make the appropriate changes in `settings.ini`
-- After you make changes to `settings.ini`, rerun `nbdev_build_lib && nbdev_clean_nbs && nbdev_build_docs` to make sure all changes are propagated appropriately.
+Then generate an author+paper graph based on her ID:`1736370` 
 
-## Previewing Documents Locally 
+```
+kolsGraph.build_author_citation_graph(1736370)
+kolsGraph.print_basic_stats()
+```
 
-It is often desirable to preview nbdev generated documentation locally before having it built and rendered by GitHub Pages.  This requires you to run Jekyll locally, which requires installing Ruby and Jekyll. Instructions on how to install Jekyll are provided [on Jekyll's site](https://jekyllrb.com/). You can run the command `make docs_serve` from the root of your repo to serve the documentation locally after calling `nbdev_build_docs` to generate the docs. 
+This command performs the following steps: 
 
-In order to allow you to run Jekyll locally this project contains manifest files, called Gem files, that specify all Ruby dependencies for Jekyll & nbdev. **If you do not plan to preview documentation locally**, you can choose to delete `docs/Gemfile` and `docs/Gemfile.lock` from your nbdev project (for example, after creating a new repo from this template). 
+* Retrieve all her papers indexed in S2AG add those papers and all authors to the graph
+* Iterate through those papers and add any papers that either she cites 'meaninfully' or that cite her 'meaningfully' (for a definition of what constitutes a 'meaningful' citation, see [Valenzuela et al 2015](https://ai2-website.s3.amazonaws.com/publications/ValenzuelaHaMeaningfulCitations.pdf)). 
+* Add or link authors to these papers. 
+* Iterate over all papers in this extended set and add all citations / references between them.
+* Print out the results
+
+Generating the following output: 
