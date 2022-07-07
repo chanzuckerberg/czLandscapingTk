@@ -23,7 +23,6 @@ class NCBI_Database_Type(Enum):
     Supported NCBI databases within this API
     """
     pubmed = 'pubmed'
-
     PMC = 'PMC'
 
 class ESearchQuery:
