@@ -1,74 +1,4 @@
 # Databricks notebook source
-# MAGIC %run ../../global_variables
-
-# COMMAND ----------
-
-# MAGIC %run ../../utils/dashboard_utils
-
-# COMMAND ----------
-
-# MAGIC %run ../../utils/nlm_eutils
-
-# COMMAND ----------
-
-# MAGIC %run ../../utils/solr
-
-# COMMAND ----------
-
-dbutils.widgets.removeAll()
-dbutils.widgets.text('airtable_file','')
-dbutils.widgets.text('airtable_table','')
-dbutils.widgets.text('prefix','')
-dbutils.widgets.dropdown('pm_interface', "eutils", ['eutils','website'])
-dbutils.widgets.dropdown('pm_order', "best_match", ['best_match','date'])
-dbutils.widgets.dropdown('delete_database', "True", ['True','False'])
-dbutils.widgets.dropdown('pm_include', "True", ['True','False'])
-dbutils.widgets.dropdown('solr_include', "False", ['True','False'])
-dbutils.widgets.dropdown('epmc_include', "False", ['True','False'])
-dbutils.widgets.text('airtable_subsets_table','')
-dbutils.widgets.text('airtable_subsets_column','Query')
-
-airtable_file = dbutils.widgets.get('airtable_file')
-airtable_table = dbutils.widgets.get('airtable_table')
-
-prefix = dbutils.widgets.get('prefix')
-
-pm_interface = dbutils.widgets.get('pm_interface')
-pm_order = dbutils.widgets.get('pm_order')
-
-pm_include = dbutils.widgets.get('pm_include')
-solr_include = dbutils.widgets.get('solr_include')
-epmc_include = dbutils.widgets.get('epmc_include')
-
-# Any additional conditions for creating this corpus?
-airtable_subsets_table = dbutils.widgets.get('airtable_subsets_table')
-delete_database = dbutils.widgets.get('delete_database')
-
-# COMMAND ----------
-
-mcdash = RstContentDashboard(g_database, g_schema, g_loc, prefix)
-
-# COMMAND ----------
-
-airtable_api_url = 'https://api.airtable.com/v0/%s/%s?api_key=%s'%(airtable_file, airtable_table, g_airtable_api_key) 
-df = read_airtable(airtable_api_url)
-displayHTML(df.to_html())
-
-# COMMAND ----------
-
-subsets_df = None
-if len(airtable_subsets_table)>0: 
-  airtable_subsets_api_url = 'https://api.airtable.com/v0/%s/%s?api_key=%s'%(airtable_file, airtable_subsets_table, g_airtable_api_key) 
-  subsets_df = read_airtable(airtable_subsets_api_url)
-  subsets_df = subsets_df.fillna('')
-  subsets_df.reset_index(inplace=True, drop=True)
-  displayHTML(subsets_df.to_html())
-else: 
-  subsets_df = pd.DataFrame([{"ID":0, "Subset_Name":"None", "Query":""}])
-no_subsets_df = pd.DataFrame([{"ID":0, "Subset_Name":"None", "Query":""}])
-
-# COMMAND ----------
-
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
 import re
 import pprint
@@ -254,8 +184,6 @@ class QueryTranslator():
     elif isinstance(ex, OrOp):
       return '('+'|'.join([self._pubmed(x) for x in ex.xs])+')'
 
-qt = QueryTranslator(df, 'TERMS')
-qt2 = QueryTranslator(subsets_df, 'Query')
 
 # COMMAND ----------
 
@@ -344,38 +272,6 @@ def exec_query_with_timeout_and_repeat(url, post_data_hash):
   if data.get('response') is None:
     return []
   return data
-
-def run_solr_query(q, page_size=1000):   
-  url = BASE_URL + '?wt=python&fl=id&rows=1&start=0&q='+q
-  print(url)
-  r = requests.get(url, timeout=10)
-  #print(r.text)
-  data = json.loads(r.text)
-  #print(data)
-  numFound = data['response']['numFound']
-  print(q + ', ' + str(numFound) + ' SOLR PAPERS FOUND')
-  pmids_from_q = set()
-  for i in tqdm(range(0, numFound, page_size)):
-      post_data_hash = {
-          'wt': 'python',
-          'fl': 'id,doi',
-          'wt': 'python',
-          'rows': str(page_size),
-          'start': i,
-          'q': '(' + q + ')'
-      }
-      #url = BASE_URL + '?wt=python&fl=id&rows='+str(page_size)+'&start='+str(i)+'&q='+q
-      #r = requests.get(url)
-      #print(r.text)
-      data = json.loads(r.text)
-      for d in data['response']['docs']:
-        pmids_from_q.add(str(d['id']))
-      data = exec_query_with_timeout_and_repeat(BASE_URL, post_data_hash)  
-      for d in data['response']['docs']:
-        pmids_from_q.add(str(d['id']))
-      #pp.pprint(data)
-      #break
-  return (numFound, list(pmids_from_q))
 
 META_API_URL = 'https://api.meta.org/work/'
 if solr_include == 'True':
