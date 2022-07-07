@@ -1,4 +1,9 @@
 # Databricks notebook source
+# default_exp nlm_utils
+from nbdev import *
+
+# COMMAND ----------
+
 """
 A package designed for interactions with the EUtils tools from the National Library of Medicine
 """
