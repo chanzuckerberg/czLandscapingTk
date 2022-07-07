@@ -25,97 +25,25 @@ class NCBI_Database_Type(Enum):
     pubmed = 'pubmed'
     PMC = 'PMC'
 
-class ClinicalCategory(Enum):
-    """
-    Simple enumeration of types of clinical query
-    """
-    NoCategory = 0
-    Diagnosis = 1
-    Therapy = 2
-    Etiology = 3
-    Prognosis = 4
-    ClinicalPrediction = 5
-
-class QueryBreadth(Enum):
-    """
-    Simple enumeration of broad/narrow types of clinical query
-    """
-    Unspecified = 0
-    Broad = 1
-    Narrow = 2
-
-#
-# Added Filters for Clinical Queries
-# see https://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Clinical_Queries_Filters
-#
-BROAD_THERAPY_FILTER = '((clinical[Title/Abstract] AND trial[Title/Abstract]) OR clinical trials as topic[MeSH Terms] OR ' \
-                'clinical trial[Publication Type] OR random*[Title/Abstract] OR random allocation[MeSH Terms] OR ' \
-                'therapeutic use[MeSH Subheading]) AND '
-NARROW_THERAPY_FILTER = '(randomized controlled trial[Publication Type] OR (randomized[Title/Abstract] AND ' \
-                 'controlled[Title/Abstract] AND trial[Title/Abstract])) AND '
-BROAD_DIAGNOSIS_FILTER = '(sensitiv*[Title/Abstract] OR sensitivity and specificity[MeSH Terms] OR diagnose[Title/Abstract] ' \
-                  'OR diagnosed[Title/Abstract] OR diagnoses[Title/Abstract] OR diagnosing[Title/Abstract] OR ' \
-                  'diagnosis[Title/Abstract] OR diagnostic[Title/Abstract] OR diagnosis[MeSH:noexp] OR diagnostic ' \
-                  '* [MeSH:noexp] OR diagnosis,differential[MeSH:noexp] OR diagnosis[Subheading:noexp]) AND '
-NARROW_DIAGNOSIS_FILTER = '(specificity[Title/Abstract]) AND '
-BROAD_ETIOLOGY_FILTER = '(risk*[Title/Abstract] OR risk*[MeSH:noexp] OR risk *[MeSH:noexp] OR cohort studies[MeSH Terms] ' \
-                 'OR group[Text Word] OR groups[Text Word] OR grouped [Text Word]) AND '
-NARROW_ETIOLOGY_FILTER = '((relative[Title/Abstract] AND risk*[Title/Abstract]) OR (relative risk[Text Word]) OR ' \
-                  'risks[Text Word] OR cohort studies[MeSH:noexp] OR (cohort[Title/Abstract] AND ' \
-                  'study[Title/Abstract]) OR (cohort[Title/Abstract] AND studies[Title/Abstract])) AND '
-BROAD_PROGNOSIS_FILTER = '(incidence[MeSH:noexp] OR mortality[MeSH Terms] OR follow up studies[MeSH:noexp] OR ' \
-                  'prognos*[Text Word] OR predict*[Text Word] OR course*[Text Word]) AND '
-NARROW_PROGNOSIS_FILTER = '(prognos*[Title/Abstract] OR (first[Title/Abstract] AND episode[Title/Abstract]) OR ' \
-                   'cohort[Title/Abstract]) AND '
-BROAD_CLINICAL_PREDICTION_FILTER = '(predict*[tiab] OR predictive value of tests[mh] OR score[tiab] OR scores[tiab] OR ' \
-                            'scoring system[tiab] OR scoring systems[tiab] OR observ*[tiab] OR observer variation[mh])'
-NARROW_CLINICAL_PREDICTION_FILTER = '(validation[tiab] OR validate[tiab]) AND '
-
 class ESearchQuery:
     """
     Class to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids)
     Each instance of this class executes queries of a given type
     """
 
-    def __init__(self, api_key, oa=False, db='pubmed', category=ClinicalCategory.NoCategory, scope=QueryBreadth.Unspecified):
+    def __init__(self, api_key=None, oa=False, db='pubmed'):
         """
         Initialization of the class
         :param query:
         :param oa:
         :param db:
-        :param category:
-        :param scope:
         """
         self.api_key = api_key
-        self.category = category
-        self.scope = scope
         self.idPrefix = ''
         self.oa = oa
         self.db = db
 
     def execute_count_query(self, query):
-
-        if self.category == ClinicalCategory.Diagnosis and self.scope == QueryBreadth.Broad:
-            query = BROAD_DIAGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Diagnosis and self.scope == QueryBreadth.Narrow:
-            query = NARROW_DIAGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Therapy and self.scope == QueryBreadth.Broad:
-            query = BROAD_THERAPY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Therapy and self.scope == QueryBreadth.Narrow:
-            query = NARROW_THERAPY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Etiology and self.scope == QueryBreadth.Broad:
-            query = BROAD_ETIOLOGY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Etiology and self.scope == QueryBreadth.Narrow:
-            query = NARROW_ETIOLOGY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Prognosis and self.scope == QueryBreadth.Broad:
-            query = BROAD_PROGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Prognosis and self.scope == QueryBreadth.Narrow:
-            query = NARROW_PROGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.ClinicalPrediction and self.scope == QueryBreadth.Broad:
-            query = BROAD_CLINICAL_PREDICTION_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.ClinicalPrediction and self.scope == QueryBreadth.Narrow:
-            query = NARROW_CLINICAL_PREDICTION_FILTER + '(' + query + ')'
-
         idPrefix = ''
         if self.oa:
             if self.db == NCBI_Database_Type.PMC:
@@ -123,8 +51,10 @@ class ESearchQuery:
                 idPrefix = 'PMC'
             elif self.db == NCBI_Database_Type.pubmed:
                 query = '"loattrfree full text"[sb] AND (' + query + ')'
-        esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
-        
+        if self.api_key: 
+          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+        else:
+          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
         esearch_response = urlopen(esearch_stem + query)
         esearch_data = esearch_response.read().decode('utf-8')
         esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -135,7 +65,10 @@ class ESearchQuery:
 
     def find_max_min_of_pmid_range_on_given_day(self, dd, min_flag=True):
         d = dd.strftime("%Y/%m/%d")
-        esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=1'%(d,d)
+        if self.api_key: 
+          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=1'%(d,d)
+        else: 
+          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=1'%(d,d)
         esearch_response = urlopen(esearch)
         esearch_data = esearch_response.read().decode('utf-8')
         esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -144,7 +77,10 @@ class ESearchQuery:
         if count_tag is None:
             raise Exception('No Data returned from "' + self.query + '"')
         count = int(count_tag.string)
-        esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=%d'%(d,d,count)
+        if self.api_key: 
+          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=%d'%(d,d,count)
+        else: 
+          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=%d'%(d,d,count)
         esearch_response = urlopen(esearch)
         esearch_data = esearch_response.read().decode('utf-8')
         esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -167,27 +103,6 @@ class ESearchQuery:
 
     def execute_query(self, query):
 
-        if self.category == ClinicalCategory.Diagnosis and self.scope == QueryBreadth.Broad:
-            query = BROAD_DIAGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Diagnosis and self.scope == QueryBreadth.Narrow:
-            query = NARROW_DIAGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Therapy and self.scope == QueryBreadth.Broad:
-            query = BROAD_THERAPY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Therapy and self.scope == QueryBreadth.Narrow:
-            query = NARROW_THERAPY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Etiology and self.scope == QueryBreadth.Broad:
-            query = BROAD_ETIOLOGY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Etiology and self.scope == QueryBreadth.Narrow:
-            query = NARROW_ETIOLOGY_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Prognosis and self.scope == QueryBreadth.Broad:
-            query = BROAD_PROGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.Prognosis and self.scope == QueryBreadth.Narrow:
-            query = NARROW_PROGNOSIS_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.ClinicalPrediction and self.scope == QueryBreadth.Broad:
-            query = BROAD_CLINICAL_PREDICTION_FILTER + '(' + query + ')'
-        elif self.category == ClinicalCategory.ClinicalPrediction and self.scope == QueryBreadth.Narrow:
-            query = NARROW_CLINICAL_PREDICTION_FILTER + '(' + query + ')'
-
         idPrefix = ''
         if self.oa:
             if self.db == NCBI_Database_Type.PMC:
@@ -195,7 +110,12 @@ class ESearchQuery:
                 idPrefix = 'PMC'
             elif self.db == NCBI_Database_Type.pubmed:
                 query = '"loattrfree full text"[sb] AND (' + query + ')'
-        esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+        
+        if self.api_key: 
+          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+        else: 
+          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
+          
         #query = quote_plus(query)
         print(esearch_stem + query)
         esearch_response = urlopen(esearch_stem + query)
@@ -224,29 +144,28 @@ class ESearchQuery:
 
 class EFetchQuery:
     """
-    Class to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids)
+    Class to provide query interface for EFetch (i.e., query based on a list of ids)
     Each instance of this class executes queries of a given type
     """
 
-    def __init__(self, oa=False, db='pubmed'):
-        """
-        Initialization of the class
-        :param query:
-        :param oa:
-        :param db:
-        """
-        self.oa = oa
+    def __init__(self, api_key=None, db='pubmed'):
+        self.api_key = api_key
         self.db = db
 
     def execute_efetch(self, pmid):
-        efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id='
+        if self.api_key:
+          efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
+        else:
+          efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id='
+          
         efetch_response = urlopen(efetch_stem + str(pmid))
         return self._generate_rows_from_medline_records(efetch_response.read().decode('utf-8'))
 
     def generate_data_frame_from_id_list(self, id_list):
-
-        efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id='
-
+        if self.api_key:
+          efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
+        else:
+          efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id='
         page_size = 100
         i = 0
         url = efetch_stem
@@ -281,7 +200,11 @@ class EFetchQuery:
     def generate_mesh_data_frame_from_id_list(self, id_list):
 
         url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-        payload = 'db=pubmed&retmode=xml&id='
+        if self.api_key:
+          payload = 'api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
+        else:
+          payload = 'db=pubmed&retmode=xml&id='
+          
         headers = {'content-type': 'application/xml'}
 
         page_size = 10000
@@ -389,3 +312,21 @@ class EFetchQuery:
         df = pd.DataFrame(data=rows, columns=cols)
         return df
 
+# COMMAND ----------
+
+# tests
+import urllib.parse 
+
+esq = ESearchQuery()
+pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+print(esq.execute_count_query(pcd_search))
+esq.execute_query(pcd_search)
+
+# COMMAND ----------
+
+efq = EFetchQuery()
+efq.execute_efetch(35777446)
+
+# COMMAND ----------
+
+efq.generate_data_frame_from_id_list([35770021,35777446])
