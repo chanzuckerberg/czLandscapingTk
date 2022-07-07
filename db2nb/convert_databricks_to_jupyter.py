@@ -116,9 +116,13 @@ def convert_databricks_nb(in_file, out_file):
    elif in_ext == '.py' and out_ext == '.ipynb':
       with open(in_file, 'r') as f:
          py_str = f.read()
-      notebook = py2nb(py_str)
-      with open(out_file, 'w') as f:
-         json.dump(notebook, f, indent=2)
+
+      # We only convert nbdev notebooks - must have
+      nbdev_pattern = "\# default_exp \W+\nfrom nbdev import *"
+      if re.search(nbdev_pattern, py_str) is False:
+         notebook = py2nb(py_str)
+         with open(out_file, 'w') as f:
+            json.dump(notebook, f, indent=2)
 
    else:
       raise (Exception('Extensions must be .ipynb and .py or vice versa'))
