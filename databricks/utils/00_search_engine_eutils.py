@@ -4,6 +4,12 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md # Search Engine Tools  
+# MAGIC 
+# MAGIC > A library of classes that provide query access to a number of online academic search services including (Pubmed, PMC, and European PMC). 
+
+# COMMAND ----------
+
 """
 A package designed for interactions with the EUtils tools from the National Library of Medicine
 """
@@ -25,11 +31,11 @@ PAGE_SIZE = 10000
 TIME_THRESHOLD = 0.3333334
 
 class NCBI_Database_Type(Enum):
-    """
-    Supported NCBI databases within this API
-    """
-    pubmed = 'pubmed'
-    PMC = 'PMC'
+  """
+  Simple enumeration of the different NCBI databases supported by this tool
+  """
+  pubmed = 'pubmed'
+  PMC = 'PMC'
 
 class ESearchQuery:
     """
@@ -39,10 +45,9 @@ class ESearchQuery:
 
     def __init__(self, api_key=None, oa=False, db='pubmed'):
         """
-        Initialization of the class
-        :param query:
-        :param oa:
-        :param db:
+        :param api_key: API Key for NCBI EUtil Services 
+        :param oa: Is this query searching for open access papers? 
+        :param db: The database being queried
         """
         self.api_key = api_key
         self.idPrefix = ''
@@ -50,6 +55,9 @@ class ESearchQuery:
         self.db = db
 
     def execute_count_query(self, query):
+        """
+        Executes a query on the target database and returns a count of papers 
+        """
         idPrefix = ''
         if self.oa:
             if self.db == NCBI_Database_Type.PMC:
@@ -60,7 +68,7 @@ class ESearchQuery:
         if self.api_key: 
           esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
         else:
-          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
+          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
         esearch_response = urlopen(esearch_stem + query)
         esearch_data = esearch_response.read().decode('utf-8')
         esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -68,46 +76,12 @@ class ESearchQuery:
         if count_tag is None:
             raise Exception('No Data returned from "' + self.query + '"')
         return int(count_tag.string)
-
-    def find_max_min_of_pmid_range_on_given_day(self, dd, min_flag=True):
-        d = dd.strftime("%Y/%m/%d")
-        if self.api_key: 
-          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=1'%(d,d)
-        else: 
-          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=1'%(d,d)
-        esearch_response = urlopen(esearch)
-        esearch_data = esearch_response.read().decode('utf-8')
-        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-        count_tag = esearch_soup.find('Count')
-
-        if count_tag is None:
-            raise Exception('No Data returned from "' + self.query + '"')
-        count = int(count_tag.string)
-        if self.api_key: 
-          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=%d'%(d,d,count)
-        else: 
-          esearch = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&mindate=%s&maxdate=%s&datetype=edat&retmax=%d'%(d,d,count)
-        esearch_response = urlopen(esearch)
-        esearch_data = esearch_response.read().decode('utf-8')
-        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-
-        pmids = sorted([int(id_tag.string) for id_tag in esearch_soup.findAll('Id')])
-
-        # find biggest block of broadly contiguous IDs with a list of lists
-        pmid_blocks = []
-        current_block = [pmids[0]]
-        pmid_blocks.append(current_block)
-        for i in range(len(pmids)-1):
-            if pmids[i+1] > pmids[i] + 10:
-                current_block = []
-                pmid_blocks.append(current_block)
-            current_block.append(pmids[i+1])
-        longest_block_length = max([len(i) for i in pmid_blocks])
-        max_min = [min(i) if min_flag else max(i) for i in pmid_blocks if len(i)==longest_block_length][0]
-
-        return max_min
       
     def execute_query_on_website(self, q, pm_order='relevance'):
+        """
+        Executes a query on the Pubmed database and returns papers in order of relevance or date.
+        This is important to determine accuracy of complex queries are based on the composition of the first page of results.  
+        """
         query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
         if pm_order == 'date':
             query += '&sort=date'
@@ -118,7 +92,9 @@ class ESearchQuery:
         return pmids
 
     def execute_query(self, query):
-
+        """
+        Executes a query on the eutils service and returns data as a Pandas Dataframe
+        """
         idPrefix = ''
         if self.oa:
             if self.db == NCBI_Database_Type.PMC:
@@ -165,19 +141,29 @@ class EFetchQuery:
     """
 
     def __init__(self, api_key=None, db='pubmed'):
+        """
+        :param api_key: API Key for NCBI EUtil Services 
+        :param oa: Is this query searching for open access papers? 
+        :param db: The database being queried
+        """
         self.api_key = api_key
         self.db = db
 
-    def execute_efetch(self, pmid):
+    def execute_efetch(self, id):
+        """
+        Executes a query for a single specific identifier
+        """
         if self.api_key:
           efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
         else:
           efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&retmode=xml&id='
-          
-        efetch_response = urlopen(efetch_stem + str(pmid))
+        efetch_response = urlopen(efetch_stem + str(id))
         return self._generate_rows_from_medline_records(efetch_response.read().decode('utf-8'))
 
     def generate_data_frame_from_id_list(self, id_list):
+        """
+        Executes a query for a list of ID values
+        """
         if self.api_key:
           efetch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
         else:
@@ -214,7 +200,9 @@ class EFetchQuery:
         return efetch_df
 
     def generate_mesh_data_frame_from_id_list(self, id_list):
-
+        """
+        Executes a query for MeSH data from a list of ID values
+        """
         url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
         if self.api_key:
           payload = 'api_key='+self.api_key+'&db=pubmed&retmode=xml&id='
@@ -329,6 +317,9 @@ class EFetchQuery:
         return df
 
 class EuroPMCQuery():
+    """
+    A class that executes search queries on the European PMC API 
+    """
     def __init__(self, oa=False, db='pubmed'):
         """
         Initialization of the class
@@ -380,3 +371,7 @@ esq.execute_query(pcd_search)
 efq = EFetchQuery()
 sleep(3) # Sleep for 3 seconds
 efq.execute_efetch(35777446)
+
+# COMMAND ----------
+
+show_doc(ESearchQuery)
