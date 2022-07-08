@@ -106,6 +106,16 @@ class ESearchQuery:
         max_min = [min(i) if min_flag else max(i) for i in pmid_blocks if len(i)==longest_block_length][0]
 
         return max_min
+      
+    def execute_query_on_website(self, q, pm_order='relevance'):
+        query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
+        if pm_order == 'date':
+            query += '&sort=date'
+        response = urlopen(query)
+        data = response.read().decode('utf-8')
+        soup = BeautifulSoup(data, "lxml-xml")
+        pmids = re.split('\s+', soup.find('body').text.strip())
+        return pmids
 
     def execute_query(self, query):
 
@@ -357,18 +367,16 @@ class EuroPMCQuery():
 # COMMAND ----------
 
 # tests
+# uncomment if needed.
 import urllib.parse 
+from time import time, sleep
 
 esq = ESearchQuery()
 pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
 print(esq.execute_count_query(pcd_search))
+sleep(3) # Sleep for 3 seconds
 esq.execute_query(pcd_search)
 
-# COMMAND ----------
-
 efq = EFetchQuery()
+sleep(3) # Sleep for 3 seconds
 efq.execute_efetch(35777446)
-
-# COMMAND ----------
-
-efq.generate_data_frame_from_id_list([35770021,35777446])
