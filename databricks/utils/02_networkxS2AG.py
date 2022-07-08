@@ -4,19 +4,9 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md # Key Opinion Leader Analysis
+# MAGIC %md # NetworkX Graph Theory Tools based on the Semantic Scholar Academic Graph (S2AG) 
 # MAGIC 
-# MAGIC > API Details here
-# MAGIC 
-# MAGIC System to try to unpack key opinion leaders + close associates / prominent researchers based on co-authorship and co-citation within the same network of papers. 
-# MAGIC 
-# MAGIC 1. List key opinion leaders (KOL)
-# MAGIC 2. Disambiguate each KOL based on clustering within bioinformatics + machine learning field
-# MAGIC 3. List co-authors + referenced authors + citing authors
-# MAGIC 4. Build paper / author networks 
-# MAGIC 5. Derive co-citation graphs of authors
-# MAGIC 6. Perform Author-based Eigenfactor on citation networks to list most influential authors
-# MAGIC 7. Provide links to the KOL that generated the link to each influential author
+# MAGIC > Tools to create and analyze S2AG data. The initial focus is on analysis of the authors in order to key opinion leaders / prominent researchers based on centrality measures within a network of papers. 
 
 # COMMAND ----------
 
@@ -40,7 +30,7 @@ import numpy as np
 from scipy.sparse import dok_matrix
 from scipy import linalg
 
-class KOLsOnS2AG:
+class NetworkxS2AG:
   """This class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.<BR>
   Functionality includes:
     * query all papers, references, and cited papers of a single individual
@@ -377,8 +367,6 @@ class KOLsOnS2AG:
   def threshold_authors_by_pubcount(self, min_pub_count):
     authors = sorted([int(a) for a,attrs in self.g.nodes.data() if attrs.get('label')=='author'])
     authors_to_id = {a:i for i,a in enumerate(authors)}
-
-
     n_authors = len(authors)
     thresholded_authors = []
     counts = []
@@ -492,7 +480,7 @@ class KOLsOnS2AG:
   
   # ~~~~~~~~~~ UTILITIES ~~~~~~~~~~
   def clone(self):
-    copy = KOLsOnS2AG(self.x_api_key)
+    copy = NetworkxS2AG(self.x_api_key)
     copy.added_papers = self.added_papers
     copy.g = self.g.copy()
     copy.cit_g = self.cit_g.copy()
@@ -526,16 +514,16 @@ class KOLsOnS2AG:
 
 # COMMAND ----------
 
-show_doc(KOLsOnS2AG.print_basic_stats)
+show_doc(NetworkxS2AG.print_basic_stats)
 
 # COMMAND ----------
 
-show_doc(KOLsOnS2AG.search_for_disambiguated_author)
+show_doc(NetworkxS2AG.search_for_disambiguated_author)
 
 # COMMAND ----------
 
-show_doc(KOLsOnS2AG.build_author_citation_graph)
+show_doc(NetworkxS2AG.build_author_citation_graph)
 
 # COMMAND ----------
 
-show_doc(KOLsOnS2AG.run_thresholded_centrality_analysis)
+show_doc(NetworkxS2AG.run_thresholded_centrality_analysis)

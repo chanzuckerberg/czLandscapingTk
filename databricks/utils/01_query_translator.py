@@ -4,6 +4,12 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md # Query Translation Tools  
+# MAGIC 
+# MAGIC > A library that takes a dataframe with a column specifying a number of Boolean Logic Queries in it . 
+
+# COMMAND ----------
+
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
 import re
 import pprint
