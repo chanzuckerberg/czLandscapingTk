@@ -84,86 +84,6 @@ Each instance of this class executes queries of a given type</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="EFetchQuery" class="doc_header"><code>class</code> <code>EFetchQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EFetchQuery</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
-</blockquote>
-<p>Class to provide query interface for EFetch (i.e., query based on a list of ids)
-Each instance of this class executes queries of a given type</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h2 id="EuroPMCQuery" class="doc_header"><code>class</code> <code>EuroPMCQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L312" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EuroPMCQuery</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
-</blockquote>
-<p>A class that executes search queries on the European PMC API</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># uncomment if needed.</span>
-<span class="kn">import</span> <span class="nn">urllib.parse</span> 
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">sleep</span>
-
-<span class="n">esq</span> <span class="o">=</span> <span class="n">ESearchQuery</span><span class="p">()</span>
-<span class="n">pcd_search</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s2">&quot;Primary Ciliary Dyskinesia&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">esq</span><span class="o">.</span><span class="n">execute_count_query</span><span class="p">(</span><span class="n">pcd_search</span><span class="p">))</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Sleep for 3 seconds</span>
-<span class="n">esq</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span><span class="n">pcd_search</span><span class="p">)</span>
-
-<span class="n">efq</span> <span class="o">=</span> <span class="n">EFetchQuery</span><span class="p">()</span>
-<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Sleep for 3 seconds</span>
-<span class="n">efq</span><span class="o">.</span><span class="n">execute_efetch</span><span class="p">(</span><span class="mi">35777446</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -281,10 +201,43 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.__init__" class="doc_header"><code>EFetchQuery.__init__</code><a href="__main__.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.__init__</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h2 id="EFetchQuery" class="doc_header"><code>class</code> <code>EFetchQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L132" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EFetchQuery</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
-<p>:param api_key: API Key for NCBI EUtil Services 
-:param oa: Is this query searching for open access papers? 
+<p>Class to provide query interface for EFetch (i.e., query based on a list of ids)
+Each instance of this class executes queries of a given type</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="EFetchQuery.__init__" class="doc_header"><code>EFetchQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.__init__</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+</blockquote>
+<p>:param api_key: API Key for NCBI EUtil Services
+:param oa: Is this query searching for open access papers?
 :param db: The database being queried</p>
 
 </div>
@@ -308,7 +261,7 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.execute_efetch" class="doc_header"><code>EFetchQuery.execute_efetch</code><a href="__main__.py#L141" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.execute_efetch</code>(<strong><code>id</code></strong>)</p>
+<h4 id="EFetchQuery.execute_efetch" class="doc_header"><code>EFetchQuery.execute_efetch</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L147" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.execute_efetch</code>(<strong><code>id</code></strong>)</p>
 </blockquote>
 <p>Executes a query for a single specific identifier</p>
 
@@ -333,7 +286,7 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.generate_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_data_frame_from_id_list</code><a href="__main__.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
+<h4 id="EFetchQuery.generate_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L158" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
 </blockquote>
 <p>Executes a query for a list of ID values</p>
 
@@ -358,7 +311,7 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.generate_mesh_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code><a href="__main__.py#L191" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
+<h4 id="EFetchQuery.generate_mesh_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L197" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
 </blockquote>
 <p>Executes a query for MeSH data from a list of ID values</p>
 
@@ -383,7 +336,39 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EuroPMCQuery.__init__" class="doc_header"><code>EuroPMCQuery.__init__</code><a href="__main__.py#L312" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.__init__</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h2 id="EuroPMCQuery" class="doc_header"><code>class</code> <code>EuroPMCQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L316" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EuroPMCQuery</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+</blockquote>
+<p>A class that executes search queries on the European PMC API</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="EuroPMCQuery.__init__" class="doc_header"><code>EuroPMCQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L320" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.__init__</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
 <p>Initialization of the class
 :param oa:</p>
@@ -409,13 +394,42 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EuroPMCQuery.run_empc_query" class="doc_header"><code>EuroPMCQuery.run_empc_query</code><a href="__main__.py#L319" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.run_empc_query</code>(<strong><code>q</code></strong>, <strong><code>page_size</code></strong>=<em><code>1000</code></em>)</p>
+<h4 id="EuroPMCQuery.run_empc_query" class="doc_header"><code>EuroPMCQuery.run_empc_query</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L327" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.run_empc_query</code>(<strong><code>q</code></strong>, <strong><code>page_size</code></strong>=<em><code>1000</code></em>)</p>
 </blockquote>
 
 </div>
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># uncomment if needed.</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span> 
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">sleep</span>
+
+<span class="n">esq</span> <span class="o">=</span> <span class="n">ESearchQuery</span><span class="p">()</span>
+<span class="n">pcd_search</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s2">&quot;Primary Ciliary Dyskinesia&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">esq</span><span class="o">.</span><span class="n">execute_count_query</span><span class="p">(</span><span class="n">pcd_search</span><span class="p">))</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Sleep for 3 seconds</span>
+<span class="n">esq</span><span class="o">.</span><span class="n">execute_query</span><span class="p">(</span><span class="n">pcd_search</span><span class="p">)</span>
+
+<span class="n">efq</span> <span class="o">=</span> <span class="n">EFetchQuery</span><span class="p">()</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Sleep for 3 seconds</span>
+<span class="n">efq</span><span class="o">.</span><span class="n">execute_efetch</span><span class="p">(</span><span class="mi">35777446</span><span class="p">)</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
