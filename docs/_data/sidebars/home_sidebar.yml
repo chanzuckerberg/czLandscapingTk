@@ -11,7 +11,7 @@ entries:
       url: /
     - output: web,pdf
       title: Title
-      url: nlm_eutils.html
+      url: search_engine_eutils.html
     - output: web,pdf
       title: Key Opinion Leader Analysis
       url: networkxS2AG.html
