@@ -367,18 +367,16 @@ class EuroPMCQuery():
 # COMMAND ----------
 
 # tests
+# uncomment if needed.
 import urllib.parse 
+from time import time, sleep
 
 esq = ESearchQuery()
 pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
 print(esq.execute_count_query(pcd_search))
+sleep(3) # Sleep for 3 seconds
 esq.execute_query(pcd_search)
 
-# COMMAND ----------
-
 efq = EFetchQuery()
+sleep(3) # Sleep for 3 seconds
 efq.execute_efetch(35777446)
-
-# COMMAND ----------
-
-efq.generate_data_frame_from_id_list([35770021,35777446])
