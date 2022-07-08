@@ -107,7 +107,7 @@ class ESearchQuery:
 
         return max_min
       
-    def execute_query_on_website(self, query, pm_order='relevance'):
+    def execute_query_on_website(self, q, pm_order='relevance'):
         query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
         if pm_order == 'date':
             query += '&sort=date'
