@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp kolsOnS2AG
+# default_exp networkXS2AG
 from nbdev import *
 
 # COMMAND ----------

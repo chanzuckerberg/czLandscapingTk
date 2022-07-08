@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp search_engine_utils
+# default_exp searchEngineUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -10,6 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
+#export
 """
 A package designed for interactions with the EUtils tools from the National Library of Medicine
 """

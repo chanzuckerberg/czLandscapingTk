@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp query_translator
+# default_exp queryTranslator
 from nbdev import *
 
 # COMMAND ----------
@@ -10,6 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
+#export
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
 import re
 import pprint
