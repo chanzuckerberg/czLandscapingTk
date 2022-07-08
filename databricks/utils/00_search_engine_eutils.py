@@ -20,6 +20,7 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
 import pandas as pd
 
+
 PAGE_SIZE = 10000
 TIME_THRESHOLD = 0.3333334
 
