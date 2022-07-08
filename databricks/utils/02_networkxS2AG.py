@@ -4,9 +4,9 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md # NetworkX Graph Theory Tools based on the Semantic Scholar Academic Graph (S2AG) 
+# MAGIC %md # NetworkX S2AG Tools 
 # MAGIC 
-# MAGIC > Tools to create and analyze S2AG data. The initial focus is on analysis of the authors in order to key opinion leaders / prominent researchers based on centrality measures within a network of papers. 
+# MAGIC > Tools to create and analyze Semantic Scholar Academic Graph (S2AG) data. The initial focus is on analysis of the authors in order to key opinion leaders / prominent researchers based on centrality measures within a network of papers. 
 
 # COMMAND ----------
 

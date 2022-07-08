@@ -6,7 +6,7 @@ from nbdev import *
 
 # MAGIC %md # Query Translation Tools  
 # MAGIC 
-# MAGIC > A library that takes a dataframe with a column specifying a number of Boolean Logic Queries in it . 
+# MAGIC > A library permits translation of complex boolean AND/OR queries between online APIs. 
 
 # COMMAND ----------
 
@@ -19,6 +19,9 @@ from enum import Enum
 import unicodedata
 
 class QueryType(Enum):
+  """
+  An enumeration that permits conversion of complex boolean queries to different formats
+  """
   open = 1
   closed = 2
   solr = 3
@@ -29,6 +32,15 @@ class QueryType(Enum):
 
 class QueryTranslator(): 
   def __init__(self, df, query_col):
+    """This class allows a user to define a set of logical boolean queries in a Pandas dataframe and then convert them to a variety of formats for use on various online API systems.<BR>
+    Functionality includes:
+      * Specify queries as a table using '|' and '&' symbols
+      * generate search strings to be used in API calls for PMID, SOLR, and European PMC
+
+    Attributes:
+      * df: The dataframe of queries to be processed (note: this dataframe must have a numerical ID column specified)
+      * query_col: the column in the data frame where the query is specified
+    """
     pp = pprint.PrettyPrinter(indent=4)
     def fix_errors(expr_string):
       q = re.sub('\s+(AND)\s+',' & ',expr_string)
@@ -63,6 +75,9 @@ class QueryTranslator():
       self.redq_list.append((row_id, redq))
 
   def generate_queries(self, query_type:QueryType):
+    """
+    Use this command to covert the queries to the different forms specified by the QueryType enumeration
+    """
     queries = []
     IDs = []
     for ID, t in tqdm(self.redq_list):
@@ -195,3 +210,11 @@ class QueryTranslator():
     elif isinstance(ex, OrOp):
       return '('+'|'.join([self._pubmed(x) for x in ex.xs])+')'
 
+
+# COMMAND ----------
+
+show_doc(QueryTranslator.__init__)
+
+# COMMAND ----------
+
+show_doc(QueryTranslator.generate_queries)

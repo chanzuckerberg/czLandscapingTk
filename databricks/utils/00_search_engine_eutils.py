@@ -374,4 +374,40 @@ efq.execute_efetch(35777446)
 
 # COMMAND ----------
 
-show_doc(ESearchQuery)
+show_doc(ESearchQuery.__init__)
+
+# COMMAND ----------
+
+show_doc(ESearchQuery.execute_count_query)
+
+# COMMAND ----------
+
+show_doc(ESearchQuery.execute_query_on_website)
+
+# COMMAND ----------
+
+show_doc(ESearchQuery.execute_query)
+
+# COMMAND ----------
+
+show_doc(EFetchQuery.__init__)
+
+# COMMAND ----------
+
+show_doc(EFetchQuery.execute_efetch)
+
+# COMMAND ----------
+
+show_doc(EFetchQuery.generate_data_frame_from_id_list)
+
+# COMMAND ----------
+
+show_doc(EFetchQuery.generate_mesh_data_frame_from_id_list)
+
+# COMMAND ----------
+
+show_doc(EuroPMCQuery.__init__)
+
+# COMMAND ----------
+
+show_doc(EuroPMCQuery.run_empc_query)
