@@ -106,6 +106,16 @@ class ESearchQuery:
         max_min = [min(i) if min_flag else max(i) for i in pmid_blocks if len(i)==longest_block_length][0]
 
         return max_min
+      
+    def execute_query_on_website(self, query, pm_order='relevance'):
+        query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
+        if pm_order == 'date':
+            query += '&sort=date'
+        response = urlopen(query)
+        data = response.read().decode('utf-8')
+        soup = BeautifulSoup(data, "lxml-xml")
+        pmids = re.split('\s+', soup.find('body').text.strip())
+        return pmids
 
     def execute_query(self, query):
 
