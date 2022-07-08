@@ -10,7 +10,7 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: 'Search Engine Tools  '
       url: search_engine_eutils.html
     - output: web,pdf
       title: 'Query Translation Tools  '
