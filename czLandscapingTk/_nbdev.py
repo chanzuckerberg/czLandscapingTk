@@ -2,7 +2,7 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"KOLsOnS2AG": "02_networkxS2AG.ipynb"}
+index = {"NetworkxS2AG": "02_networkxS2AG.ipynb"}
 
 modules = ["kolsOnS2AG.py"]
 

@@ -13,7 +13,11 @@ entries:
       title: Title
       url: search_engine_eutils.html
     - output: web,pdf
-      title: Key Opinion Leader Analysis
+      title: 'Query Translation Tools  '
+      url: query_translator.html
+    - output: web,pdf
+      title: 'NetworkX Graph Theory Tools based on the Semantic Scholar Academic Graph
+        (S2AG) '
       url: networkxS2AG.html
     output: web
     title: czLandscapingTk
