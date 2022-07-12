@@ -9,6 +9,7 @@ import pandas as pd
 import json
 from urllib.parse import quote
 from tqdm import tqdm
+import requests
 
 class AirtableUtils:
   """This class permits simple input / output from airtable
