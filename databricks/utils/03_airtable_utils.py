@@ -1,4 +1,10 @@
 # Databricks notebook source
+# default_exp airtableUtils
+from nbdev import *
+
+# COMMAND ----------
+
+#export
 import pandas as pd
 import json
 from urllib.parse import quote
@@ -21,6 +27,8 @@ class AirtableUtils:
     return 'https://api.airtable.com/v0/%s/%s?api_key=%s'%(file, table, self.api_key) 
 
   def read_airtable(self, file, table):
+    """ Read an airtable into a Pandas Dataframe. 
+    """
     url = self._get_airtable_url(file, table)
     x = requests.get(url)
     js = json.loads(x.text)
@@ -39,6 +47,10 @@ class AirtableUtils:
     return df
 
   def send_df_to_airtable(self, file, table, df):
+    """ Send a dataframe to an airtable table.
+    
+    _Note: the dataframe's columns must match the structure of the table exactly_ 
+    """
     # note need to check size of payload - 10 JSON records only with 'fields' hash entry
     headers = {'Authorization': 'Bearer '+self.api_key, 'Content-Type': 'application/json'}
     records = []
@@ -67,3 +79,19 @@ class AirtableUtils:
       r = requests.post(url, headers=headers, data=payload)   
       print(r.text)
       
+
+# COMMAND ----------
+
+show_doc(AirtableUtils.__init__)
+
+# COMMAND ----------
+
+show_doc(AirtableUtils.read_airtable)
+
+# COMMAND ----------
+
+show_doc(AirtableUtils.send_df_to_airtable)
+
+# COMMAND ----------
+
+show_doc(AirtableUtils.send_records_to_airtable)
