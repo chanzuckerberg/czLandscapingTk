@@ -6,8 +6,8 @@ title: czLandscapingTk (Chan Zuckerberg Landscaping Toolkit)
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. "
-description: "This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. "
+summary: "This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries and some scripts to demonstrate how to use them. "
+description: "This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries and some scripts to demonstrate how to use them. "
 nb_path: "index.ipynb"
 ---
 <!--
@@ -50,9 +50,9 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
+<h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
 
-<pre><code>kolsGraph = KOLsOnS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')</code></pre>
+<pre><code>kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')</code></pre>
 <p>Maybe start by searching for a reseracher by name. e.g. <a href="https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller">Daphne Koller</a></p>
 
 <pre><code>kolsGraph.search_for_disambiguated_author('Daphne Koller')</code></pre>
@@ -69,7 +69,6 @@ kolsGraph.print_basic_stats()</code></pre>
 <li>Iterate over all papers in this extended set and add all citations / references between them.</li>
 <li>Print out the results</li>
 </ul>
-<p>Generating the following output:</p>
 
 </div>
 </div>
