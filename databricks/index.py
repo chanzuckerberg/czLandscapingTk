@@ -7,7 +7,7 @@ from nbdev import *
 
 # MAGIC %md # czLandscapingTk (Chan Zuckerberg Landscaping Toolkit)
 # MAGIC 
-# MAGIC > This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. 
+# MAGIC > This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries and some scripts to demonstrate how to use them. 
 
 # COMMAND ----------
 
@@ -25,10 +25,15 @@ from nbdev import *
 
 # MAGIC %md 
 # MAGIC 
+# MAGIC # NetworkxS2AG Class
+# MAGIC 
+# MAGIC # NetworkxS2AG Class
+# MAGIC 
+# MAGIC # NetworkxS2AG Class
 # MAGIC Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 # MAGIC 
 # MAGIC ```
-# MAGIC kolsGraph = KOLsOnS2AG('<API-KEY-FROM-S2AG-TEAM>')
+# MAGIC kolsGraph = NetworkxS2AG('<API-KEY-FROM-S2AG-TEAM>')
 # MAGIC ```
 # MAGIC 
 # MAGIC Maybe start by searching for a reseracher by name. e.g. [Daphne Koller](https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller) 
@@ -54,5 +59,3 @@ from nbdev import *
 # MAGIC * Add or link authors to these papers. 
 # MAGIC * Iterate over all papers in this extended set and add all citations / references between them.
 # MAGIC * Print out the results
-# MAGIC 
-# MAGIC Generating the following output: 
