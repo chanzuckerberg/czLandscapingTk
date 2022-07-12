@@ -18,6 +18,9 @@ entries:
     - output: web,pdf
       title: 'NetworkX S2AG Tools '
       url: networkxS2AG.html
+    - output: web,pdf
+      title: Title
+      url: airtable_utils.html
     output: web
     title: czLandscapingTk
   output: web

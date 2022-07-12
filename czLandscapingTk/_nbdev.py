@@ -10,11 +10,13 @@ index = {"NCBI_Database_Type": "00_search_engine_eutils.ipynb",
          "EuroPMCQuery": "00_search_engine_eutils.ipynb",
          "QueryType": "01_query_translator.ipynb",
          "QueryTranslator": "01_query_translator.ipynb",
-         "NetworkxS2AG": "02_networkxS2AG.ipynb"}
+         "NetworkxS2AG": "02_networkxS2AG.ipynb",
+         "AirtableUtils": "03_airtable_utils.ipynb"}
 
 modules = ["searchEngineUtils.py",
            "queryTranslator.py",
-           "networkXS2AG.py"]
+           "networkXS2AG.py",
+           "airtableUtils.py"]
 
 doc_url = "https://GullyBurns.github.io/czLandscapingTk/"
 
