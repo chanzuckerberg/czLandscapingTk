@@ -5,7 +5,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md # czLandscapingTk (Chan Zuckerberg Landscaping Toolkit)
+# MAGIC %md # Chan Zuckerberg Landscaping Toolkit
 # MAGIC 
 # MAGIC > This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries and some scripts to demonstrate how to use them. 
 
