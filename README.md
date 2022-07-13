@@ -8,10 +8,9 @@
 
  ## How to use:
 
- 
+ ### AirtableUtils Class
 
-# AirtableUtils Class
-
+  
 Load the class and instantiate it with the API-KEY from Airtable:
 ```
 from czLandscapingTk.airtableUtils import AirtableUtils
@@ -31,7 +30,9 @@ df = <YOUR DATA>
 atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
 ```
 
-# NetworkxS2AG Class
+ ### NetworkxS2AG Class
+
+ 
 
 Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 
@@ -64,7 +65,9 @@ This command performs the following steps:
 * Iterate over all papers in this extended set and add all citations / references between them.
 * Print out the results
 
-# QueryTranslator class
+ ### QueryTranslator class
+
+ 
 
 This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": `'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'`. This dataframe must also contain a numerical ID column to identify each query. 
 
@@ -85,6 +88,6 @@ Generate a list of queries that work on European PMC:
 (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
 ```
 
-# ESearchQuery / EFetchQuery
+ ### ESearchQuery / EFetchQuery
 
-# EuroPMCQuery
+ ### EuroPMCQuery

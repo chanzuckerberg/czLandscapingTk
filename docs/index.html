@@ -50,7 +50,13 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="AirtableUtils-Class">AirtableUtils Class<a class="anchor-link" href="#AirtableUtils-Class"> </a></h1><p>Load the class and instantiate it with the API-KEY from Airtable:</p>
+<h3 id="AirtableUtils-Class">AirtableUtils Class<a class="anchor-link" href="#AirtableUtils-Class"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Load the class and instantiate it with the API-KEY from Airtable:</p>
 
 <pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
 atu = AirtableUtils('keyXYZXYZXYZYXZY')</code></pre>
@@ -63,7 +69,19 @@ atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')</code></pre>
 <pre><code># atu.send_df_to_airtable(&lt;notebook id&gt;, &lt;table id&gt;, df):
 df = &lt;YOUR DATA&gt;
 atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)</code></pre>
-<h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
 
 <pre><code>from czLandscapingTk.networkxS2AG import NetworkxS2AG
 kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')</code></pre>
@@ -83,7 +101,19 @@ kolsGraph.print_basic_stats()</code></pre>
 <li>Iterate over all papers in this extended set and add all citations / references between them.</li>
 <li>Print out the results</li>
 </ul>
-<h1 id="QueryTranslator-class">QueryTranslator class<a class="anchor-link" href="#QueryTranslator-class"> </a></h1><p>This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": <code>'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'</code>. This dataframe must also contain a numerical ID column to identify each query.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="QueryTranslator-class">QueryTranslator class<a class="anchor-link" href="#QueryTranslator-class"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": <code>'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'</code>. This dataframe must also contain a numerical ID column to identify each query.</p>
 <p>Load the class and instantiate it with dataframe:</p>
 
 <pre><code>from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
@@ -95,7 +125,19 @@ qt = QueryTranslator(df, 'query')</code></pre>
 <p>Generate a list of queries that work on European PMC:</p>
 
 <pre><code>(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)</code></pre>
-<h1 id="ESearchQuery-/-EFetchQuery">ESearchQuery / EFetchQuery<a class="anchor-link" href="#ESearchQuery-/-EFetchQuery"> </a></h1><h1 id="EuroPMCQuery">EuroPMCQuery<a class="anchor-link" href="#EuroPMCQuery"> </a></h1>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="ESearchQuery-/-EFetchQuery">ESearchQuery / EFetchQuery<a class="anchor-link" href="#ESearchQuery-/-EFetchQuery"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="EuroPMCQuery">EuroPMCQuery<a class="anchor-link" href="#EuroPMCQuery"> </a></h3>
 </div>
 </div>
 </div>
