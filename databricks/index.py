@@ -19,7 +19,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md ## How to use
+# MAGIC %md ## How to use:
 
 # COMMAND ----------
 
@@ -27,13 +27,9 @@ from nbdev import *
 # MAGIC 
 # MAGIC # AirtableUtils Class
 # MAGIC 
-# MAGIC Load the class + instantiate with API:
+# MAGIC Load the class and instantiate it with the API-KEY from Airtable:
 # MAGIC ```
 # MAGIC from czLandscapingTk.airtableUtils import AirtableUtils
-# MAGIC ```
-# MAGIC 
-# MAGIC Instantiate with API-KEY from Airtable 
-# MAGIC ```
 # MAGIC atu = AirtableUtils('keyXYZXYZXYZYXZY')
 # MAGIC ```
 # MAGIC 
@@ -55,6 +51,7 @@ from nbdev import *
 # MAGIC Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 # MAGIC 
 # MAGIC ```
+# MAGIC from czLandscapingTk.networkxS2AG import NetworkxS2AG
 # MAGIC kolsGraph = NetworkxS2AG('<API-KEY-FROM-S2AG-TEAM>')
 # MAGIC ```
 # MAGIC 
@@ -83,6 +80,25 @@ from nbdev import *
 # MAGIC * Print out the results
 # MAGIC 
 # MAGIC # QueryTranslator class
+# MAGIC 
+# MAGIC This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": `'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'`. This dataframe must also contain a numerical ID column to identify each query. 
+# MAGIC 
+# MAGIC Load the class and instantiate it with dataframe:
+# MAGIC ```
+# MAGIC from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
+# MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+# MAGIC qt = QueryTranslator(df, 'query')
+# MAGIC ```
+# MAGIC 
+# MAGIC Generate a list of queries that work on Pubmed:
+# MAGIC ```
+# MAGIC (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+# MAGIC ```
+# MAGIC 
+# MAGIC Generate a list of queries that work on European PMC:
+# MAGIC ```
+# MAGIC (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+# MAGIC ```
 # MAGIC 
 # MAGIC # ESearchQuery / EFetchQuery
 # MAGIC 
