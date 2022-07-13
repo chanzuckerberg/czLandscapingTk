@@ -50,7 +50,22 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
+<h1 id="AirtableUtils-Class">AirtableUtils Class<a class="anchor-link" href="#AirtableUtils-Class"> </a></h1><p>Load the class + instantiate with API:</p>
+
+<pre><code>from czLandscapingTk.airtableUtils import AirtableUtils</code></pre>
+<p>Instantiate with API-KEY from Airtable</p>
+
+<pre><code>atu = AirtableUtils('keyXYZXYZXYZYXZY')</code></pre>
+<p>Read a complete table into a pandas dataframe:</p>
+
+<pre><code># atu.read_airtable(&lt;notebook id&gt;, &lt;table id&gt;)
+atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')</code></pre>
+<p>Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time):</p>
+
+<pre><code># atu.send_df_to_airtable(&lt;notebook id&gt;, &lt;table id&gt;, df):
+df = &lt;YOUR DATA&gt;
+atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)</code></pre>
+<h1 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h1><p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
 
 <pre><code>kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')</code></pre>
 <p>Maybe start by searching for a reseracher by name. e.g. <a href="https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller">Daphne Koller</a></p>
@@ -69,7 +84,7 @@ kolsGraph.print_basic_stats()</code></pre>
 <li>Iterate over all papers in this extended set and add all citations / references between them.</li>
 <li>Print out the results</li>
 </ul>
-
+<h1 id="QueryTranslator-class">QueryTranslator class<a class="anchor-link" href="#QueryTranslator-class"> </a></h1><h1 id="ESearchQuery-/-EFetchQuery">ESearchQuery / EFetchQuery<a class="anchor-link" href="#ESearchQuery-/-EFetchQuery"> </a></h1><h1 id="EuroPMCQuery">EuroPMCQuery<a class="anchor-link" href="#EuroPMCQuery"> </a></h1>
 </div>
 </div>
 </div>

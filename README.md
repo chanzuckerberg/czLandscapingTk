@@ -10,11 +10,33 @@
 
  
 
-# NetworkxS2AG Class
+# AirtableUtils Class
+
+Load the class + instantiate with API:
+```
+from czLandscapingTk.airtableUtils import AirtableUtils
+```
+
+Instantiate with API-KEY from Airtable 
+```
+atu = AirtableUtils('keyXYZXYZXYZYXZY')
+```
+
+Read a complete table into a pandas dataframe: 
+```
+# atu.read_airtable(<notebook id>, <table id>)
+atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
+```
+
+Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time): 
+```
+# atu.send_df_to_airtable(<notebook id>, <table id>, df):
+df = <YOUR DATA>
+atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
+```
 
 # NetworkxS2AG Class
 
-# NetworkxS2AG Class
 Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 
 ```
@@ -44,3 +66,9 @@ This command performs the following steps:
 * Add or link authors to these papers. 
 * Iterate over all papers in this extended set and add all citations / references between them.
 * Print out the results
+
+# QueryTranslator class
+
+# ESearchQuery / EFetchQuery
+
+# EuroPMCQuery
