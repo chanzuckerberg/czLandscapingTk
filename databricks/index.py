@@ -25,11 +25,33 @@ from nbdev import *
 
 # MAGIC %md 
 # MAGIC 
-# MAGIC # NetworkxS2AG Class
+# MAGIC # AirtableUtils Class
+# MAGIC 
+# MAGIC Load the class + instantiate with API:
+# MAGIC ```
+# MAGIC from czLandscapingTk.airtableUtils import AirtableUtils
+# MAGIC ```
+# MAGIC 
+# MAGIC Instantiate with API-KEY from Airtable 
+# MAGIC ```
+# MAGIC atu = AirtableUtils('keyXYZXYZXYZYXZY')
+# MAGIC ```
+# MAGIC 
+# MAGIC Read a complete table into a pandas dataframe: 
+# MAGIC ```
+# MAGIC # atu.read_airtable(<notebook id>, <table id>)
+# MAGIC atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
+# MAGIC ```
+# MAGIC 
+# MAGIC Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time): 
+# MAGIC ```
+# MAGIC # atu.send_df_to_airtable(<notebook id>, <table id>, df):
+# MAGIC df = <YOUR DATA>
+# MAGIC atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
+# MAGIC ```
 # MAGIC 
 # MAGIC # NetworkxS2AG Class
 # MAGIC 
-# MAGIC # NetworkxS2AG Class
 # MAGIC Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 # MAGIC 
 # MAGIC ```
@@ -59,3 +81,9 @@ from nbdev import *
 # MAGIC * Add or link authors to these papers. 
 # MAGIC * Iterate over all papers in this extended set and add all citations / references between them.
 # MAGIC * Print out the results
+# MAGIC 
+# MAGIC # QueryTranslator class
+# MAGIC 
+# MAGIC # ESearchQuery / EFetchQuery
+# MAGIC 
+# MAGIC # EuroPMCQuery
