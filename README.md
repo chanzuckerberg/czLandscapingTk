@@ -6,19 +6,15 @@
 
  `pip install git+https://github.com/GullyBurns/czLandscapingTk.git`
 
- ## How to use
+ ## How to use:
 
  
 
 # AirtableUtils Class
 
-Load the class + instantiate with API:
+Load the class and instantiate it with the API-KEY from Airtable:
 ```
 from czLandscapingTk.airtableUtils import AirtableUtils
-```
-
-Instantiate with API-KEY from Airtable 
-```
 atu = AirtableUtils('keyXYZXYZXYZYXZY')
 ```
 
@@ -40,6 +36,7 @@ atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
 Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 
 ```
+from czLandscapingTk.networkxS2AG import NetworkxS2AG
 kolsGraph = NetworkxS2AG('<API-KEY-FROM-S2AG-TEAM>')
 ```
 
@@ -68,6 +65,25 @@ This command performs the following steps:
 * Print out the results
 
 # QueryTranslator class
+
+This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": `'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'`. This dataframe must also contain a numerical ID column to identify each query. 
+
+Load the class and instantiate it with dataframe:
+```
+from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
+df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+qt = QueryTranslator(df, 'query')
+```
+
+Generate a list of queries that work on Pubmed:
+```
+(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+```
+
+Generate a list of queries that work on European PMC:
+```
+(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+```
 
 # ESearchQuery / EFetchQuery
 
