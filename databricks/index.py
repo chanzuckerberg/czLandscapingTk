@@ -23,10 +23,11 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md 
-# MAGIC 
-# MAGIC # AirtableUtils Class
-# MAGIC 
+# MAGIC %md ### AirtableUtils Class
+
+# COMMAND ----------
+
+# MAGIC %md  
 # MAGIC Load the class and instantiate it with the API-KEY from Airtable:
 # MAGIC ```
 # MAGIC from czLandscapingTk.airtableUtils import AirtableUtils
@@ -45,8 +46,14 @@ from nbdev import *
 # MAGIC df = <YOUR DATA>
 # MAGIC atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
 # MAGIC ```
-# MAGIC 
-# MAGIC # NetworkxS2AG Class
+
+# COMMAND ----------
+
+# MAGIC %md ### NetworkxS2AG Class
+
+# COMMAND ----------
+
+# MAGIC %md 
 # MAGIC 
 # MAGIC Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: https://www.semanticscholar.org/product/api#Partner-Form
 # MAGIC 
@@ -78,8 +85,14 @@ from nbdev import *
 # MAGIC * Add or link authors to these papers. 
 # MAGIC * Iterate over all papers in this extended set and add all citations / references between them.
 # MAGIC * Print out the results
-# MAGIC 
-# MAGIC # QueryTranslator class
+
+# COMMAND ----------
+
+# MAGIC %md ### QueryTranslator class
+
+# COMMAND ----------
+
+# MAGIC %md 
 # MAGIC 
 # MAGIC This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": `'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'`. This dataframe must also contain a numerical ID column to identify each query. 
 # MAGIC 
@@ -99,7 +112,11 @@ from nbdev import *
 # MAGIC ```
 # MAGIC (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
 # MAGIC ```
-# MAGIC 
-# MAGIC # ESearchQuery / EFetchQuery
-# MAGIC 
-# MAGIC # EuroPMCQuery
+
+# COMMAND ----------
+
+# MAGIC %md ### ESearchQuery / EFetchQuery
+
+# COMMAND ----------
+
+# MAGIC %md ### EuroPMCQuery
