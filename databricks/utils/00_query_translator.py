@@ -82,7 +82,7 @@ class QueryTranslator():
     """
     queries = []
     IDs = []
-    for ID, t in tqdm(self.redq_list):
+    for ID, t in self.redq_list:
       if t:
         print(t)
         ex = expr(t)
