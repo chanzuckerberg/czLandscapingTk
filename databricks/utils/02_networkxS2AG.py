@@ -40,6 +40,7 @@ class NetworkxS2AG:
   Attributes:
     * x_api_key: an API key obtained from Semantic Scholar (https://www.semanticscholar.org/product/api)
     * author_stem_url, paper_stem_url: urls for API endpoints in S2AG
+    * features: a regular expression expressed as a string to provide a simple filter for papers in the graph [preliminary]
     * g: the networkx graph representing the citation / authorship network 
     * added_papers: papers that have had all citations and references added to graph
   """
@@ -51,6 +52,7 @@ class NetworkxS2AG:
     self.author_stem_url = 'https://api.semanticscholar.org/graph/v1/author/'
     self.paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
     self.x_api_key = x_api_key
+    self.features = None
     self.added_papers = set()
     self.g = nx.DiGraph()
 
@@ -64,6 +66,8 @@ class NetworkxS2AG:
     print("# Citations: %d"%(len(self.search_edges('cites'))))
     infCites = [(e1, e2) for e1,e2,attrs in self.search_edges('cites') if attrs.get('isInfluential')]
     print("# Influential Citations: %d"%(len(infCites)))
+    feature_papers = [n1 for n1,attrs in nxS2.search_nodes('paper') if attrs.get('features')]
+    print("# Papers with feature: %d"%(len(feature_papers)))
     print("SCC: %d"%(nx.number_strongly_connected_components(self.g)))
     print("WCC: %d"%(nx.number_weakly_connected_components(self.g)))
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
@@ -88,7 +92,7 @@ class NetworkxS2AG:
     df2['Top 10 Pubs'] = paper_titles
     return df2
 
-  def build_author_citation_graph(self, authorId, pkl_file=None):
+  def build_author_citation_graph(self, authorId, influentialOnly=True, pkl_file=None):
     """This builds a complete graph for a given individual based on 
     their papers, and 'highly influential' references + citations of those papers.
     See https://www.nature.com/articles/547032a. The system will then fill in 
@@ -96,12 +100,14 @@ class NetworkxS2AG:
     """
     # Build the S2 author / paper graph
     self.addKeyOpinionLeader(authorId)
-    inf_edges = [(n1,n2) for n1,n2,attrs in self.search_edges('cites') if attrs.get('isInfluential')]
-    inf_papers = set([n1 for n1,n2 in inf_edges]).union(set([n2 for n1,n2 in inf_edges]))
-    g2 = self.get_influential_graph()
-    self.g = g2
-    self.addCitationsOrReferencesToGraph(inf_papers, 'references', True, pkl_file)
-    for p in inf_papers:
+    if influentialOnly:
+      inf_edges = [(n1,n2) for n1,n2,attrs in self.search_edges('cites') if attrs.get('isInfluential')]
+      papers_to_add = set([n1 for n1,n2 in inf_edges]).union(set([n2 for n1,n2 in inf_edges]))
+      self.g = self.get_influential_graph()
+    else:
+      papers_to_add = [n1 for n1,attrs in self.search_nodes('paper')]
+    self.addCitationsOrReferencesToGraph(papers_to_add, 'references', True, pkl_file)
+    for p in papers_to_add:
       self.added_papers.add(p)
   
   def run_thresholded_centrality_analysis(self, min_pub_count=3, top_n=100 ):
@@ -113,9 +119,9 @@ class NetworkxS2AG:
     """
     thresholded_authors, counts  = self.threshold_authors_by_pubcount(min_pub_count)
     author_eigfacs_df = self.compute_author_eigenfactors(thresholded_authors, verbose=True)
-    top_n_df = author_eigfacs_df.sort_values('f',ascending=False)[0:top_n]
+    top_n_df = author_eigfacs_df.sort_values('eigenfactor',ascending=False)[0:top_n]
     authorIds = [row.id for row in top_n_df.itertuples()]
-    topn_author_metadata_df = self.query_authors_metadata(authorIds)
+    topn_author_metadata_df, errors = self.query_authors_metadata(authorIds)
     return topn_author_metadata_df.set_index('authorId').join(top_n_df.set_index('id'))
     
   # ~~~~~~~~~~ BUILDING THE GRAPH FROM S2AG ~~~~~~~~~~    
@@ -123,7 +129,10 @@ class NetworkxS2AG:
     fields = [
         'paperId',
         'authors',
-        'referenceCount'
+        'title',
+        'abstract',
+        'referenceCount',
+        'year'
       ]
     url = '%s%d/papers?fields=%s&limit=1000&offset=%d'%(self.author_stem_url,authorId,','.join(fields),offset)
     
@@ -140,10 +149,30 @@ class NetworkxS2AG:
     
     #print(json.dumps(rdata, indent=4, sort_keys=True))
 
-    paperTuples = list(set([(p_hash.get('paperId'), 
-                             len(p_hash.get('authors')), 
-                             p_hash.get('referenceCount'))
-                         for p_hash in rdata if p_hash.get('referenceCount') is not None]))
+    if self.features is not None:
+      paperTuples = list(set([
+          (
+             p_hash.get('paperId'), 
+             len(p_hash.get('authors')), 
+             p_hash.get('referenceCount'),
+             p_hash.get('year'),
+             re.search(self.features, '%s. %s'%(p_hash.get('title',''),p_hash.get('abstract',''))) is not None
+          )
+          for p_hash in rdata 
+          if p_hash.get('referenceCount') is not None
+        ]))
+    else:
+      paperTuples = list(set([
+          (
+             p_hash.get('paperId'), 
+             len(p_hash.get('authors')), 
+             p_hash.get('referenceCount'),
+             p_hash.get('year'),
+          )
+          for p_hash in rdata 
+          if p_hash.get('referenceCount') is not None
+        ]))
+    
     if verbose:
       print('Adding papers:'+str(len(paperTuples)))
 
@@ -163,7 +192,11 @@ class NetworkxS2AG:
       print('Adding author edges:'+str(len(authorEdges1)))
 
     for tup in paperTuples:
-      self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]))
+      if self.features is not None:
+        self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3], features=bool(tup[4]))
+      else:
+        self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3])
+        
     self.g.add_nodes_from(authorIds, label='author' )
     self.g.add_edges_from(authorEdges1, label='wrote')
     self.g.add_edges_from(authorEdges2, label='was_written_by')
@@ -185,12 +218,18 @@ class NetworkxS2AG:
   def addKeyOpinionLeader(self, kolId, pkl_file=None, verbose=False):
     '''Given an author `kol`, add all papers published by `kol` to `g`. 
     Then, add all citations and references of those papers to `g`, 
-    and add them to `added papers`.
+    and add them to `added papers`. 
+    Note - if the self.features attribute is set, only papers that conform
+    to that regular expression will be included in the graph.
     '''
     self.runSemScholAuthorPapersQuery(kolId, verbose=verbose)
-    kol_papers = [e2 for e1, e2, attrs in self.g.out_edges(str(kolId), data=True) if attrs.get('label') == 'wrote']
+    if self.features is not None:
+      self.g = self.get_featured_graph()
+    kol_papers = [e2 for e1, e2, attrs in self.g.out_edges(str(kolId), data=True) if attrs.get('label') == 'wrote']  
     self.addCitationsOrReferencesToGraph(kol_papers, 'citations', False, pkl_file)
     self.addCitationsOrReferencesToGraph(kol_papers, 'references', False, pkl_file)
+    if self.features is not None:
+      self.g = self.get_featured_graph()
     for p in kol_papers:
       self.added_papers.add(p)
     
@@ -208,6 +247,8 @@ class NetworkxS2AG:
         'authors',
         'isInfluential',
         'referenceCount',
+        'title',
+        'abstract',
         'year'
       ]
     url = '%s%s/%s?fields=%s&limit=1000&offset=%d'%(paper_stem_url, paperId, citref, ','.join(fields), offset)
@@ -222,7 +263,18 @@ class NetworkxS2AG:
   
     try:
       
-      paperTuples = list(set([(p_hash.get(citing_cited).get('paperId'), 
+      if self.features is not None:
+        paperTuples = list(set([(p_hash.get(citing_cited).get('paperId'), 
+                                len(p_hash.get(citing_cited).get('authors')), 
+                                p_hash.get(citing_cited).get('referenceCount'),
+                                p_hash.get(citing_cited).get('year'),
+                                re.search(self.features, '%s. %s'%(p_hash.get(citing_cited).get('title'),p_hash.get(citing_cited).get('abstract'))) is not None 
+                                )
+                           for p_hash in rdata
+                           if p_hash.get(citing_cited).get('paperId') is not None 
+                              and p_hash.get(citing_cited).get('referenceCount') is not None]))
+      else:
+        paperTuples = list(set([(p_hash.get(citing_cited).get('paperId'), 
                                 len(p_hash.get(citing_cited).get('authors')), 
                                 p_hash.get(citing_cited).get('referenceCount'),
                                 p_hash.get(citing_cited).get('year'))
@@ -269,7 +321,10 @@ class NetworkxS2AG:
         self.g.add_edge(e1, e2, label='cites', isInfluential=isInf)        
     else:
       for tup in paperTuples:
-        self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3])
+        if self.features is not None:
+          self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3], features=tup[4])
+        else: 
+          self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3])
         #print(tup)
       self.g.add_nodes_from(authorIds, label='author' )
       self.g.add_edges_from(authorEdges1, label='wrote')
@@ -330,40 +385,60 @@ class NetworkxS2AG:
 
   def query_authors_metadata(self, authorIds):
     extras = []
+    errors = []
     for authorId in tqdm(authorIds):
-      rdata = self.executeSemScholAuthorQuery(int(authorId))
-      extras.append(rdata)
+      try:
+        rdata = self.executeSemScholAuthorQuery(int(authorId))
+        extras.append(rdata)
+      except ReadTimeoutError as e:
+        print('Error in '+authorId)
+        errors.append(authorId)
     extras_df = pd.DataFrame(extras)
     extras_df.set_index('authorId')
-    return extras_df
+    return extras_df, errors
   
   # ~~~~~~~~~~ INFLUENTIAL GRAPH FUNCTIONS ~~~~~~~~~~  
+  def get_featured_graph(self):
+    featured_papers = [n1 for n1,attrs in self.search_nodes('paper') if attrs.get('features')]
+    return self.build_new_graph(featured_papers)
 
   def get_influential_graph(self):
-    g = self.g
-    g2 = nx.DiGraph()
     inf_edges = [(n1,n2) for n1,n2,attrs in self.search_edges('cites') if attrs.get('isInfluential')]
     inf_papers =  set([n1 for n1,n2 in inf_edges]).union(set([n2 for n1,n2 in inf_edges]))
-    for paperId in tqdm(sorted(list(inf_papers))):
+    return self.build_new_graph(inf_papers)
+  
+  def build_new_graph(self, paperIds):
+    g = self.g
+    g2 = nx.DiGraph()
+    for paperId in sorted(list(paperIds)):
       nAuthors = g.nodes[paperId].get('nAuthors')
       nRefs = g.nodes[paperId].get('nRefs')
-      g2.add_node(paperId, label='paper', nAuthors=nAuthors, nRefs=nRefs)        
+      year = g.nodes[paperId].get('year')
+      features = g.nodes[paperId].get('features')
+      if features is not None:
+        g2.add_node(paperId, label='paper', nAuthors=nAuthors, nRefs=nRefs, year=year, features=features)
+      else:
+        g2.add_node(paperId, label='paper', nAuthors=nAuthors, nRefs=nRefs, year=year)
       for e1, e2, attrs in g.out_edges(paperId, data=True): 
         if attrs.get('label') == 'was_written_by': 
           g2.add_node(e2, label='author')
           g2.add_edge(e1, e2, label='was_written_by')
           g2.add_edge(e2, e1, label='wrote')
-        elif attrs.get('label') == 'cites' and e2 in inf_papers: 
+        elif attrs.get('label') == 'cites' and e2 in paperIds: 
           if e2 not in g2.nodes: 
             nAuthors = g.nodes[e2].get('nAuthors')
             nRefs = g.nodes[e2].get('nRefs')
-            g2.add_node(e2, label='paper', nAuthors=nAuthors, nRefs=nRefs)
+            year = g.nodes[e2].get('year')
+            features = g.nodes[e2].get('features')
+            if features is not None:
+              g2.add_node(e2, label='paper', nAuthors=nAuthors, nRefs=nRefs, year=year, features=features)
+            else:
+              g2.add_node(e2, label='paper', nAuthors=nAuthors, nRefs=nRefs, year=year)
           isInf = attrs.get('isInfluential')
           g2.add_edge(e1, e2, label='cites', isInfluential=isInf)
     return g2
 
   # ~~~~~~~~~~ AUTHOR-INFLUENCE-GRAPH FUNCTIONS ~~~~~~~~~~  
-
   def threshold_authors_by_pubcount(self, min_pub_count):
     authors = sorted([int(a) for a,attrs in self.g.nodes.data() if attrs.get('label')=='author'])
     authors_to_id = {a:i for i,a in enumerate(authors)}
@@ -377,8 +452,11 @@ class NetworkxS2AG:
         thresholded_authors.append(a)
     return thresholded_authors, counts
   
-  def compute_author_eigenfactors(self, thresholded_authors, alpha=0.99, verbose=False):
+  def compute_author_eigenfactors(self, thresholded_authors, alpha=0.99, verbose=True):
     thresholded_authors_df = pd.DataFrame(thresholded_authors, columns=['id'])
+    if self.features is not None:
+      feature_positive_authors = set([n1 for n1,n2,attrs in self.search_edges('wrote') if self.g.nodes[n2]['features']])
+      thresholded_authors_df['features'] = [row.id in feature_positive_authors for row in thresholded_authors_df.itertuples()]
     n_thresholded_authors = len(thresholded_authors)
     thresholded_authors_to_id = {a:i for i,a in enumerate(thresholded_authors)}
     
@@ -413,6 +491,7 @@ class NetworkxS2AG:
     if verbose:
       print("Computing Eigenfactors + Eigenvectors")
     PP = P + P.T
+    print(PP)
     eigf, eigv = linalg.eig(np.nan_to_num(PP))
 
     if verbose:
@@ -420,7 +499,7 @@ class NetworkxS2AG:
     
     leading_eigenvector_index = np.argmax(eigf)
     f = eigv[:,leading_eigenvector_index].real#.reshape(P.shape[0],1)
-    thresholded_authors_df['f'] = f 
+    thresholded_authors_df['eigenfactor'] = f 
     
     return thresholded_authors_df
   
