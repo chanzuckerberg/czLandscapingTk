@@ -163,6 +163,9 @@ qt = QueryTranslator(df, 'query')</code></pre>
 <p>Load the class and instantiate it:</p>
 
 <pre><code>from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+
+
+
 df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'})
 qt = QueryTranslator(df, 'query')</code></pre>
 <p>Generate a list of queries that work on Pubmed:</p>

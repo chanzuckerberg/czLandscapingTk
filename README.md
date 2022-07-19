@@ -109,6 +109,9 @@ These classes provides an interface for performing queries on NCBI Etuils. This 
 Load the class and instantiate it:
 ```
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+
+
+
 df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
 qt = QueryTranslator(df, 'query')
 ```

@@ -10,6 +10,7 @@ from pyeda.inter import *
 from pyeda.boolalg.expr import Literal,AndOp,OrOp
 from enum import Enum
 import unicodedata
+from tqdm import tqdm
 
 class QueryType(Enum):
   """
@@ -73,7 +74,7 @@ class QueryTranslator():
     """
     queries = []
     IDs = []
-    for ID, t in tqdm(self.redq_list):
+    for ID, t in self.redq_list:
       if t:
         print(t)
         ex = expr(t)
