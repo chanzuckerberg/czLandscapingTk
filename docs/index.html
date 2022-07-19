@@ -138,7 +138,8 @@ kolsGraph.print_basic_stats()</code></pre>
 <p>Load the class and instantiate it with dataframe:</p>
 
 <pre><code>from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
-df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'})
+df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" |
+    "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'})
 qt = QueryTranslator(df, 'query')</code></pre>
 <p>Generate a list of queries that work on Pubmed:</p>
 
@@ -158,10 +159,45 @@ qt = QueryTranslator(df, 'query')</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the <a href="/czLandscapingTk/query_translator.html#QueryTranslator"><code>QueryTranslator</code></a> class.</p>
+<p>Load the class and instantiate it:</p>
+
+<pre><code>from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'})
+qt = QueryTranslator(df, 'query')</code></pre>
+<p>Generate a list of queries that work on Pubmed:</p>
+
+<pre><code>(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)</code></pre>
+<p>Generate a list of queries that work on European PMC:</p>
+
+<pre><code>(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="EuroPMCQuery">EuroPMCQuery<a class="anchor-link" href="#EuroPMCQuery"> </a></h3>
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

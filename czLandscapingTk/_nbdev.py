@@ -2,19 +2,19 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"NCBI_Database_Type": "00_search_engine_eutils.ipynb",
+index = {"QueryType": "00_query_translator.ipynb",
+         "QueryTranslator": "00_query_translator.ipynb",
+         "NCBI_Database_Type": "00_search_engine_eutils.ipynb",
          "ESearchQuery": "00_search_engine_eutils.ipynb",
          "PAGE_SIZE": "00_search_engine_eutils.ipynb",
          "TIME_THRESHOLD": "00_search_engine_eutils.ipynb",
          "EFetchQuery": "00_search_engine_eutils.ipynb",
          "EuroPMCQuery": "00_search_engine_eutils.ipynb",
-         "QueryType": "01_query_translator.ipynb",
-         "QueryTranslator": "01_query_translator.ipynb",
          "NetworkxS2AG": "02_networkxS2AG.ipynb",
          "AirtableUtils": "03_airtable_utils.ipynb"}
 
-modules = ["searchEngineUtils.py",
-           "queryTranslator.py",
+modules = ["queryTranslator.py",
+           "searchEngineUtils.py",
            "networkXS2AG.py",
            "airtableUtils.py"]
 

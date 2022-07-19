@@ -85,7 +85,8 @@ This class processes a Pandas Dataframe where one of the columns describes a Boo
 Load the class and instantiate it with dataframe:
 ```
 from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
-df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" |
+    "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
 qt = QueryTranslator(df, 'query')
 ```
 
@@ -101,4 +102,30 @@ Generate a list of queries that work on European PMC:
 
  ### ESearchQuery / EFetchQuery
 
+ 
+
+These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the `QueryTranslator` class. 
+
+Load the class and instantiate it:
+```
+from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+qt = QueryTranslator(df, 'query')
+```
+
+Generate a list of queries that work on Pubmed:
+```
+(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+```
+
+Generate a list of queries that work on European PMC:
+```
+(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+```
+
  ### EuroPMCQuery
+
+```
+
+
+```

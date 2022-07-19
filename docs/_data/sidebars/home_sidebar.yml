@@ -10,11 +10,11 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: 'Search Engine Tools  '
-      url: search_engine_eutils.html
-    - output: web,pdf
       title: 'Query Translation Tools  '
       url: query_translator.html
+    - output: web,pdf
+      title: 'Search Engine Tools  '
+      url: search_engine_eutils.html
     - output: web,pdf
       title: 'NetworkX S2AG Tools '
       url: networkxS2AG.html
