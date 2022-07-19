@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install git+https://github.com/GullyBurns/czLandscapingTk.git 
+# MAGIC %run ./00_query_translator 
 
 # COMMAND ----------
 
@@ -410,12 +410,10 @@ show_doc(EuroPMCQuery.run_empc_query)
 
 # COMMAND ----------
 
-from tqdm import tqdm
-from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
 query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
 df = pd.DataFrame(query)
 qt = QueryTranslator(df, 'query')
-qt.generate_queries(QueryType.pubmed)
+print(qt.generate_queries(QueryType.pubmed))
 
 # COMMAND ----------
 
