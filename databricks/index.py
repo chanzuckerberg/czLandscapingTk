@@ -8,6 +8,8 @@ from nbdev import *
 # MAGIC %md # Chan Zuckerberg Landscaping Toolkit
 # MAGIC 
 # MAGIC > This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent [`nbdev`](https://nbdev.fast.ai/) package 
+# MAGIC 
+# MAGIC CZI adheres to the Contributor Covenant code of conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@chanzuckerberg.com.
 
 # COMMAND ----------
 
@@ -114,7 +116,8 @@ from nbdev import *
 # MAGIC Load the class and instantiate it with dataframe:
 # MAGIC ```
 # MAGIC from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
-# MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+# MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" |
+# MAGIC     "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
 # MAGIC qt = QueryTranslator(df, 'query')
 # MAGIC ```
 # MAGIC 
@@ -134,4 +137,31 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md 
+# MAGIC 
+# MAGIC These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the `QueryTranslator` class. 
+# MAGIC 
+# MAGIC Load the class and instantiate it:
+# MAGIC ```
+# MAGIC from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+# MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
+# MAGIC qt = QueryTranslator(df, 'query')
+# MAGIC ```
+# MAGIC 
+# MAGIC Generate a list of queries that work on Pubmed:
+# MAGIC ```
+# MAGIC (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+# MAGIC ```
+# MAGIC 
+# MAGIC Generate a list of queries that work on European PMC:
+# MAGIC ```
+# MAGIC (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+# MAGIC ```
+
+# COMMAND ----------
+
 # MAGIC %md ### EuroPMCQuery
+
+# COMMAND ----------
+
+

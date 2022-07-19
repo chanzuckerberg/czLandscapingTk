@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC %pip install git+https://github.com/GullyBurns/czLandscapingTk.git 
+
+# COMMAND ----------
+
 # default_exp searchEngineUtils
 from nbdev import *
 
@@ -403,6 +407,10 @@ show_doc(EuroPMCQuery.__init__)
 # COMMAND ----------
 
 show_doc(EuroPMCQuery.run_empc_query)
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
