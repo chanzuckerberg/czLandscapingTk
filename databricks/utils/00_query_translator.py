@@ -18,6 +18,7 @@ from pyeda.inter import *
 from pyeda.boolalg.expr import Literal,AndOp,OrOp
 from enum import Enum
 import unicodedata
+from tqdm import tqdm
 
 class QueryType(Enum):
   """

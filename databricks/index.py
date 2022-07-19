@@ -9,7 +9,7 @@ from nbdev import *
 # MAGIC 
 # MAGIC > This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent [`nbdev`](https://nbdev.fast.ai/) package 
 # MAGIC 
-# MAGIC CZI adheres to the Contributor Covenant code of conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@chanzuckerberg.com.
+# MAGIC CZI adheres to the Contributor Covenant [code of conduct](https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@chanzuckerberg.com.
 
 # COMMAND ----------
 
@@ -144,6 +144,9 @@ from nbdev import *
 # MAGIC Load the class and instantiate it:
 # MAGIC ```
 # MAGIC from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+# MAGIC 
+# MAGIC 
+# MAGIC 
 # MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
 # MAGIC qt = QueryTranslator(df, 'query')
 # MAGIC ```
