@@ -124,12 +124,29 @@ from nbdev import *
 # MAGIC Generate a list of queries that work on Pubmed:
 # MAGIC ```
 # MAGIC (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+# MAGIC query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
+# MAGIC df = pd.DataFrame(query)
+# MAGIC qt = QueryTranslator(df, 'query')
+# MAGIC print(qt.generate_queries(QueryType.pubmed))
+# MAGIC ```
+# MAGIC 
+# MAGIC This gives you the following output: 
+# MAGIC ```
+# MAGIC (t0 | t1 | t2 | t3) & t4
+# MAGIC ([0], ['(("Machine Learning")[tiab]) AND (("Neurodegeneration")[tiab]) OR ("Neurodegenerative disease")[tiab]) OR ("Alzheimers Disease")[tiab]) OR ("Parkinsons Disease")[tiab])))'])
 # MAGIC ```
 # MAGIC 
 # MAGIC Generate a list of queries that work on European PMC:
 # MAGIC ```
 # MAGIC (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
 # MAGIC ```
+# MAGIC This will give you:
+# MAGIC ```
+# MAGIC (t0 | t1 | t2 | t3) & t4
+# MAGIC ([0], ['((paper_title:"Machine Learning" OR ABSTRACT:"Machine Learning") AND ((paper_title:"Neurodegeneration" OR ABSTRACT:"Neurodegeneration") OR (paper_title:"Neurodegenerative disease" OR ABSTRACT:"Neurodegenerative disease") OR (paper_title:"Alzheimers Disease" OR ABSTRACT:"Alzheimers Disease") OR (paper_title:"Parkinsons Disease" OR ABSTRACT:"Parkinsons Disease")))'])
+# MAGIC ```
+# MAGIC 
+# MAGIC Thus the same query can be executed easily on different APIs.
 
 # COMMAND ----------
 
@@ -141,24 +158,21 @@ from nbdev import *
 # MAGIC 
 # MAGIC These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the `QueryTranslator` class. 
 # MAGIC 
-# MAGIC Load the class and instantiate it:
 # MAGIC ```
 # MAGIC from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
 # MAGIC 
+# MAGIC import urllib.parse 
+# MAGIC from time import time, sleep
 # MAGIC 
+# MAGIC esq = ESearchQuery()
+# MAGIC pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+# MAGIC print(esq.execute_count_query(pcd_search))
+# MAGIC sleep(3) # Sleep for 3 seconds
+# MAGIC esq.execute_query(pcd_search)
 # MAGIC 
-# MAGIC df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
-# MAGIC qt = QueryTranslator(df, 'query')
-# MAGIC ```
-# MAGIC 
-# MAGIC Generate a list of queries that work on Pubmed:
-# MAGIC ```
-# MAGIC (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-# MAGIC ```
-# MAGIC 
-# MAGIC Generate a list of queries that work on European PMC:
-# MAGIC ```
-# MAGIC (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+# MAGIC efq = EFetchQuery()
+# MAGIC sleep(3) # Sleep for 3 seconds
+# MAGIC efq.execute_efetch(35777446)
 # MAGIC ```
 
 # COMMAND ----------
