@@ -1,5 +1,5 @@
 # Chan Zuckerberg Landscaping Toolkit
-> This library is a public-facing implementation of a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries and some scripts to demonstrate how to use them. 
+> This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package 
 
 
  ## Install
@@ -7,6 +7,17 @@
  `pip install git+https://github.com/GullyBurns/czLandscapingTk.git`
 
  ## How to use:
+
+ This libray is built on [databricks_to_nbdev_template](https://github.com/GullyBurns/databricks_to_nbdev_template), which is modified version of [nbdev_template](https://github.com/fastai/nbdev_template) tailored to work with databricks notebooks.
+
+The steps to using this are: 
+1. Use the basic template to clone your repository and access it via databricks. 
+2. Fill in your `settings.ini` file (especially with any `requirements` that would need to be built to run your code).
+3. Place your scripts and utility notebooks in subdirectories of the `databricks` folder in the file hierarchy.
+4. Any databricks notebooks that contain the text: `from nbdev import *` will be automatically converted to Jupyter notebooks that live at the root level of the repository.
+5. When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to https://nbdev.fast.ai/ for full documentation on how to do this). Note that pushing code to Github will add and commit *more* code to github, requiring you to perform another `git pull` to load and refer to the latest changes in your code.  
+
+ ## Instructions for how to use Toolkit Classes:
 
  ### AirtableUtils Class
 

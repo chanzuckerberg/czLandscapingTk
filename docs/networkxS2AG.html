@@ -53,6 +53,7 @@ Functionality includes:</p>
 <ul>
 <li>x_api_key: an API key obtained from Semantic Scholar (<a href="https://www.semanticscholar.org/product/api">https://www.semanticscholar.org/product/api</a>)</li>
 <li>author_stem_url, paper_stem_url: urls for API endpoints in S2AG</li>
+<li>features: a regular expression expressed as a string to provide a simple filter for papers in the graph [preliminary]</li>
 <li>g: the networkx graph representing the citation / authorship network</li>
 <li>added_papers: papers that have had all citations and references added to graph</li>
 </ul>
@@ -85,7 +86,7 @@ Functionality includes:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="NetworkxS2AG.print_basic_stats" class="doc_header"><code>NetworkxS2AG.print_basic_stats</code><a href="__main__.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.print_basic_stats</code>()</p>
+<h4 id="NetworkxS2AG.print_basic_stats" class="doc_header"><code>NetworkxS2AG.print_basic_stats</code><a href="__main__.py#L47" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.print_basic_stats</code>()</p>
 </blockquote>
 <p>Prints out basic stats about the current graph stored in memory.</p>
 
@@ -110,7 +111,7 @@ Functionality includes:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="NetworkxS2AG.search_for_disambiguated_author" class="doc_header"><code>NetworkxS2AG.search_for_disambiguated_author</code><a href="__main__.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.search_for_disambiguated_author</code>(<strong><code>author_name</code></strong>)</p>
+<h4 id="NetworkxS2AG.search_for_disambiguated_author" class="doc_header"><code>NetworkxS2AG.search_for_disambiguated_author</code><a href="__main__.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.search_for_disambiguated_author</code>(<strong><code>author_name</code></strong>)</p>
 </blockquote>
 <p>Searches for an author and returns 10 most influential papers for each disambiguated example.</p>
 
@@ -135,7 +136,7 @@ Functionality includes:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="NetworkxS2AG.build_author_citation_graph" class="doc_header"><code>NetworkxS2AG.build_author_citation_graph</code><a href="__main__.py#L79" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.build_author_citation_graph</code>(<strong><code>authorId</code></strong>, <strong><code>pkl_file</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="NetworkxS2AG.build_author_citation_graph" class="doc_header"><code>NetworkxS2AG.build_author_citation_graph</code><a href="__main__.py#L83" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.build_author_citation_graph</code>(<strong><code>authorId</code></strong>, <strong><code>influentialOnly</code></strong>=<em><code>True</code></em>, <strong><code>pkl_file</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>This builds a complete graph for a given individual based on 
 their papers, and 'highly influential' references + citations of those papers.
@@ -163,7 +164,7 @@ all cross-references of papers in this graph that cite each other.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="NetworkxS2AG.run_thresholded_centrality_analysis" class="doc_header"><code>NetworkxS2AG.run_thresholded_centrality_analysis</code><a href="__main__.py#L95" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.run_thresholded_centrality_analysis</code>(<strong><code>min_pub_count</code></strong>=<em><code>3</code></em>, <strong><code>top_n</code></strong>=<em><code>100</code></em>)</p>
+<h4 id="NetworkxS2AG.run_thresholded_centrality_analysis" class="doc_header"><code>NetworkxS2AG.run_thresholded_centrality_analysis</code><a href="__main__.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.run_thresholded_centrality_analysis</code>(<strong><code>min_pub_count</code></strong>=<em><code>3</code></em>, <strong><code>top_n</code></strong>=<em><code>100</code></em>)</p>
 </blockquote>
 <p>The system will analyse all authors within the graph that have total 
 number of publications above <code>min_pub_count</code> by peforming an author-based
