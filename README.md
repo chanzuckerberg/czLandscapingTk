@@ -93,12 +93,29 @@ qt = QueryTranslator(df, 'query')
 Generate a list of queries that work on Pubmed:
 ```
 (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
+query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
+df = pd.DataFrame(query)
+qt = QueryTranslator(df, 'query')
+print(qt.generate_queries(QueryType.pubmed))
+```
+
+This gives you the following output: 
+```
+(t0 | t1 | t2 | t3) & t4
+([0], ['(("Machine Learning")[tiab]) AND (("Neurodegeneration")[tiab]) OR ("Neurodegenerative disease")[tiab]) OR ("Alzheimers Disease")[tiab]) OR ("Parkinsons Disease")[tiab])))'])
 ```
 
 Generate a list of queries that work on European PMC:
 ```
 (corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
 ```
+This will give you:
+```
+(t0 | t1 | t2 | t3) & t4
+([0], ['((paper_title:"Machine Learning" OR ABSTRACT:"Machine Learning") AND ((paper_title:"Neurodegeneration" OR ABSTRACT:"Neurodegeneration") OR (paper_title:"Neurodegenerative disease" OR ABSTRACT:"Neurodegenerative disease") OR (paper_title:"Alzheimers Disease" OR ABSTRACT:"Alzheimers Disease") OR (paper_title:"Parkinsons Disease" OR ABSTRACT:"Parkinsons Disease")))'])
+```
+
+Thus the same query can be executed easily on different APIs.
 
  ### ESearchQuery / EFetchQuery
 
@@ -106,24 +123,21 @@ Generate a list of queries that work on European PMC:
 
 These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the `QueryTranslator` class. 
 
-Load the class and instantiate it:
 ```
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
 
+import urllib.parse 
+from time import time, sleep
 
+esq = ESearchQuery()
+pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+print(esq.execute_count_query(pcd_search))
+sleep(3) # Sleep for 3 seconds
+esq.execute_query(pcd_search)
 
-df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'})
-qt = QueryTranslator(df, 'query')
-```
-
-Generate a list of queries that work on Pubmed:
-```
-(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-```
-
-Generate a list of queries that work on European PMC:
-```
-(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+efq = EFetchQuery()
+sleep(3) # Sleep for 3 seconds
+efq.execute_efetch(35777446)
 ```
 
  ### EuroPMCQuery
