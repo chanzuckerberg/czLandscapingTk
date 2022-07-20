@@ -372,7 +372,7 @@ class EuroPMCQuery():
         """
         self.oa = oa
 
-    def run_empc_query(q, page_size=1000):
+    def run_empc_query(self, q, page_size=1000):
         EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(
             page_size) + '&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
@@ -431,3 +431,12 @@ esq.execute_query(pcd_search)
 efq = EFetchQuery()
 sleep(3) # Sleep for 3 seconds
 efq.execute_efetch(35777446)
+
+# COMMAND ----------
+
+import urllib.parse 
+from time import time, sleep
+
+epmcq = EuroPMCQuery()
+id_list, q_list = qt.generate_queries(QueryType.epmc)
+epmcq.run_empc_query(q_list[0])

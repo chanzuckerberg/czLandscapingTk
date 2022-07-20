@@ -7,7 +7,7 @@ from nbdev import *
 
 # MAGIC %md # Chan Zuckerberg Landscaping Toolkit
 # MAGIC 
-# MAGIC > This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent [`nbdev`](https://nbdev.fast.ai/) package 
+# MAGIC > This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent [`nbdev`](https://nbdev.fast.ai/) package that uses notebooks as a vehicle for development. 
 # MAGIC 
 # MAGIC CZI adheres to the Contributor Covenant [code of conduct](https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@chanzuckerberg.com.
 # MAGIC 
@@ -23,18 +23,17 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md ## How to use:
+# MAGIC %md ## How this system was built:
 
 # COMMAND ----------
 
 # MAGIC %md This libray is built on [databricks_to_nbdev_template](https://github.com/GullyBurns/databricks_to_nbdev_template), which is modified version of [nbdev_template](https://github.com/fastai/nbdev_template) tailored to work with databricks notebooks.
 # MAGIC 
-# MAGIC The steps to using this are: 
-# MAGIC 1. Use the basic template to clone your repository and access it via databricks. 
-# MAGIC 2. Fill in your `settings.ini` file (especially with any `requirements` that would need to be built to run your code).
-# MAGIC 3. Place your scripts and utility notebooks in subdirectories of the `databricks` folder in the file hierarchy.
-# MAGIC 4. Any databricks notebooks that contain the text: `from nbdev import *` will be automatically converted to Jupyter notebooks that live at the root level of the repository.
-# MAGIC 5. When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to https://nbdev.fast.ai/ for full documentation on how to do this). Note that pushing code to Github will add and commit *more* code to github, requiring you to perform another `git pull` to load and refer to the latest changes in your code.  
+# MAGIC The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team: 
+# MAGIC 1. Clone this library from within databricks. 
+# MAGIC 2. Place your scripts and utility notebooks in subdirectories of the `databricks` folder in the file hierarchy.
+# MAGIC 3. Any databricks notebooks that contain the text: `from nbdev import *` will be automatically converted to Jupyter notebooks that live at the root level of the repository.
+# MAGIC 4. When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to https://nbdev.fast.ai/ for full documentation on how to do this). Note that pushing code to Github will add and commit *more* code to github, requiring you to perform another `git pull` to load and refer to the latest changes in your code. 
 
 # COMMAND ----------
 
@@ -183,4 +182,15 @@ from nbdev import *
 
 # COMMAND ----------
 
+These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
 
+```
+from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+
+import urllib.parse 
+from time import time, sleep
+
+epmcq = EuroPMCQuery()
+pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+epmcq.run_empc_query(pcd_search)
+```
