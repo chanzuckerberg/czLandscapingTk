@@ -1,11 +1,8 @@
 # How to contribute
 
-## How to get started
+IMPORTANT: This is primarily a vehicle for distributing tools developed within the CZI technical group to the community to be used in trainings or in an ad-hoc manner by interested third parties. This is _intended to provide a lightweight mechanism of code dissemination to facilitate direct interaction with our stakeholders_. Contributions are welcome but would likely be best handled through direct contact with a CZI team member. 
 
-Before anything else, please install the git hooks that run automatic scripts during each commit and merge to strip the notebooks of superfluous metadata (and avoid merge conflicts). After cloning the repository, run the following command inside it:
-```
-nbdev_install_git_hooks
-```
+Please contact Donghui Li at dli@chanzuckerberg.com for more information and coordination. 
 
 ## Did you find a bug?
 
@@ -30,4 +27,3 @@ nbdev_install_git_hooks
 ## Do you want to contribute to the documentation?
 
 * Docs are automatically created from the notebooks in the nbs folder.
-
