@@ -6,8 +6,8 @@ title: Chan Zuckerberg Landscaping Toolkit
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package "
-description: "This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package "
+summary: "This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. "
+description: "This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. "
 nb_path: "index.ipynb"
 ---
 <!--
@@ -44,20 +44,19 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-use:">How to use:<a class="anchor-link" href="#How-to-use:"> </a></h2>
+<h2 id="How-this-system-was-built:">How this system was built:<a class="anchor-link" href="#How-this-system-was-built:"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This libray is built on <a href="https://github.com/GullyBurns/databricks_to_nbdev_template">databricks_to_nbdev_template</a>, which is modified version of <a href="https://github.com/fastai/nbdev_template">nbdev_template</a> tailored to work with databricks notebooks.</p>
-<p>The steps to using this are:</p>
+<p>The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team:</p>
 <ol>
-<li>Use the basic template to clone your repository and access it via databricks. </li>
-<li>Fill in your <code>settings.ini</code> file (especially with any <code>requirements</code> that would need to be built to run your code).</li>
+<li>Clone this library from within databricks. </li>
 <li>Place your scripts and utility notebooks in subdirectories of the <code>databricks</code> folder in the file hierarchy.</li>
 <li>Any databricks notebooks that contain the text: <code>from nbdev import *</code> will be automatically converted to Jupyter notebooks that live at the root level of the repository.</li>
-<li>When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to <a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> for full documentation on how to do this). Note that pushing code to Github will add and commit <em>more</em> code to github, requiring you to perform another <code>git pull</code> to load and refer to the latest changes in your code.  </li>
+<li>When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to <a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> for full documentation on how to do this). Note that pushing code to Github will add and commit <em>more</em> code to github, requiring you to perform another <code>git pull</code> to load and refer to the latest changes in your code. </li>
 </ol>
 
 </div>
@@ -205,7 +204,18 @@ efq.execute_efetch(35777446)</code></pre>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">These</span> <span class="n">classes</span> <span class="n">provides</span> <span class="n">an</span> <span class="n">interface</span> <span class="k">for</span> <span class="n">performing</span> <span class="n">queries</span> <span class="n">on</span> <span class="n">European</span> <span class="n">PMC</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">designed</span> <span class="n">to</span> <span class="n">work</span> <span class="ow">in</span> <span class="n">conjunction</span> <span class="k">with</span> <span class="n">the</span> <span class="err">`</span><span class="n">QueryTranslator</span><span class="err">`</span> <span class="n">class</span><span class="o">.</span> 
+
+<span class="err">```</span>
+<span class="kn">from</span> <span class="nn">czLandscapingTk.searchEngineUtils</span> <span class="kn">import</span> <span class="n">ESearchQuery</span><span class="p">,</span> <span class="n">EFetchQuery</span>
+
+<span class="kn">import</span> <span class="nn">urllib.parse</span> 
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">sleep</span>
+
+<span class="n">epmcq</span> <span class="o">=</span> <span class="n">EuroPMCQuery</span><span class="p">()</span>
+<span class="n">pcd_search</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s2">&quot;Primary Ciliary Dyskinesia&quot;</span><span class="p">)</span>
+<span class="n">epmcq</span><span class="o">.</span><span class="n">run_empc_query</span><span class="p">(</span><span class="n">pcd_search</span><span class="p">)</span>
+<span class="err">```</span>
 </pre></div>
 
     </div>

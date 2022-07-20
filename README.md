@@ -1,21 +1,20 @@
 # Chan Zuckerberg Landscaping Toolkit
-> This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package 
+> This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. 
 
 
  ## Install
 
  `pip install git+https://github.com/GullyBurns/czLandscapingTk.git`
 
- ## How to use:
+ ## How this system was built:
 
  This libray is built on [databricks_to_nbdev_template](https://github.com/GullyBurns/databricks_to_nbdev_template), which is modified version of [nbdev_template](https://github.com/fastai/nbdev_template) tailored to work with databricks notebooks.
 
-The steps to using this are: 
-1. Use the basic template to clone your repository and access it via databricks. 
-2. Fill in your `settings.ini` file (especially with any `requirements` that would need to be built to run your code).
-3. Place your scripts and utility notebooks in subdirectories of the `databricks` folder in the file hierarchy.
-4. Any databricks notebooks that contain the text: `from nbdev import *` will be automatically converted to Jupyter notebooks that live at the root level of the repository.
-5. When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to https://nbdev.fast.ai/ for full documentation on how to do this). Note that pushing code to Github will add and commit *more* code to github, requiring you to perform another `git pull` to load and refer to the latest changes in your code.  
+The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team: 
+1. Clone this library from within databricks. 
+2. Place your scripts and utility notebooks in subdirectories of the `databricks` folder in the file hierarchy.
+3. Any databricks notebooks that contain the text: `from nbdev import *` will be automatically converted to Jupyter notebooks that live at the root level of the repository.
+4. When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to https://nbdev.fast.ai/ for full documentation on how to do this). Note that pushing code to Github will add and commit *more* code to github, requiring you to perform another `git pull` to load and refer to the latest changes in your code. 
 
  ## Instructions for how to use Toolkit Classes:
 
@@ -143,6 +142,17 @@ efq.execute_efetch(35777446)
  ### EuroPMCQuery
 
 ```
+These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
 
+```
+from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+
+import urllib.parse 
+from time import time, sleep
+
+epmcq = EuroPMCQuery()
+pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+epmcq.run_empc_query(pcd_search)
+```
 
 ```
