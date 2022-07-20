@@ -10,6 +10,8 @@ from nbdev import *
 # MAGIC > This is a public-facing library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed as natural language and structured data. This system is built on the excellent [`nbdev`](https://nbdev.fast.ai/) package 
 # MAGIC 
 # MAGIC CZI adheres to the Contributor Covenant [code of conduct](https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@chanzuckerberg.com.
+# MAGIC 
+# MAGIC Please note: If you believe you have found a security issue, please responsibly disclose by contacting us at security@chanzuckerberg.com.
 
 # COMMAND ----------
 
