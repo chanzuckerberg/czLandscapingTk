@@ -1,8 +1,10 @@
 # How to contribute
 
-IMPORTANT: This is primarily a vehicle for distributing tools developed within the CZI technical group to the community to be used in trainings or in an ad-hoc manner by interested third parties. This is _intended to provide a lightweight mechanism of code dissemination to facilitate direct interaction with our stakeholders_. Contributions are welcome but would likely be best handled through direct contact with a CZI team member. 
+IMPORTANT: This is primarily a vehicle for distributing tools developed within the CZI technical group to the community to be used in trainings or in an ad-hoc manner by interested third parties. This is _intended to provide a lightweight mechanism of code dissemination to facilitate direct interaction with our stakeholders_. 
 
-Please contact Donghui Li at dli@chanzuckerberg.com for more information and coordination. 
+Contributions are welcome but would likely be best handled through direct contact with a CZI team member. 
+
+If you would like to contact us, please contact Donghui Li at dli@chanzuckerberg.com for more information and coordination. 
 
 ## Did you find a bug?
 
