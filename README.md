@@ -147,7 +147,7 @@ efq.execute_efetch(35777446)
 
  ### EuroPMCQuery
 
-```
+ 
 These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
 
 ```
@@ -159,7 +159,4 @@ from time import time, sleep
 epmcq = EuroPMCQuery()
 pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
 epmcq.run_empc_query(pcd_search)
-```
-
-
 ```
