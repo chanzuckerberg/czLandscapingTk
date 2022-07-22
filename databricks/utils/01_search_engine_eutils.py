@@ -434,9 +434,6 @@ efq.execute_efetch(35777446)
 
 # COMMAND ----------
 
-import urllib.parse 
-from time import time, sleep
-
 epmcq = EuroPMCQuery()
 id_list, q_list = qt.generate_queries(QueryType.epmc)
 epmcq.run_empc_query(q_list[0])
