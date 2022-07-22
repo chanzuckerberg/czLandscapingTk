@@ -186,16 +186,16 @@ from nbdev import *
 
 # COMMAND ----------
 
-These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
-
-```
-from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
-
-import urllib.parse 
-from time import time, sleep
-
-epmcq = EuroPMCQuery()
-pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
-epmcq.run_empc_query(pcd_search)
-```
-
+# MAGIC %md 
+# MAGIC These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
+# MAGIC 
+# MAGIC ```
+# MAGIC from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+# MAGIC 
+# MAGIC import urllib.parse 
+# MAGIC from time import time, sleep
+# MAGIC 
+# MAGIC epmcq = EuroPMCQuery()
+# MAGIC pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+# MAGIC epmcq.run_empc_query(pcd_search)
+# MAGIC ```
