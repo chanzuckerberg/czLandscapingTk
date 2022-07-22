@@ -4,12 +4,12 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"QueryType": "00_query_translator.ipynb",
          "QueryTranslator": "00_query_translator.ipynb",
-         "NCBI_Database_Type": "00_search_engine_eutils.ipynb",
-         "ESearchQuery": "00_search_engine_eutils.ipynb",
-         "PAGE_SIZE": "00_search_engine_eutils.ipynb",
-         "TIME_THRESHOLD": "00_search_engine_eutils.ipynb",
-         "EFetchQuery": "00_search_engine_eutils.ipynb",
-         "EuroPMCQuery": "00_search_engine_eutils.ipynb",
+         "NCBI_Database_Type": "01_search_engine_eutils.ipynb",
+         "ESearchQuery": "01_search_engine_eutils.ipynb",
+         "PAGE_SIZE": "01_search_engine_eutils.ipynb",
+         "TIME_THRESHOLD": "01_search_engine_eutils.ipynb",
+         "EFetchQuery": "01_search_engine_eutils.ipynb",
+         "EuroPMCQuery": "01_search_engine_eutils.ipynb",
          "NetworkxS2AG": "02_networkxS2AG.ipynb",
          "AirtableUtils": "03_airtable_utils.ipynb"}
 
