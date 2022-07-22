@@ -2,10 +2,11 @@
 > This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. 
 
 
-```
-from nbdev import *
-#from your_lib.core import *
-```
+ 
+
+CZI adheres to the Contributor Covenant [code of conduct](https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [opensource@chanzuckerberg.com](mailto:opensource@chanzuckerberg.com).
+
+Please note: If you believe you have found a security issue, please responsibly disclose by contacting us at [security@chanzuckerberg.com](mailto:security@chanzuckerberg.com).
 
  ## Install
 
