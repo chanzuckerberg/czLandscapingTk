@@ -434,6 +434,8 @@ efq.execute_efetch(35777446)
 
 # COMMAND ----------
 
+# Tests for European PMC
 epmcq = EuroPMCQuery()
 id_list, q_list = qt.generate_queries(QueryType.epmc)
 epmcq.run_empc_query(q_list[0])
+
