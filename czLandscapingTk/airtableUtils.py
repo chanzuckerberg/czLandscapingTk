@@ -19,7 +19,6 @@ class AirtableUtils:
   def __init__(self, api_key):
     """ Initialize the interface with an API key.
     """
-    self.airtable_url = 'https://api.semanticscholar.org/graph/v1/author/search'
     self.api_key = api_key
 
   def _get_airtable_url(self, file, table):

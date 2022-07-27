@@ -4,6 +4,7 @@
     "Query Translation Tools  ": "query_translator.html",
     "Search Engine Tools  ": "search_engine_eutils.html",
     "NetworkX S2AG Tools ": "networkxS2AG.html",
-    "Airtable Utilities": "airtable_utils.html"
+    "Airtable Utilities": "airtable_utils.html",
+    "Title": "dashdb_queries.html"
   }
 }
