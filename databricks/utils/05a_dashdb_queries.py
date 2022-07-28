@@ -4,6 +4,14 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md # Dashboard Database Queries
+# MAGIC 
+# MAGIC > SQL Queries to be used with the CZI KG Snowflake database . 
+
+# COMMAND ----------
+
+#export
+
 DASHBOARD_CORPUS = """
 SELECT d.* 
 FROM PREFIX_CORPUS as d
@@ -359,6 +367,8 @@ MONDO_SEARCH_TERMS = '''
 '''
 
 # COMMAND ----------
+
+#export
 
 CREATE_FULL_TEXT_DOCUMENT_TABLE = """
     CREATE TABLE FULLTEXT_DOCUMENT (ID INT IDENTITY, 
