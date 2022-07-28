@@ -23,6 +23,9 @@ entries:
       url: airtable_utils.html
     - output: web,pdf
       title: Title
+      url: dashdb_utils.html
+    - output: web,pdf
+      title: Dashboard Database Queries
       url: dashdb_queries.html
     output: web
     title: czLandscapingTk

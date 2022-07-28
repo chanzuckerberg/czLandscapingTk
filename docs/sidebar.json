@@ -5,6 +5,7 @@
     "Search Engine Tools  ": "search_engine_eutils.html",
     "NetworkX S2AG Tools ": "networkxS2AG.html",
     "Airtable Utilities": "airtable_utils.html",
-    "Title": "dashdb_queries.html"
+    "Title": "dashdb_utils.html",
+    "Dashboard Database Queries": "dashdb_queries.html"
   }
 }
