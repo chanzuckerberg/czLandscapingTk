@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %run ./00_query_translator 
+# MAGIC %run ./01_query_translator 
 
 # COMMAND ----------
 
@@ -397,7 +397,7 @@ class EuroPMCQuery():
                     otherIds_from_q.add(str(d['id']))
             # pp.pprint(data)
             # break
-        return (numFound, list(pmids_from_q))
+        return (numFound, list(pmids_from_q), list(otherIds_from_q))
 
 
 # COMMAND ----------

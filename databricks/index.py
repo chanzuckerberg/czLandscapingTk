@@ -190,7 +190,7 @@ from nbdev import *
 # MAGIC These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
 # MAGIC 
 # MAGIC ```
-# MAGIC from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+# MAGIC from czLandscapingTk.searchEngineUtils import EuroPMCQuery
 # MAGIC 
 # MAGIC import urllib.parse 
 # MAGIC from time import time, sleep

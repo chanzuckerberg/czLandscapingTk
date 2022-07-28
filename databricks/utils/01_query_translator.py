@@ -33,7 +33,7 @@ class QueryType(Enum):
   pubmed_no_types = 7
 
 class QueryTranslator(): 
-  def __init__(self, df, query_col):
+  def __init__(self, df, id_col, query_col):
     """This class allows a user to define a set of logical boolean queries in a Pandas dataframe and then convert them to a variety of formats for use on various online API systems.<BR>
     Functionality includes:
       * Specify queries as a table using '|' and '&' symbols
@@ -69,7 +69,7 @@ class QueryTranslator():
     self.redq_list = []
     for row in df.iterrows():
       tt = row[1][query_col]
-      row_id = row[1]['ID']
+      row_id = row[1][id_col]
       redq = fix_errors(tt.strip())
       for t in ordered_names:
         id = self.terms2id[t]
