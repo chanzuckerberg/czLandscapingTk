@@ -151,7 +151,7 @@ efq.execute_efetch(35777446)
 These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the `QueryTranslator` class. 
 
 ```
-from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+from czLandscapingTk.searchEngineUtils import EuroPMCQuery
 
 import urllib.parse 
 from time import time, sleep
