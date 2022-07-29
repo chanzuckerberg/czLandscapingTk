@@ -103,7 +103,7 @@ class Snowflake():
 
 from pathlib import Path
 from .searchEngineUtils import ESearchQuery, EuroPMCQuery
-from .queryTranslator import QueryTranslator
+from .queryTranslator import QueryTranslator, QueryType
 import czLandscapingTk.dashdbQueries
 
 from datetime import datetime
