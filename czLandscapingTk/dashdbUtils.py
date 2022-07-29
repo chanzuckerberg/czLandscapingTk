@@ -252,12 +252,12 @@ class DashboardDb:
         for (j, sq) in zip(subset_ids, pubmed_subset_queries):
           if len(sq)>0:
             q = '(%s) AND (%s)'%(q,sq)
-        q = re.sub('\s+','+',q)
-        esq = ESearchQuery(pubmed_api_key)
-        pubmed_pmids = esq.execute_query(q)
-        print(len(pubmed_pmids))
-        for pmid in pubmed_pmids:
-          corpus_paper_list.append((pmid, i, 'pubmed', j))
+          q = re.sub('\s+','+',q)
+          esq = ESearchQuery(pubmed_api_key)
+          pubmed_pmids = esq.execute_query(q)
+          print(len(pubmed_pmids))
+          for pmid in pubmed_pmids:
+            corpus_paper_list.append((pmid, i, 'pubmed', j))
 
     if epmc_inlcude:
       (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.closed)
