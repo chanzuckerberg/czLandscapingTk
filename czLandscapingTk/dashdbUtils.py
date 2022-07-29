@@ -16,6 +16,18 @@ from enum import Enum
 import re
 
 class Snowflake():
+   '''
+    Class to provide simple access to Snowflake from within CZI
+
+    Attributes (note - store `user`, `pem`, and `pwd` as `dbutils.secret` data ):
+    * user: Snowflake username
+    * pem: SSH key
+    * pwd: Password for SSH key
+    * warehouse: name of the SNOWFLAKE warehouse
+    * database: name of the SNOWFLAKE database
+    * schema: name of the SNOWFLAKE schema
+    * role: name of the SNOWFLAKE role with correct permissions to execute database editing
+    '''
 
   def __init__(self, user, pem, pwd, warehouse, database, schema, role):
     self.user = user
@@ -53,6 +65,9 @@ class Snowflake():
     return self.cs
 
   def get_cursor(self):
+    '''
+    Gets an active cursor for use within the database
+    '''
     cs = self.cursor()
     cs.execute('USE ROLE '+self.role)
     cs.execute('USE WAREHOUSE ' + self.warehouse)
@@ -62,6 +77,9 @@ class Snowflake():
     return cs
 
   def execute_query(self, cs, sql, columns):
+    '''
+    Executes an SQL query with a list of column names and returns a Pandas DataFrame
+    '''
     cs.execute(sql)
     df = pd.DataFrame(cs.fetchall(), columns=columns)
     df = df.replace('\n', ' ', regex=True)
@@ -100,6 +118,9 @@ class Snowflake():
           .load()
 
     return sdf
+
+# Cell
+
 #export
 
 from pathlib import Path
@@ -154,7 +175,6 @@ class DashboardDb:
     if os.path.exists(self.temp_documents_path) is False:
       Path(self.temp_documents_path).touch()
 
-  #export
   def get_cursor(self):
     cs = self.sf.get_cursor()
     return cs
