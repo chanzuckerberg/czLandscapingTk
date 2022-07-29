@@ -12,7 +12,6 @@ import io
 import snowflake.connector
 import pandas as pd
 from enum import Enum
-import
 
 class Platform(Enum):
   GC = 'Google Cloud'
