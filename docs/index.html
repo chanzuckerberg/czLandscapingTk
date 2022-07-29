@@ -221,6 +221,41 @@ epmcq.run_empc_query(pcd_search)</code></pre>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="DashboardDb-Class">DashboardDb Class<a class="anchor-link" href="#DashboardDb-Class"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This class permits contruction of a Snowflake database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use.</p>
+
+<pre><code>prefix = 'RARE_2022H2_'
+secret_scope = '&lt;SCOPE-FOR-DB-SECRETS&gt;'
+warehouse = '&lt;WAREHOUSE-NAME&gt;'
+database = '&lt;DATABASE_NAME&gt;' 
+schema = '&lt;SCHEMA_NAME&gt;'
+role = '&lt;ROLE_NAME&gt;'
+loc = '/dbfs/FileStore/user/&lt;path&gt;/'
+
+user = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_USERNAME")
+pem = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
+pwd = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PASSPHRASE")
+
+dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)</code></pre>
+<p>Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command:</p>
+
+<pre><code>queries_df = pd.read_csv('...', sep='\t')
+ID_column = 'ID'
+query_column = 'Queries'  
+pubmed_api_key = 'ENTER YOUR KEY INFORMATION HERE'
+
+dashdb.build_database_from_queries(pubmed_api_key, queries_df, ID_column, query_column)</code></pre>
+
+</div>
+</div>
+</div>
 </div>
  
 
