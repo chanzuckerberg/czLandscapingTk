@@ -373,13 +373,12 @@ class EuroPMCQuery():
         self.oa = oa
 
     def run_empc_query(self, q, page_size=1000):
-        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(
-            page_size) + '&synonym=TRUE'
+        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=10)
         data = json.loads(r.text)
         numFound = data['hitCount']
-        print(q + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
+        print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
         pmids_from_q = set()
         otherIds_from_q = set()
         cursorMark = '*'
@@ -412,7 +411,7 @@ show_doc(EuroPMCQuery.run_empc_query)
 
 query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
 df = pd.DataFrame(query)
-qt = QueryTranslator(df, 'query')
+qt = QueryTranslator(df, 'ID', 'query')
 print(qt.generate_queries(QueryType.pubmed))
 
 # COMMAND ----------
@@ -438,4 +437,3 @@ efq.execute_efetch(35777446)
 epmcq = EuroPMCQuery()
 id_list, q_list = qt.generate_queries(QueryType.epmc)
 epmcq.run_empc_query(q_list[0])
-
