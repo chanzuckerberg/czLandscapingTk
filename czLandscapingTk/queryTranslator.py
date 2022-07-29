@@ -75,13 +75,17 @@ class QueryTranslator():
     queries = []
     IDs = []
     for ID, t in self.redq_list:
-      if t:
-        print(t)
-        ex = expr(t)
-        queries.append(self._expand_expr(ex, query_type))
-      else:
-        queries.append('')
-      IDs.append(ID)
+      try:
+        if t:
+          #print(t)
+          ex = expr(t)
+          queries.append(self._expand_expr(ex, query_type))
+        else:
+          queries.append('')
+        IDs.append(ID)
+      except:
+        print('Error with ' + str(ID))
+        raise
     return (IDs, queries)
 
   def _expand_expr(self, ex, query_type:QueryType):
@@ -179,18 +183,18 @@ class QueryTranslator():
         t = m.group(1)
         f = m.group(2)
         if f == 'ti':
-          return '("%s"[ti])'%(t)
+          return '"%s"[ti]'%(t)
         elif f == 'ab':
-          return '("%s"[ab])'%(t)
+          return '"%s"[ab]'%(t)
         elif f == 'tiab':
-          return '("%s"[tiab])'%(t)
+          return '"%s"[tiab]'%(t)
         elif f == 'ft':
           raise Exception("Can't run full text query on pubmed currently: " + self.id2terms[ex.name] )
         else:
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:
         t = self.id2terms[ex.name]
-        return '("%s")[tiab])'%(t)
+        return '"%s"[tiab]'%(t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):

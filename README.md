@@ -36,7 +36,7 @@ atu = AirtableUtils('keyXYZXYZXYZYXZY')
 Read a complete table into a pandas dataframe: 
 ```
 # atu.read_airtable(<notebook id>, <table id>)
-atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
+df = atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
 ```
 
 Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time): 

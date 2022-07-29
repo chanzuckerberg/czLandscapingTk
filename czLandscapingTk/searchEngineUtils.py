@@ -325,13 +325,12 @@ class EuroPMCQuery():
         self.oa = oa
 
     def run_empc_query(self, q, page_size=1000):
-        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(
-            page_size) + '&synonym=TRUE'
+        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=10)
         data = json.loads(r.text)
         numFound = data['hitCount']
-        print(q + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
+        print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
         pmids_from_q = set()
         otherIds_from_q = set()
         cursorMark = '*'

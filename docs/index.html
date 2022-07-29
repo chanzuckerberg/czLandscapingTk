@@ -91,7 +91,7 @@ atu = AirtableUtils('keyXYZXYZXYZYXZY')</code></pre>
 <p>Read a complete table into a pandas dataframe:</p>
 
 <pre><code># atu.read_airtable(&lt;notebook id&gt;, &lt;table id&gt;)
-atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')</code></pre>
+df = atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')</code></pre>
 <p>Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time):</p>
 
 <pre><code># atu.send_df_to_airtable(&lt;notebook id&gt;, &lt;table id&gt;, df):
