@@ -118,6 +118,7 @@ import czLandscapingTk.dashdbQueries
 from datetime import datetime
 import requests
 import json
+from tqdm import tqdm
 
 class DashboardDb:
 
