@@ -16,18 +16,18 @@ from enum import Enum
 import re
 
 class Snowflake():
-   '''
-    Class to provide simple access to Snowflake from within CZI
+  '''
+  Class to provide simple access to Snowflake from within CZI
 
-    Attributes (note - store `user`, `pem`, and `pwd` as `dbutils.secret` data ):
-    * user: Snowflake username
-    * pem: SSH key
-    * pwd: Password for SSH key
-    * warehouse: name of the SNOWFLAKE warehouse
-    * database: name of the SNOWFLAKE database
-    * schema: name of the SNOWFLAKE schema
-    * role: name of the SNOWFLAKE role with correct permissions to execute database editing
-    '''
+  Attributes (note - store `user`, `pem`, and `pwd` as `dbutils.secret` data ):
+  * user: Snowflake username
+  * pem: SSH key
+  * pwd: Password for SSH key
+  * warehouse: name of the SNOWFLAKE warehouse
+  * database: name of the SNOWFLAKE database
+  * schema: name of the SNOWFLAKE schema
+  * role: name of the SNOWFLAKE role with correct permissions to execute database editing
+  '''
 
   def __init__(self, user, pem, pwd, warehouse, database, schema, role):
     self.user = user
@@ -322,3 +322,4 @@ class DashboardDb:
     self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
     cs.execute('COMMIT')
+show_doc(DashboardDb.build_database_from_queries)
