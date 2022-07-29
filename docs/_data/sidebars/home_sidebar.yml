@@ -22,7 +22,7 @@ entries:
       title: Airtable Utilities
       url: airtable_utils.html
     - output: web,pdf
-      title: Title
+      title: Dashboard Database Utilities
       url: dashdb_utils.html
     - output: web,pdf
       title: Dashboard Database Queries
