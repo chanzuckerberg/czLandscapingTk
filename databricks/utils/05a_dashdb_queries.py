@@ -6,7 +6,7 @@ from nbdev import *
 
 # MAGIC %md # Dashboard Database Queries
 # MAGIC 
-# MAGIC > SQL Queries to be used with the CZI KG Snowflake database . 
+# MAGIC > Simple queries in SQL provided for use by `czLandscapingTk.dashdbUtils.DashboardDb` class.
 
 # COMMAND ----------
 
