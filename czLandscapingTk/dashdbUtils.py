@@ -12,6 +12,7 @@ import io
 import snowflake.connector
 import pandas as pd
 from enum import Enum
+import
 
 class Platform(Enum):
   GC = 'Google Cloud'
@@ -20,13 +21,20 @@ class Platform(Enum):
 class SecretManager():
   def __init__(self, platform):
     self.platform = platform
+    try:
+        from pyspark.dbutils import DBUtils
+        dbutils = DBUtils(spark)
+    except ImportError:
+        import IPython
+        dbutils = IPython.get_ipython().user_ns["dbutils"]
+    self.dbutils = dbutils
 
   def get_creds(self, key):
     # databricks credentials
     if self.platform == Platform.DB:
-      user = dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_USERNAME")
-      pem = dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
-      pwd = dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_PASSPHRASE")
+      user = self.dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_USERNAME")
+      pem = self.dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
+      pwd = self.dbutils.secrets.get(scope=key, key="SNOWFLAKE_SERVICE_PASSPHRASE")
     else:
       raise Exception("Platform not set")
     return (user, pem, pwd)
