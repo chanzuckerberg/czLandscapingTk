@@ -13,6 +13,7 @@ import os
 import snowflake.connector
 import pandas as pd
 from enum import Enum
+import re
 
 class Snowflake():
 
