@@ -250,7 +250,7 @@ class DashboardDb:
         (subset_ids, pubmed_subset_queries) = ([0],[''])
       for (i, q) in zip(corpus_ids, pubmed_queries):
         for (j, sq) in zip(subset_ids, pubmed_subset_queries):
-          if len(sq)>0:
+          if len(sq) > 0:
             q = '(%s) AND (%s)'%(q,sq)
           q = re.sub('\s+','+',q)
           esq = ESearchQuery(pubmed_api_key)
@@ -268,7 +268,7 @@ class DashboardDb:
       for (i, q) in zip(corpus_ids, epmc_queries):
         for (j, sq) in zip(subset_ids, epmc_subset_queries):
           query = q
-          if len(sq)>0:
+          if len(sq) > 0:
             query = '(%s) AND (%s)'%(q, sq)
           epmcq = EuroPMCQuery()
           numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
