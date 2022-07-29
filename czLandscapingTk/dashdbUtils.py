@@ -113,6 +113,24 @@ import json
 from tqdm import tqdm
 
 class DashboardDb:
+  """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>
+  Functionality includes:
+    * Define a spreadsheet with a column of queries expressed in boolean logic
+    * Optional: Define a secondary spreadsheet with a column of subqueries expressed in boolean logic
+    * Iterate over different sources (Pubmed + European Pubmed) to execute all combinations of queries and subqueries
+    * Store extended records for all papers - including full text where available from CZI's internal data repo.
+
+  Attributes (note - store `user`, `pem`, and `pwd` as `dbutils.secret` data ):
+    * prefix: a string that will be used as the prefix for each table in the database
+    * user: Snowflake username
+    * pem: SSH key
+    * pwd: Password for SSH key
+    * warehouse: name of the SNOWFLAKE warehouse
+    * database: name of the SNOWFLAKE database
+    * schema: name of the SNOWFLAKE schema
+    * role: name of the SNOWFLAKE role with correct permissions to execute database editing
+    * loc: local disk location for files
+  """
 
   def __init__(self, prefix, user, pem, pwd, warehouse, database, schema, role, loc):
     self.sf = Snowflake(user, pem, pwd, warehouse, database, schema, role)
@@ -218,6 +236,22 @@ class DashboardDb:
     cs.execute("COMMIT")
 
   def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col, subquery_df=None, subq_col=None, delete_db=True, pm_include=True, epmc_inlcude=True):
+    '''
+    Function to generate a snowflake database of scientific papers based on a list of queries listed in a dataframe
+    (and possibly faceted by a second set of queries in a second dataframe). This system will (optionally)
+    execute queries on the REST services of Pubmed and European PMC to build the database.
+
+    Attributes:
+    * pubmed_api_key: see https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/
+    * query_df: a Pandas Dataframe of corpora where one column specifies the query
+    * id_col: ID column used to identify the corpus
+    * q_col: column for the query (expressed using '&' for AND and '|' for OR)
+    * subquery_df: an optional Pandas Dataframe of subqueries
+    * subq_col: an optional column for the subquery (expressed using '&' for AND and '|' for OR)
+    * delete_db (default=True): delete the existing database?
+    * pm_include (default=True): Run corpus construction queries on Pubmed
+    * epmc_include (default=True): Run corpus construction queries on European PMC
+    '''
     qt = QueryTranslator(query_df, id_col, q_col)
     if subquery_df:
       qt2 = QueryTranslator(subquery_df, id_col, subq_col)
