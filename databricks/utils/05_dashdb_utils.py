@@ -339,4 +339,7 @@ class DashboardDb:
     self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
     cs.execute('COMMIT')
+
+# COMMAND ----------
+
 show_doc(DashboardDb.build_database_from_queries)
