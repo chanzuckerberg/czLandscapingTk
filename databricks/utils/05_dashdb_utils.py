@@ -17,6 +17,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import dsa
 from cryptography.hazmat.primitives import serialization
 import io
+import os
 import snowflake.connector
 import pandas as pd
 from enum import Enum
@@ -106,9 +107,6 @@ class Snowflake():
           .load()
 
     return sdf
-
-# COMMAND ----------
-
 #export
 
 from pathlib import Path
