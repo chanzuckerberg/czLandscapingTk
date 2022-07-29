@@ -335,7 +335,7 @@ class DashboardDb:
     cs.execute("BEGIN")
     if delete_db:
       self.drop_database(cs=cs)
-    self.upload_wb(df, 'CORPUS', cs=cs)
+    self.upload_wb(query_df, 'CORPUS', cs=cs)
     self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
     cs.execute('COMMIT')
