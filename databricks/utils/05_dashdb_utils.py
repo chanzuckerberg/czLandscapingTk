@@ -111,7 +111,7 @@ class Snowflake():
 
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery
-from czLandscapingTk.queryTranslator import QueryTranslator
+from czLandscapingTk.queryTranslator import QueryTranslator, QueryType
 import czLandscapingTk.dashdbQueries
 
 from datetime import datetime
