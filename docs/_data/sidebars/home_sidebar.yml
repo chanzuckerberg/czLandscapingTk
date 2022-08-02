@@ -10,23 +10,29 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: Title
+      url: databricks_utils.html
+    - output: web,pdf
+      title: 'General Utilities  '
+      url: general_utils.html
+    - output: web,pdf
       title: 'Query Translation Tools  '
       url: query_translator.html
     - output: web,pdf
-      title: 'Search Engine Tools  '
-      url: search_engine_eutils.html
-    - output: web,pdf
-      title: 'NetworkX S2AG Tools '
-      url: networkxS2AG.html
-    - output: web,pdf
       title: Airtable Utilities
       url: airtable_utils.html
+    - output: web,pdf
+      title: 'Search Engine Tools  '
+      url: search_engine_eutils.html
     - output: web,pdf
       title: Dashboard Database Utilities
       url: dashdb_utils.html
     - output: web,pdf
       title: Dashboard Database Queries
       url: dashdb_queries.html
+    - output: web,pdf
+      title: 'NetworkX S2AG Tools '
+      url: networkxS2AG.html
     output: web
     title: czLandscapingTk
   output: web

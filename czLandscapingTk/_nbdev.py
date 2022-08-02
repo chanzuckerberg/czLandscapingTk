@@ -2,16 +2,15 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"QueryType": "01_query_translator.ipynb",
-         "QueryTranslator": "01_query_translator.ipynb",
-         "NCBI_Database_Type": "02_search_engine_eutils.ipynb",
-         "ESearchQuery": "02_search_engine_eutils.ipynb",
-         "PAGE_SIZE": "02_search_engine_eutils.ipynb",
-         "TIME_THRESHOLD": "02_search_engine_eutils.ipynb",
-         "EFetchQuery": "02_search_engine_eutils.ipynb",
-         "EuroPMCQuery": "02_search_engine_eutils.ipynb",
-         "NetworkxS2AG": "03_networkxS2AG.ipynb",
-         "AirtableUtils": "04_airtable_utils.ipynb",
+index = {"QueryType": "02_query_translator.ipynb",
+         "QueryTranslator": "02_query_translator.ipynb",
+         "AirtableUtils": "03_airtable_utils.ipynb",
+         "NCBI_Database_Type": "04_search_engine_eutils.ipynb",
+         "ESearchQuery": "04_search_engine_eutils.ipynb",
+         "PAGE_SIZE": "04_search_engine_eutils.ipynb",
+         "TIME_THRESHOLD": "04_search_engine_eutils.ipynb",
+         "EFetchQuery": "04_search_engine_eutils.ipynb",
+         "EuroPMCQuery": "04_search_engine_eutils.ipynb",
          "Snowflake": "05_dashdb_utils.ipynb",
          "DashboardDb": "05_dashdb_utils.ipynb",
          "DASHBOARD_CORPUS": "05a_dashdb_queries.ipynb",
@@ -58,14 +57,15 @@ index = {"QueryType": "01_query_translator.ipynb",
          "CONTENT_CORPUS_SQL": "05a_dashdb_queries.ipynb",
          "MONDO_SEARCH_TERMS": "05a_dashdb_queries.ipynb",
          "CREATE_FULL_TEXT_DOCUMENT_TABLE": "05a_dashdb_queries.ipynb",
-         "CREATE_FULL_TEXT_ANNOTATION_TABLE": "05a_dashdb_queries.ipynb"}
+         "CREATE_FULL_TEXT_ANNOTATION_TABLE": "05a_dashdb_queries.ipynb",
+         "NetworkxS2AG": "06_networkxS2AG.ipynb"}
 
 modules = ["queryTranslator.py",
-           "searchEngineUtils.py",
-           "networkXS2AG.py",
            "airtableUtils.py",
+           "searchEngineUtils.py",
            "dashdbUtils.py",
-           "dashdbQueries.py"]
+           "dashdbQueries.py",
+           "networkXS2AG.py"]
 
 doc_url = "https://GullyBurns.github.io/czLandscapingTk/"
 
