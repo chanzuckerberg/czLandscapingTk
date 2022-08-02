@@ -58,14 +58,16 @@ index = {"QueryType": "02_query_translator.ipynb",
          "MONDO_SEARCH_TERMS": "05a_dashdb_queries.ipynb",
          "CREATE_FULL_TEXT_DOCUMENT_TABLE": "05a_dashdb_queries.ipynb",
          "CREATE_FULL_TEXT_ANNOTATION_TABLE": "05a_dashdb_queries.ipynb",
-         "NetworkxS2AG": "06_networkxS2AG.ipynb"}
+         "NetworkxS2AG": "06_networkxS2AG.ipynb",
+         "BioLinkUtils": "07_bioLinkUtils.ipynb"}
 
 modules = ["queryTranslator.py",
            "airtableUtils.py",
            "searchEngineUtils.py",
            "dashdbUtils.py",
            "dashdbQueries.py",
-           "networkXS2AG.py"]
+           "networkXS2AG.py",
+           "bioLinkUtils.py"]
 
 doc_url = "https://GullyBurns.github.io/czLandscapingTk/"
 
