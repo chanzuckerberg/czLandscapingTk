@@ -333,7 +333,7 @@ class NetworkxS2AG:
         self.g.add_edge(e1, e2, label='cites', isInfluential=isInf)        
     return rdata
   
-  def addCitationsOrReferencesToGraph(self, paperIds, citref, isClosed, pklpath=None):
+  def addCitationsOrReferencesToGraph(self, paperIds, citref, isClosed, pklpath=None, idType=''):
     
     for i, paperId in tqdm(enumerate(paperIds), total=len(paperIds)):
       
