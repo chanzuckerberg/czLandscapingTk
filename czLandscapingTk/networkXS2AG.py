@@ -21,7 +21,6 @@ from collections import deque
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy import linalg
-from .generalUtilities import ID_Type
 
 class NetworkxS2AG:
   """This class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.<BR>
@@ -59,7 +58,7 @@ class NetworkxS2AG:
     print("# Citations: %d"%(len(self.search_edges('cites'))))
     infCites = [(e1, e2) for e1,e2,attrs in self.search_edges('cites') if attrs.get('isInfluential')]
     print("# Influential Citations: %d"%(len(infCites)))
-    feature_papers = [n1 for n1,attrs in nxS2.search_nodes('paper') if attrs.get('features')]
+    feature_papers = [n1 for n1,attrs in self.search_nodes('paper') if attrs.get('features')]
     print("# Papers with feature: %d"%(len(feature_papers)))
     print("SCC: %d"%(nx.number_strongly_connected_components(self.g)))
     print("WCC: %d"%(nx.number_weakly_connected_components(self.g)))
@@ -581,4 +580,3 @@ class NetworkxS2AG:
     if len(checked_edge_list) > 0:
       print('adding %d new edges'%(len(checked_edge_list)))
       self.g.add_edges_from(checked_edge_list, label=label)
-
