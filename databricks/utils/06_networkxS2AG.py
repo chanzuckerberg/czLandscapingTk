@@ -29,6 +29,7 @@ from collections import deque
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy import linalg
+from czLandscapingTk.generalUtilities import ID_Type
 
 class NetworkxS2AG:
   """This class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.<BR>
@@ -333,7 +334,7 @@ class NetworkxS2AG:
         self.g.add_edge(e1, e2, label='cites', isInfluential=isInf)        
     return rdata
   
-  def addCitationsOrReferencesToGraph(self, paperIds, citref, isClosed, pklpath=None, idType=''):
+  def addCitationsOrReferencesToGraph(self, paperIds, citref, isClosed, pklpath=None):
     
     for i, paperId in tqdm(enumerate(paperIds), total=len(paperIds)):
       
