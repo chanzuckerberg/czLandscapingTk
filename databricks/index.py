@@ -11,6 +11,12 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/f36c6769-e10f-4741-8037-a4ce0dcec7c6/image.png)
+# MAGIC 
+# MAGIC Image source on LucidDraw: [Link](https://lucid.app/lucidchart/28a5a90d-0c96-43e3-b569-7ed7dfb0fbd3/edit?viewport_loc=-62%2C-519%2C2266%2C1916%2C0_0&invitationId=inv_66c5fd70-6e98-4631-bb39-f2c9df08dbeb#)
+
+# COMMAND ----------
+
 # MAGIC %md 
 # MAGIC 
 # MAGIC CZI adheres to the Contributor Covenant [code of conduct](https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [opensource@chanzuckerberg.com](mailto:opensource@chanzuckerberg.com).
