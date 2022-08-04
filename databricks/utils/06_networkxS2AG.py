@@ -110,7 +110,7 @@ class NetworkxS2AG:
     for p in papers_to_add:
       self.added_papers.add(p)
   
-  def run_thresholded_centrality_analysis(self, min_pub_count=3, top_n=100 ):
+  def run_thresholded_centrality_analysis(self, authorIds):
     """The system will analyse all authors within the graph that have total 
     number of publications above `min_pub_count` by peforming an author-based
     eigenfactor calculation (see [West et al 2013](https://jevinwest.org/papers/West2013JASIST.pdf)) 
@@ -119,9 +119,9 @@ class NetworkxS2AG:
     """
     thresholded_authors, counts  = self.threshold_authors_by_pubcount(min_pub_count)
     author_eigfacs_df = self.compute_author_eigenfactors(thresholded_authors, verbose=True)
-    top_n_df = author_eigfacs_df.sort_values('eigenfactor',ascending=False)[0:top_n]
-    authorIds = [row.id for row in top_n_df.itertuples()]
-    topn_author_metadata_df, errors = self.query_authors_metadata(authorIds)
+    top_n_df = author_eigfacs_df.sort_values('eigenfactor',ascending=True)
+    final_authorIds = [row.id for row in top_n_df.itertuples()]
+    topn_author_metadata_df, errors = self.query_authors_metadata(final_authorIds)
     return topn_author_metadata_df.set_index('authorId').join(top_n_df.set_index('id'))
     
   # ~~~~~~~~~~ BUILDING THE GRAPH FROM S2AG ~~~~~~~~~~    
@@ -395,8 +395,63 @@ class NetworkxS2AG:
         errors.append(authorId)
     extras_df = pd.DataFrame(extras)
     extras_df.set_index('authorId')
-    return extras_df, errors
+    return extras_df, errors  
   
+    def listAuthorsOfPaperWithOffset(self, paperId, offset):
+    paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
+    fields = [
+        'paperId',
+        'title',
+        'authors'
+    ]
+    url = '%s%s?fields=%s&limit=1000&offset=%d'%(paper_stem_url, paperId, ','.join(fields), offset)
+    r = requests.get(url, headers={"x-api-key":self.x_api_key}, timeout=20)   
+    paper_response = json.loads(r.content.decode(r.encoding))
+    s2pId = paper_response.get('paperId')
+    title = paper_response.get('title')
+    rdata = paper_response.get('authors')
+    #print(json.dumps(rdata, indent=4, sort_keys=True))
+    try:
+      paTuples = list(set([(s2pId, title, a_hash.get('authorId'), len(rdata)) 
+                            for a_hash in rdata 
+                            if a_hash.get('authorId') is not None]))
+    except:
+      print('Error in adding citations from paper: '+paperId)
+      return []
+    return paTuples
+  
+  def listAuthorsOfPapers(self, paperIds):
+    paTuples = []
+    for i, paperId in tqdm(enumerate(paperIds), total=len(paperIds)):
+      offset = 0
+      rdata = []
+      while len(rdata)%1000 == 0: 
+        rdata = listAuthorsOfPaperWithOffset(paperId, offset)
+        #print(json.dumps(rdata, indent=4, sort_keys=True))
+        if len(rdata) == 0:
+          break      
+        paTuples.extend(rdata)
+        offset += 1000 
+    return paTuples
+  
+  def generate_author_df_for_corpus(self, paperIds):
+    '''
+    Lists all authors mentioned in a particular set of papers and computes a score S = sum_over_authors_papers(1/n_authors_on_paper_i)
+    '''
+    paTuples = self.listAuthorsOfPapers(paperIds)
+    author_lookup = {}
+    author_score_lookup = {}
+    for pid, tit, aut, count in paTuples:
+      if author_lookup.get(int(aut)) is not None:
+        author_lookup.get(int(aut)).append(tit)
+        author_score_lookup[int(aut)] += 1.0/float(count)
+      else:
+        author_lookup[int(aut)] = [tit]
+        author_score_lookup[int(aut)] = 1.0/float(count)
+    author_df = pd.DataFrame([{'authorId':int(k), 'SPS_Papers':' | '.join(author_lookup.get(k)), 'score':author_score_lookup[k]} for k in author_lookup])
+    author_df = author_pcd_df.set_index('authorId')
+    return author_df
+
   # ~~~~~~~~~~ INFLUENTIAL GRAPH FUNCTIONS ~~~~~~~~~~  
   def get_featured_graph(self):
     featured_papers = [n1 for n1,attrs in self.search_nodes('paper') if attrs.get('features')]
@@ -604,3 +659,7 @@ show_doc(NetworkxS2AG.build_author_citation_graph)
 # COMMAND ----------
 
 show_doc(NetworkxS2AG.run_thresholded_centrality_analysis)
+
+# COMMAND ----------
+
+show_doc(NetworkxS2AG.generate_author_df_for_corpus)
