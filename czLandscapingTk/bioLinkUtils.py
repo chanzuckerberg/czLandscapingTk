@@ -23,29 +23,30 @@ class BioLinkUtils:
   def __init__(self, local_files = None):
     self.local_files = local_files
     if local_files is not None:
+      self.mondo_path = local_files+'/mondo.owl'
       if os.path.exists(local_files+'/mondo.owl') is False:
-        self.mondo_path = local_files+'/mondo.owl'
-        urllib.request.urlretrieve(MONDO_LATEST_URL, mondo_path)
+        print('Downloading latest version of MONDO')
+        urllib.request.urlretrieve(MONDO_LATEST_URL, self.mondo_path)
     else:
       self.mondo_path = None
 
-  def get_descendents_df(self, disease_ids, file_name=None)
-    if self.local_files is None:
-      return None
-    df_file = self.local_files+'/'+file_name
-    if os.path.exists(df_file) and file_name is not None:
-      return pd.read_csv(df_file, sep='\t')
+  def build_descendents_lookup(self, disease_ids):
     mondo = get_ontology(self.mondo_path).load()
-    df = run_substituted_sparql_over_mondo_ids(descendents_sparql, mondo_ids)
-    if file_name is not None:
-      df.to_csv(df_file, sep='\t')
-    return df
+    descendents_df = self._run_substituted_sparql_over_mondo_ids(descendents_sparql, mondo_ids)
+    self.descendents_lookup = {}
+    for row in descendents_df.itertuples():
+      d = row.descendent_id[-13:].replace('_', ':')
+      m = row.mondo_id[-13:].replace('_', ':')
+      if descendents_lookup.get(m) is None:
+        self.descendents_lookup[m] = [d]
+      else:
+        self.descendents_lookup.get(m).append(d)
 
   def _run_substituted_sparql_over_mondo_ids(self, sparql, mondo_ids):
     df = pd.DataFrame()
     for mondo_id in mondo_ids:
       print(mondo_id)
-      ldf = run_substituted_mondo_sparql(sparql, mondo_id)
+      ldf = self._run_substituted_mondo_sparql(sparql, mondo_id)
       df = df.append(ldf)
     return df
 
@@ -91,17 +92,7 @@ class BioLinkUtils:
     '''
     Computes similar diesases (with scores) for a single MONDO URI based on a phenotypic overlap metric (e.g., phenodigm).
     Analysis is performed remotely.
-    Currently not ideal - needs to be able to remove 'descendents' from the list of returned similar diseases.
     '''
-    descendents_lookup = {}
-    if descendents_df is not None:
-      for row in descendents_df.itertuples():
-        d = row.descendent_id[-13:].replace('_', ':')
-        m = row.mondo_id[-13:].replace('_', ':')
-        if descendents_lookup.get(m) is None:
-          descendents_lookup[m] = [d]
-        else:
-          descendents_lookup.get(m).append(d)
 
     BIOLINK_STEM = "https://api.monarchinitiative.org/api/sim/search?is_feature_set=false&"
     url = BIOLINK_STEM + 'metric='+metric+'&id='+disease_id+'&limit=100&taxon='+str(taxon)
