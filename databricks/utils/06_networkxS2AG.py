@@ -111,11 +111,9 @@ class NetworkxS2AG:
       self.added_papers.add(p)
   
   def run_thresholded_centrality_analysis(self, authorIds):
-    """The system will analyse all authors within the graph that have total 
-    number of publications above `min_pub_count` by peforming an author-based
-    eigenfactor calculation (see [West et al 2013](https://jevinwest.org/papers/West2013JASIST.pdf)) 
-    and then return a pandas data fram of the `top_n` most central authors 
-    in the graph.
+    """Computes a Pandas Dataframe for a list of authorIds that computes the author-based
+    eigenfactor for each author (see [West et al 2013](https://jevinwest.org/papers/West2013JASIST.pdf)).
+    Use this to compute author influence for the papers in the knowledge graph. 
     """
     thresholded_authors, counts  = self.threshold_authors_by_pubcount(min_pub_count)
     author_eigfacs_df = self.compute_author_eigenfactors(thresholded_authors, verbose=True)
@@ -436,7 +434,7 @@ class NetworkxS2AG:
   
   def generate_author_df_for_corpus(self, paperIds):
     '''
-    Lists all authors mentioned in a particular set of papers and computes a score S = sum_over_authors_papers(1/n_authors_on_paper_i)
+    Lists all authors mentioned in a particular set of papers. Computes a score S = sum_over_authors_papers(1/n_authors_on_paper_i). You can use this to set thresholds for authors' level of participation in the corpus.
     '''
     paTuples = self.listAuthorsOfPapers(paperIds)
     author_lookup = {}
