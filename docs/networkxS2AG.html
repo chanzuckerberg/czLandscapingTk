@@ -166,11 +166,9 @@ all cross-references of papers in this graph that cite each other.</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="NetworkxS2AG.run_thresholded_centrality_analysis" class="doc_header"><code>NetworkxS2AG.run_thresholded_centrality_analysis</code><a href="__main__.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.run_thresholded_centrality_analysis</code>(<strong><code>authorIds</code></strong>)</p>
 </blockquote>
-<p>The system will analyse all authors within the graph that have total 
-number of publications above <code>min_pub_count</code> by peforming an author-based
-eigenfactor calculation (see <a href="https://jevinwest.org/papers/West2013JASIST.pdf">West et al 2013</a>) 
-and then return a pandas data fram of the <code>top_n</code> most central authors 
-in the graph.</p>
+<p>Computes a Pandas Dataframe for a list of authorIds that computes the author-based
+eigenfactor for each author (see <a href="https://jevinwest.org/papers/West2013JASIST.pdf">West et al 2013</a>).
+Use this to compute author influence for the papers in the knowledge graph.</p>
 
 </div>
 
@@ -193,9 +191,9 @@ in the graph.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="NetworkxS2AG.generate_author_df_for_corpus" class="doc_header"><code>NetworkxS2AG.generate_author_df_for_corpus</code><a href="__main__.py#L425" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.generate_author_df_for_corpus</code>(<strong><code>paperIds</code></strong>)</p>
+<h4 id="NetworkxS2AG.generate_author_df_for_corpus" class="doc_header"><code>NetworkxS2AG.generate_author_df_for_corpus</code><a href="__main__.py#L423" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>NetworkxS2AG.generate_author_df_for_corpus</code>(<strong><code>paperIds</code></strong>)</p>
 </blockquote>
-<p>Lists all authors mentioned in a particular set of papers and computes a score S = sum_over_authors_papers(1/n_authors_on_paper_i)</p>
+<p>Lists all authors mentioned in a particular set of papers. Computes a score S = sum_over_authors_papers(1/n_authors_on_paper_i). You can use this to set thresholds for authors' level of participation in the corpus.</p>
 
 </div>
 

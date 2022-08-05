@@ -10,7 +10,7 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: 'Databricks Utilities '
       url: databricks_utils.html
     - output: web,pdf
       title: 'General Utilities  '
