@@ -66,14 +66,19 @@ class BioLinkUtils:
 
   def query_diseases(self, disease_ids):
     BIOLINK_STEM = "https://api.monarchinitiative.org/api/bioentity/"
-    recs = []
     for id in disease_ids:
       url = BIOLINK_STEM + 'disease/'+id
-      print(url)
       r = requests.get(url)
       d = r.content.decode('utf-8')
-      recs.append(json.loads(d))
-    return recs
+      yield id, json.loads(d)
+
+  def query_synonyms_from_biolink(self, disease_ids):
+    synonyms = {}
+    for d_id, d in self.query_diseases(disease_ids):
+      synonyms[d_id] = [d.get('label')]
+      for s in d.get('synonyms'):
+        synonyms[d_id].append(s.get('val'))
+    return synonyms
 
   def compute_disease_similarity_across_disease_list(self, disease_ids, disease_names, metric='phenodigm', taxon=9606, limit=50, threshold=0.7):
     '''
@@ -93,7 +98,6 @@ class BioLinkUtils:
     Computes similar diesases (with scores) for a single MONDO URI based on a phenotypic overlap metric (e.g., phenodigm).
     Analysis is performed remotely.
     '''
-
     BIOLINK_STEM = "https://api.monarchinitiative.org/api/sim/search?is_feature_set=false&"
     url = BIOLINK_STEM + 'metric='+metric+'&id='+disease_id+'&limit=100&taxon='+str(taxon)
     r = requests.get(url)

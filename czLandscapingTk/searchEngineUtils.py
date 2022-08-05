@@ -19,7 +19,6 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
 import pandas as pd
 
-
 PAGE_SIZE = 10000
 TIME_THRESHOLD = 0.3333334
 
@@ -46,6 +45,31 @@ class ESearchQuery:
         self.idPrefix = ''
         self.oa = oa
         self.db = db
+
+    def check_query_phrase(self, phrase):
+        """
+        Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). Use this as a check for synonyms.
+        """
+
+        idPrefix = ''
+
+        m1 = re.match('^\"{0,1}[A-Z0-9]{1,5}\"\"{0,1}$', phrase)
+        if m1 is not None:
+            return False, 'Abbreviation'
+
+        m2 = re.match('^(.*)[\,\-\;](.*)$', phrase)
+        if m2 is not None:
+            return False, 'Compound name'
+
+        esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
+        esearch_response = urlopen(esearch_stem + quote(phrase))
+        esearch_data = esearch_response.read().decode('utf-8')
+        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
+        quoted_phrase_not_found = esearch_soup.find('QuotedPhraseNotFound')
+        if quoted_phrase_not_found is not None:
+            return False, 'Phrase not found'
+
+        return True, 'Phrase OK'
 
     def execute_count_query(self, query):
         """
