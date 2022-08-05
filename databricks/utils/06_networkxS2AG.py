@@ -397,7 +397,7 @@ class NetworkxS2AG:
     extras_df.set_index('authorId')
     return extras_df, errors  
   
-    def listAuthorsOfPaperWithOffset(self, paperId, offset):
+  def listAuthorsOfPaperWithOffset(self, paperId, offset):
     paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
     fields = [
         'paperId',
