@@ -6,9 +6,10 @@ from nbdev import *
 
 # MAGIC %md # BioLink Query Tools 
 # MAGIC 
-# MAGIC > Tools to query and analyze data from the Monarch Initiative's BioLink interface. This provides a live queryable interface for disease-based knowledge derived from Monarch's KG. Access to the service is through [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/). More detailed information about the Biolink model is available from their [GitHub page](https://github.com/biolink/biolink-model). 
+# MAGIC > Tools to query and analyze data from the Monarch Initiative's BioLink interface. This provides a live queryable interface for disease-based knowledge derived from Monarch's KG. Access to the service is through [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/). 
 
 # COMMAND ----------
+
 
 parent_sparql = '''PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
