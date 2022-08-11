@@ -76,8 +76,9 @@ class BioLinkUtils:
     synonyms = {}
     for d_id, d in self.query_diseases(disease_ids):
       synonyms[d_id] = [d.get('label')]
-      for s in d.get('synonyms'):
-        synonyms[d_id].append(s.get('val'))
+      if d.get('synonyms') is not None:
+        for s in d.get('synonyms'):
+          synonyms[d_id].append(s.get('val'))
     return synonyms
 
   def compute_disease_similarity_across_disease_list(self, disease_ids, disease_names, metric='phenodigm', taxon=9606, limit=50, threshold=0.7):

@@ -125,7 +125,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ESearchQuery.execute_count_query" class="doc_header"><code>ESearchQuery.execute_count_query</code><a href="__main__.py#L70" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_count_query</code>(<strong><code>query</code></strong>)</p>
+<h4 id="ESearchQuery.execute_count_query" class="doc_header"><code>ESearchQuery.execute_count_query</code><a href="__main__.py#L80" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_count_query</code>(<strong><code>query</code></strong>)</p>
 </blockquote>
 <p>Executes a query on the target database and returns a count of papers</p>
 
@@ -150,7 +150,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ESearchQuery.execute_query_on_website" class="doc_header"><code>ESearchQuery.execute_query_on_website</code><a href="__main__.py#L93" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_query_on_website</code>(<strong><code>q</code></strong>, <strong><code>pm_order</code></strong>=<em><code>'relevance'</code></em>)</p>
+<h4 id="ESearchQuery.execute_query_on_website" class="doc_header"><code>ESearchQuery.execute_query_on_website</code><a href="__main__.py#L103" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_query_on_website</code>(<strong><code>q</code></strong>, <strong><code>pm_order</code></strong>=<em><code>'relevance'</code></em>)</p>
 </blockquote>
 <p>Executes a query on the Pubmed database and returns papers in order of relevance or date.
 This is important to determine accuracy of complex queries are based on the composition of the first page of results.</p>
@@ -176,7 +176,7 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ESearchQuery.execute_query" class="doc_header"><code>ESearchQuery.execute_query</code><a href="__main__.py#L107" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_query</code>(<strong><code>query</code></strong>)</p>
+<h4 id="ESearchQuery.execute_query" class="doc_header"><code>ESearchQuery.execute_query</code><a href="__main__.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.execute_query</code>(<strong><code>query</code></strong>)</p>
 </blockquote>
 <p>Executes a query on the eutils service and returns data as a Pandas Dataframe</p>
 
@@ -201,7 +201,32 @@ This is important to determine accuracy of complex queries are based on the comp
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EFetchQuery" class="doc_header"><code>class</code> <code>EFetchQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L156" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EFetchQuery</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h4 id="ESearchQuery.check_query_phrase" class="doc_header"><code>ESearchQuery.check_query_phrase</code><a href="__main__.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ESearchQuery.check_query_phrase</code>(<strong><code>phrase</code></strong>)</p>
+</blockquote>
+<p>Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). Use this as a check for synonyms.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="EFetchQuery" class="doc_header"><code>class</code> <code>EFetchQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L183" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EFetchQuery</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
 <p>Class to provide query interface for EFetch (i.e., query based on a list of ids)
 Each instance of this class executes queries of a given type</p>
@@ -234,7 +259,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.__init__" class="doc_header"><code>EFetchQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L162" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.__init__</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h4 id="EFetchQuery.__init__" class="doc_header"><code>EFetchQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.__init__</code>(<strong><code>api_key</code></strong>=<em><code>None</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
 <p>:param api_key: API Key for NCBI EUtil Services
 :param oa: Is this query searching for open access papers?
@@ -261,7 +286,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.execute_efetch" class="doc_header"><code>EFetchQuery.execute_efetch</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L171" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.execute_efetch</code>(<strong><code>id</code></strong>)</p>
+<h4 id="EFetchQuery.execute_efetch" class="doc_header"><code>EFetchQuery.execute_efetch</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L198" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.execute_efetch</code>(<strong><code>id</code></strong>)</p>
 </blockquote>
 <p>Executes a query for a single specific identifier</p>
 
@@ -286,7 +311,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.generate_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L182" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
+<h4 id="EFetchQuery.generate_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
 </blockquote>
 <p>Executes a query for a list of ID values</p>
 
@@ -311,7 +336,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EFetchQuery.generate_mesh_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L221" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
+<h4 id="EFetchQuery.generate_mesh_data_frame_from_id_list" class="doc_header"><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L248" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EFetchQuery.generate_mesh_data_frame_from_id_list</code>(<strong><code>id_list</code></strong>)</p>
 </blockquote>
 <p>Executes a query for MeSH data from a list of ID values</p>
 
@@ -336,7 +361,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EuroPMCQuery" class="doc_header"><code>class</code> <code>EuroPMCQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L340" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EuroPMCQuery</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h2 id="EuroPMCQuery" class="doc_header"><code>class</code> <code>EuroPMCQuery</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L367" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EuroPMCQuery</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
 <p>A class that executes search queries on the European PMC API</p>
 
@@ -368,7 +393,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EuroPMCQuery.__init__" class="doc_header"><code>EuroPMCQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L344" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.__init__</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
+<h4 id="EuroPMCQuery.__init__" class="doc_header"><code>EuroPMCQuery.__init__</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L371" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.__init__</code>(<strong><code>oa</code></strong>=<em><code>False</code></em>, <strong><code>db</code></strong>=<em><code>'pubmed'</code></em>)</p>
 </blockquote>
 <p>Initialization of the class
 :param oa:</p>
@@ -394,7 +419,7 @@ Each instance of this class executes queries of a given type</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="EuroPMCQuery.run_empc_query" class="doc_header"><code>EuroPMCQuery.run_empc_query</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L351" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.run_empc_query</code>(<strong><code>q</code></strong>, <strong><code>page_size</code></strong>=<em><code>1000</code></em>)</p>
+<h4 id="EuroPMCQuery.run_empc_query" class="doc_header"><code>EuroPMCQuery.run_empc_query</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/searchEngineUtils.py#L378" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>EuroPMCQuery.run_empc_query</code>(<strong><code>q</code></strong>, <strong><code>page_size</code></strong>=<em><code>1000</code></em>)</p>
 </blockquote>
 
 </div>
