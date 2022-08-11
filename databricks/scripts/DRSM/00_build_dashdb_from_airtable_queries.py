@@ -696,3 +696,7 @@ cs.execute(
 )  
 mcdash.build_core_tables_from_pmids(cs)
 cs.execute("COMMIT")
+
+# COMMAND ----------
+
+

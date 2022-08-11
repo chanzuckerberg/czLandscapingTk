@@ -196,8 +196,9 @@ class DashboardDb:
     cs = self.sf.get_cursor()
     return cs
 
-  def execute_query(self, sql, columns):
-    cs = self.get_cursor()
+  def execute_query(self, sql, columns, cs=None):
+    if cs is None: 
+      cs = self.get_cursor()
     cs.execute(sql)
     df = pd.DataFrame(cs.fetchall(), columns=columns)
     df = df.replace('\n', ' ', regex=True)
@@ -272,12 +273,13 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
     cs.execute("COMMIT")
 
-  def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col, subquery_df=None, subq_col=None, delete_db=True, pm_include=True, epmc_inlcude=True):
+  def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col, subquery_df=None, subq_col=None, 
+                                  delete_db=True, pm_include=True, epmc_include=True, sf_include=True):
     '''
     Function to generate a snowflake database of scientific papers based on a list of queries listed in a dataframe 
     (and possibly faceted by a second set of queries in a second dataframe). This system will (optionally) 
     execute queries on the REST services of Pubmed and European PMC to build the database.    
-    
+
     Attributes:
     * pubmed_api_key: see https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/
     * query_df: a Pandas Dataframe of corpora where one column specifies the query
@@ -290,12 +292,13 @@ class DashboardDb:
     * epmc_include (default=True): Run corpus construction queries on European PMC
     '''
     qt = QueryTranslator(query_df, id_col, q_col)
-    if subquery_df:
+    if subquery_df is not None:
       qt2 = QueryTranslator(subquery_df, id_col, subq_col)
     else:
       qt2 = None
     corpus_paper_list = []
-    
+
+    pubmed_errors = []
     if pm_include:
       (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
       if qt2:
@@ -304,16 +307,26 @@ class DashboardDb:
         (subset_ids, pubmed_subset_queries) = ([0],[''])
       for (i, q) in zip(corpus_ids, pubmed_queries):
         for (j, sq) in zip(subset_ids, pubmed_subset_queries):
+          query = q
           if len(sq) > 0:
-            q = '(%s) AND (%s)'%(q,sq) 
-          q = re.sub('\s+','+',q)
+            query = '(%s) AND (%s)'%(q,sq) 
+          query = re.sub('\s+','+',query)
+          print(query)
+          if query=='nan' or len(query)==0: 
+            pubmed_errors.append((pmid, i, j, query))
+            continue
           esq = ESearchQuery(pubmed_api_key)
-          pubmed_pmids = esq.execute_query(q)
+          try: 
+            pubmed_pmids = esq.execute_query(query)
+          except:
+            pubmed_errors.append((i, j, query))
+            pummed_pmids = []
           print(len(pubmed_pmids))
           for pmid in pubmed_pmids:
             corpus_paper_list.append((pmid, i, 'pubmed', j))
 
-    if epmc_inlcude:
+    epmc_errors = []        
+    if epmc_include:
       (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.closed)
       if qt2:
         (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.closed)
@@ -324,19 +337,54 @@ class DashboardDb:
           query = q
           if len(sq) > 0:
             query = '(%s) AND (%s)'%(q, sq) 
+          if query=='nan' or len(query)==0: 
+            epmc_errors.append((i, j, query))
+            continue
           epmcq = EuroPMCQuery()
-          numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
-          for id in tqdm(epmc_pmids):
-            corpus_paper_list.append((id, i, 'epmc', j))
-    
+          try: 
+            numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
+            for id in tqdm(epmc_pmids):
+              corpus_paper_list.append((id, i, 'epmc', j))
+          except:
+            epmc_errors.append((id, i, j, query))
+
+    sf_errors = []
+    if sf_include: 
+      (corpus_ids, sf_queries) = qt.generate_queries(QueryType.snowflake)
+      if qt2:
+        (subset_ids, sf_subset_queries) = qt2.generate_queries(QueryType.snowflake)
+      else: 
+        (subset_ids, sf_subset_queries) = ([0],[''])
+      cs = self.get_cursor()
+      for (i, q) in zip(corpus_ids, sf_queries):
+        for (j, sq) in zip(subset_ids, sf_subset_queries):
+          stem = 'SELECT p.ID FROM FIVETRAN.KG_RDS_CORE_DB.PAPER as p WHERE '
+          query = stem + q
+          if len(sq) > 0:
+            query = stem + '(%s) AND (%s)'%(q, sq) 
+          if query=='nan' or len(query)==0: 
+            sf_errors.append((i, j, query))
+            continue
+          print(query)
+          df = self.execute_query(query, ['ID'], cs)
+          numFound = len(df)
+          print(i, q, numFound)
+          sf_ids = df.ID.to_list()
+          for id in tqdm(sf_ids):
+            corpus_paper_list.append((id, i, 'czkg', j))
+          #except:
+          #  sf_errors.append((i, j, query))
+
     corpus_paper_df = pd.DataFrame(corpus_paper_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
-  
+
     cs = self.get_cursor()
     cs.execute("BEGIN")
     if delete_db:
       self.drop_database(cs=cs)
     self.upload_wb(query_df, 'CORPUS', cs=cs)
     self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
+    if subquery_df is not None:
+      self.upload_wb(subquery_df, 'SUB_CORPUS', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
     cs.execute('COMMIT')
 

@@ -19,7 +19,7 @@ import json
 import datetime
 from enum import Enum
 from urllib.request import urlopen
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, quote, unquote
 from urllib.error import URLError
 from time import time,sleep
 import re
@@ -38,127 +38,154 @@ class NCBI_Database_Type(Enum):
   PMC = 'PMC'
 
 class ESearchQuery:
-    """
-    Class to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids)
-    Each instance of this class executes queries of a given type
-    """
+  """
+  Class to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids)
+  Each instance of this class executes queries of a given type
+  """
 
-    def __init__(self, api_key=None, oa=False, db='pubmed'):
-        """
-        :param api_key: API Key for NCBI EUtil Services 
-        :param oa: Is this query searching for open access papers? 
-        :param db: The database being queried
-        """
-        self.api_key = api_key
-        self.idPrefix = ''
-        self.oa = oa
-        self.db = db
+  def __init__(self, api_key=None, oa=False, db='pubmed'):
+    """
+    :param api_key: API Key for NCBI EUtil Services 
+    :param oa: Is this query searching for open access papers? 
+    :param db: The database being queried
+    """
+    self.api_key = api_key
+    self.idPrefix = ''
+    self.oa = oa
+    self.db = db
         
-    def check_query_phrase(self, phrase):
-        """
-        Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). Use this as a check for synonyms.   
-        """
+  def check_query_phrase(self, phrase):
+    """
+    Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). Use this as a check for synonyms.   
+    """
 
-        idPrefix = ''
+    idPrefix = ''
 
-        m1 = re.match('^\"{0,1}[A-Z0-9]{1,5}\"\"{0,1}$', phrase)
-        if m1 is not None:
-            return False, 'Abbreviation'
+    m1 = re.match('^[a-zA-Z0-9]{1,5}$', phrase)
+    if m1 is not None:
+      return False, 'Abbreviation', 0
 
-        m2 = re.match('^(.*)[\,\-\;](.*)$', phrase)
-        if m2 is not None:
-            return False, 'Compound name'
+    m2 = re.search('[(\)]', phrase)
+    if m2 is not None:
+      return False, 'Brackets', 0
 
-        esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
-        esearch_response = urlopen(esearch_stem + quote(phrase))
-        esearch_data = esearch_response.read().decode('utf-8')
-        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-        quoted_phrase_not_found = esearch_soup.find('QuotedPhraseNotFound')
-        if quoted_phrase_not_found is not None:
-            return False, 'Phrase not found'
+    m3 = re.search('[\,\;]', phrase)
+    if m3 is not None:
+      phrase = '("' + '" AND "'.join(re.split('[\,\;]', phrase.strip()))+'")'
 
-        return True, 'Phrase OK'        
+    if self.api_key is not None: 
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+    else:
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
+    url =  esearch_stem + quote('"'+phrase+'"')
 
-    def execute_count_query(self, query):
-        """
-        Executes a query on the target database and returns a count of papers 
-        """
-        idPrefix = ''
-        if self.oa:
-            if self.db == NCBI_Database_Type.PMC:
-                query = '"open access"[filter] AND (' + query + ')'
-                idPrefix = 'PMC'
-            elif self.db == NCBI_Database_Type.pubmed:
-                query = '"loattrfree full text"[sb] AND (' + query + ')'
-        if self.api_key: 
-          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
-        else:
-          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
-        esearch_response = urlopen(esearch_stem + query)
-        esearch_data = esearch_response.read().decode('utf-8')
-        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-        count_tag = esearch_soup.find('Count')
-        if count_tag is None:
-            raise Exception('No Data returned from "' + self.query + '"')
-        return int(count_tag.string)
+    esearch_response = urlopen(url)
+    esearch_data = esearch_response.read().decode('utf-8')
+    esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
+    count = int(esearch_soup.find('Count').string)
+    #n_translations = len(esearch_soup.find('TranslationStack').findAll('TermSet'))
+    phrase_not_found = esearch_soup.find('PhraseNotFound')
+    if phrase_not_found is not None:
+      return False, 'Phrase not found', 0
+    return True, phrase, count        
+
+  def execute_count_query(self, query):
+    """
+    Executes a query on the target database and returns a count of papers 
+    """
+    idPrefix = ''
+    if self.oa:
+      if self.db == NCBI_Database_Type.PMC:
+        query = '"open access"[filter] AND (' + query + ')'
+        idPrefix = 'PMC'
+      elif self.db == NCBI_Database_Type.pubmed:
+        query = '"loattrfree full text"[sb] AND (' + query + ')'
+    if self.api_key: 
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+    else:
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
+    esearch_response = urlopen(esearch_stem + query)
+    esearch_data = esearch_response.read().decode('utf-8')
+    esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
+    count_tag = esearch_soup.find('Count')
+    if count_tag is None:
+      raise Exception('No Data returned from "' + self.query + '"')
+    return int(count_tag.string)
+
+  def execute_query_on_website(self, q, pm_order='relevance'):
+    """
+    Executes a query on the Pubmed database and returns papers in order of relevance or date.
+    This is important to determine accuracy of complex queries are based on the composition of the first page of results.  
+    """
+    query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
+    if pm_order == 'date':
+      query += '&sort=date'
+    response = urlopen(query)
+    data = response.read().decode('utf-8')
+    soup = BeautifulSoup(data, "lxml-xml")
+    pmids = re.split('\s+', soup.find('body').text.strip())
+    return pmids
+
+  def execute_query(self, query):
+    """
+    Executes a query on the eutils service and returns data as a Pandas Dataframe
+    """
+    idPrefix = ''
+    if self.oa:
+      if self.db == NCBI_Database_Type.PMC:
+        query = '"open access"[filter] AND (' + query + ')'
+        idPrefix = 'PMC'
+      elif self.db == NCBI_Database_Type.pubmed:
+        query = '"loattrfree full text"[sb] AND (' + query + ')'
+
+    if self.api_key: 
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
+    else: 
+      esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
+
+    #query = quote_plus(query)
+    print(esearch_stem + query)
+    esearch_response = urlopen(esearch_stem + query)
+    esearch_data = esearch_response.read().decode('utf-8')
+    esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
+    count_tag = esearch_soup.find('Count')
+    if count_tag is None:
+        raise Exception('No Data returned from "' + query + '"')
+    count = int(count_tag.string)
+
+    latest_time = time()
+
+    ids = []
+    for i in tqdm(range(0,count,PAGE_SIZE)):
+      full_query = esearch_stem + query + '&retstart=' + str(i)+ '&retmax=' + str(PAGE_SIZE)
+      esearch_response = urlopen(full_query)
+      esearch_data = esearch_response.read().decode('utf-8')
+      esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
+      for pmid_tag in esearch_soup.find_all('Id') :
+        ids.append(self.idPrefix + pmid_tag.text)
+      delta_time = time() - latest_time
+      if delta_time < TIME_THRESHOLD :
+        sleep(TIME_THRESHOLD - delta_time)
+        
+    return ids
+
+  def build_query_tuples(self, disease_lookup, check_threshold):
+    query_tuples = []
+    phrase_counts = []
+    for i, id in tqdm(enumerate(disease_lookup)): 
+      search_l = []
+      for s in disease_lookup.get(id):
+        go_no_go, phrase, count = self.check_query_phrase(s)
+        print(go_no_go, phrase, count)
+        if go_no_go:
+          search_l.append(phrase)
+          print(phrase)
+          time.sleep(0.10)
+          if count>check_threshold:
+            phrase_counts.append((phrase, count))
+      query_tuples.append( (i, id, disease_lookup.get(id)[0], ' OR '.join(search_l)) )
+    return query_tuples, phrase_counts
       
-    def execute_query_on_website(self, q, pm_order='relevance'):
-        """
-        Executes a query on the Pubmed database and returns papers in order of relevance or date.
-        This is important to determine accuracy of complex queries are based on the composition of the first page of results.  
-        """
-        query = 'https://pubmed.ncbi.nlm.nih.gov/?format=pmid&size=10&term='+re.sub('\s+','+',q)
-        if pm_order == 'date':
-            query += '&sort=date'
-        response = urlopen(query)
-        data = response.read().decode('utf-8')
-        soup = BeautifulSoup(data, "lxml-xml")
-        pmids = re.split('\s+', soup.find('body').text.strip())
-        return pmids
-
-    def execute_query(self, query):
-        """
-        Executes a query on the eutils service and returns data as a Pandas Dataframe
-        """
-        idPrefix = ''
-        if self.oa:
-            if self.db == NCBI_Database_Type.PMC:
-                query = '"open access"[filter] AND (' + query + ')'
-                idPrefix = 'PMC'
-            elif self.db == NCBI_Database_Type.pubmed:
-                query = '"loattrfree full text"[sb] AND (' + query + ')'
-        
-        if self.api_key: 
-          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
-        else: 
-          esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
-          
-        #query = quote_plus(query)
-        print(esearch_stem + query)
-        esearch_response = urlopen(esearch_stem + query)
-        esearch_data = esearch_response.read().decode('utf-8')
-        esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-        count_tag = esearch_soup.find('Count')
-        if count_tag is None:
-            raise Exception('No Data returned from "' + query + '"')
-        count = int(count_tag.string)
-
-        latest_time = time()
-
-        ids = []
-        for i in tqdm(range(0,count,PAGE_SIZE)):
-            full_query = esearch_stem + query + '&retstart=' + str(i)+ '&retmax=' + str(PAGE_SIZE)
-            esearch_response = urlopen(full_query)
-            esearch_data = esearch_response.read().decode('utf-8')
-            esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
-            for pmid_tag in esearch_soup.find_all('Id') :
-                ids.append(self.idPrefix + pmid_tag.text)
-            delta_time = time() - latest_time
-            if delta_time < TIME_THRESHOLD :
-                sleep(TIME_THRESHOLD - delta_time)
-
-        return ids
-
 
 # COMMAND ----------
 
@@ -175,6 +202,10 @@ show_doc(ESearchQuery.execute_query_on_website)
 # COMMAND ----------
 
 show_doc(ESearchQuery.execute_query)
+
+# COMMAND ----------
+
+show_doc(ESearchQuery.check_query_phrase)
 
 # COMMAND ----------
 

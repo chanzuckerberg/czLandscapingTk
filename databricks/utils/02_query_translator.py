@@ -31,6 +31,7 @@ class QueryType(Enum):
   pubmed = 5
   andPlusOrPipe = 6
   pubmed_no_types = 7
+  snowflake = 8
 
 class QueryTranslator(): 
   def __init__(self, df, id_col, query_col):
@@ -54,7 +55,7 @@ class QueryTranslator():
     self.id2terms = {}
     self.terms2id = {}
     for tt in df[query_col]:
-      redq = fix_errors(tt.strip())
+      redq = fix_errors(str(tt).strip())
       for t in re.split('[\&\|\(\)]', redq):
         t = re.sub('[\(\)]','', t).strip()
         #t = re.sub('\[(ti|ab|ft|tiab)\]',r'\g<1>', t).strip()
@@ -67,33 +68,35 @@ class QueryTranslator():
 
     ordered_names = sorted(self.terms2id.keys(), key=len, reverse=True)
     self.redq_list = []
-    for row in df.iterrows():
+    for row in tqdm(df.iterrows(),total=len(df)):
       tt = row[1][query_col]
       row_id = row[1][id_col]
-      redq = fix_errors(tt.strip())
+      redq = fix_errors(str(tt).strip())
       for t in ordered_names:
         id = self.terms2id[t]
         redq = re.sub('\\b'+t+'\\b', id, redq)
       self.redq_list.append((row_id, redq))
 
-  def generate_queries(self, query_type:QueryType):
+  def generate_queries(self, query_type:QueryType, skipErrors=True):
     """
     Use this command to covert the queries to the different forms specified by the QueryType enumeration
     """
     queries = []
     IDs = []
-    for ID, t in self.redq_list:
+    for ID, t in tqdm(self.redq_list):
       try:
         if t:
-          #print(t)
           ex = expr(t)
           queries.append(self._expand_expr(ex, query_type))
         else: 
           queries.append('')
         IDs.append(ID)
       except:
-        print('Error with ' + str(ID))
-        raise
+        print('Error with '+str(ID)+': '+t)
+        queries.append('')
+        IDs.append(ID)
+        if skipErrors is False:
+          raise
     return (IDs, queries)
     
   def _expand_expr(self, ex, query_type:QueryType):
@@ -111,6 +114,8 @@ class QueryTranslator():
       return self._plusPipe(ex)
     elif query_type == QueryType.pubmed_no_types:
       return self._pubmed_no_types(ex)
+    elif query_type == QueryType.snowflake:
+      return self._snowflake(ex)
 
   # expand the query as is with AND/OR linkagage, no extension. 
   # drop search fields
@@ -215,6 +220,18 @@ class QueryTranslator():
       return '('+'+'.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
       return '('+'|'.join([self._pubmed(x) for x in ex.xs])+')'
+    
+  def _snowflake(self, ex):
+    if isinstance(ex, Literal):
+      t = self.id2terms[ex.name]
+      t = re.sub("'", "''", t)
+      s = "(p.TITLE LIKE '*%s*' OR p.ABSTRACT LIKE '*%s*')"%(t,t)
+      s = re.sub('\*', '%', s)
+      return s
+    elif isinstance(ex, AndOp):
+      return '('+' AND '.join([self._snowflake(x) for x in ex.xs])+')'
+    elif isinstance(ex, OrOp):
+      return '('+' OR '.join([self._snowflake(x) for x in ex.xs])+')'
 
 # COMMAND ----------
 
