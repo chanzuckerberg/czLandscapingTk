@@ -23,7 +23,7 @@ def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databr
   df.to_csv(data_path, sep='\t', index=False)
   databricks_stem = databricks_url + '/files/'
   url = re.sub('/dbfs/FileStore/', databricks_stem, data_path)
-  name = stem
+  name = file_stem
   name_match = re.search('/([a-zA-Z0-9_]+)_*$', stem)
   if name_match:
     name = name_match.group(1)
