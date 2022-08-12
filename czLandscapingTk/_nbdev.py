@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"QueryType": "02_query_translator.ipynb",
+index = {"dump_data_to_disk": "00_databricks_utils.ipynb",
+         "QueryType": "02_query_translator.ipynb",
          "QueryTranslator": "02_query_translator.ipynb",
          "AirtableUtils": "03_airtable_utils.ipynb",
          "NCBI_Database_Type": "04_search_engine_eutils.ipynb",
@@ -62,7 +63,8 @@ index = {"QueryType": "02_query_translator.ipynb",
          "BioLinkUtils": "07_bioLinkUtils.ipynb",
          "MONDO_LATEST_URL": "07_bioLinkUtils.ipynb"}
 
-modules = ["queryTranslator.py",
+modules = ["generalUtils.py",
+           "queryTranslator.py",
            "airtableUtils.py",
            "searchEngineUtils.py",
            "dashdbUtils.py",
