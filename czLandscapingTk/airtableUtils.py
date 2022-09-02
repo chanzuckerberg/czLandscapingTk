@@ -46,7 +46,7 @@ class AirtableUtils:
 
   def read_airtable(self, file, table):
     data_rows = []
-    headers = {'Authorization': 'Bearer '+self.api.key, 'Content-Type': 'application/json'}
+    headers = {'Authorization': 'Bearer '+self.api_key, 'Content-Type': 'application/json'}
   #  base_url = start_url + '&maxRecords=100&fields%5B%5D=ID&fields%5B%5D=Title&fields%5B%5D=Abstract' + \
   #    '&fields%5B%5D=Comments&fields%5B%5D=Disease%20Research%20Categories&fields%5B%5D=Irrelevant?' + \
   #    '&fields%5B%5D=TimeofLastCurationAction'
