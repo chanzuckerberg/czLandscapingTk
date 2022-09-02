@@ -58,7 +58,7 @@ class AirtableUtils:
     curated_df = pd.DataFrame()
     for f in files:
       for t in tables:
-        df = self.read_airtable_data(f, t)
+        df = self.read_airtable(f, t)
         df['at_f'] = f
         df['at_t'] = t
         curated_df = curated_df.append(df)
