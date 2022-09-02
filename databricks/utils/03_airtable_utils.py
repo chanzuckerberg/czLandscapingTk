@@ -92,10 +92,10 @@ class AirtableUtils:
       for t in tables:
         try:
           df = self.read_airtable(f, t)
+          df['at_f'] = f
+          df['at_t'] = t
         except Exception as e:
           print(e)
-        df['at_f'] = f
-        df['at_t'] = t
         print('%d rows added'%(len(df)))
         curated_df = curated_df.append(df)
     curated_df = curated_df.reset_index(drop=True)
