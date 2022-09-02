@@ -44,6 +44,38 @@ class AirtableUtils:
 
     return df
 
+  def read_airtable(self, file, table):
+    data_rows = []
+    headers = {'Authorization': 'Bearer '+self.api.key, 'Content-Type': 'application/json'}
+  #  base_url = start_url + '&maxRecords=100&fields%5B%5D=ID&fields%5B%5D=Title&fields%5B%5D=Abstract' + \
+  #    '&fields%5B%5D=Comments&fields%5B%5D=Disease%20Research%20Categories&fields%5B%5D=Irrelevant?' + \
+  #    '&fields%5B%5D=TimeofLastCurationAction'
+    base_url = self._get_airtable_url(file, table)
+    offset = 'GO'
+    while offset!='STOP':
+      print('.', end = '')
+      #print(offset)
+      if offset != 'GO':
+        url = base_url + '&offset='+offset
+      else:
+        url = base_url
+      #print(url)
+      r = requests.get(url, headers=headers)
+      rdata = json.loads(r.text)
+      #print(len(rdata.get('records',[])))
+      #print(rdata)
+      for r in rdata.get('records',[]):
+        data_rows.append(r['fields'])
+      if( rdata.get('offset') is not None ):
+        offset = rdata['offset']
+      else:
+        offset = 'STOP'
+    df = pd.DataFrame(data_rows)
+    df = df.replace('"', '')
+    #df = df.replace(to_replace=[r"\\t|\\n|\\r", "\t|\n|\r"], value=[" "," "], regex=True, inplace=True)
+    print('|')
+    return df
+
   def build_curated_dataframe(self, files, tables):
     curated_df = pd.DataFrame()
     for f in files:
