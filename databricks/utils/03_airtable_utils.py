@@ -54,6 +54,17 @@ class AirtableUtils:
     
     return df
 
+  def build_curated_dataframe(self, files, tables):
+    curated_df = pd.DataFrame()
+    for f in files:
+      for t in tables:
+        df = self.read_airtable_data(f, t)
+        df['at_f'] = f
+        df['at_t'] = t
+        curated_df = curated_df.append(df)
+    curated_df = curated_df.reset_index(drop=True)
+    return curated_df
+  
   def send_df_to_airtable(self, file, table, df):
     """ Send a dataframe to an airtable table.
     

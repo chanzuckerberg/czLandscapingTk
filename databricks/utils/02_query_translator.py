@@ -48,6 +48,7 @@ class QueryTranslator():
     def fix_errors(expr_string):
       q = re.sub('\s+(AND)\s+',' & ',expr_string)
       q = re.sub('\s+(OR)\s+',' | ',q)
+      q = re.sub('\s+(NOT)\s+',' ~',q)
       q = re.sub('[\"\n]','',q)
       q = re.sub('\[(ti|ab|ft|tiab)\]',r'_\g<1>', q).strip()
       return q
@@ -132,6 +133,8 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       term = re.sub('_(ti|ab|ft|tiab)', '', self.id2terms[ex.name])
       return '"'+term+'"'
+    elif isinstance(ex, AndOp):
+      return '('+' NOT '.join([self._closed_quote(x) for x in ex.xs])+')'
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._closed_quote(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
