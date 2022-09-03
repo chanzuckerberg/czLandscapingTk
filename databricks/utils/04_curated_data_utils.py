@@ -117,7 +117,7 @@ class CuratedDataUtils:
     curators = self.df[self.curator_column].unique()
 
     unused_columns = [c for c in self.df.columns if c != self.doc_id_column]
-    sdf = df.drop([c for c in self.df.columns if c != self.doc_id_column], axis=1).drop_duplicates()
+    sdf = self.df.drop([c for c in self.df.columns if c != self.doc_id_column], axis=1).drop_duplicates()
     sdf = sdf.reset_index(drop=True)
 
     #cat_count_dict = {cc: {c: 0 for c in cat_list} for cc in df.ID_PAPER}
