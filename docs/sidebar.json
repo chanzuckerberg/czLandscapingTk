@@ -5,6 +5,7 @@
     "General Utilities  ": "general_utils.html",
     "Query Translation Tools  ": "query_translator.html",
     "Airtable Utilities": "airtable_utils.html",
+    "Curated Dataframe Utilities": "curated_data_utils.html",
     "Search Engine Tools  ": "search_engine_eutils.html",
     "Dashboard Database Utilities": "dashdb_utils.html",
     "Dashboard Database Queries": "dashdb_queries.html",

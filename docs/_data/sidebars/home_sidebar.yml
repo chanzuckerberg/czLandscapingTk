@@ -22,6 +22,9 @@ entries:
       title: Airtable Utilities
       url: airtable_utils.html
     - output: web,pdf
+      title: Curated Dataframe Utilities
+      url: curated_data_utils.html
+    - output: web,pdf
       title: 'Search Engine Tools  '
       url: search_engine_eutils.html
     - output: web,pdf
