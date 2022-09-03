@@ -105,7 +105,7 @@ class CuratedDataUtils:
     """
     Generates DataFrame with new columns for 'AVG_AGREEMENT' and 'CONSENSUS' for each document
     """
-    cat_list = sorted(list({c:0 for cc in df[self.category_column] for c in str(cc).split(',')}.keys()))
+    cat_list = sorted(list({c:0 for cc in self.df[self.category_column] for c in str(cc).split(',')}.keys()))
     curators = self.df[self.curator_column].unique()
 
     unused_columns = [c for c in df.columns if c != self.doc_id_column]
