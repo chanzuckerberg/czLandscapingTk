@@ -1,12 +1,4 @@
 # Databricks notebook source
-# MAGIC %pip install git+https://github.com/GullyBurns/czLandscapingTk.git
-
-# COMMAND ----------
-
-# MAGIC %run /Users/gully.burns@chanzuckerberg.com/datasci_databricks_notebooks/global_variables
-
-# COMMAND ----------
-
 # default_exp curatedDataUtils
 from nbdev import *
 
