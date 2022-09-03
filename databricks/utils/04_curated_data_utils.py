@@ -107,7 +107,7 @@ class CuratedDataUtils:
           # No need to do anything - we get this error if attempting to compute agreement 
           # between curators where one of them never entered a score. 
           print('', end = '')
-    return None
+    return '-'
 
   def get_consensus_per_doc(self):
     """
