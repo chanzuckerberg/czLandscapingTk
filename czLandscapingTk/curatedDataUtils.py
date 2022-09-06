@@ -14,7 +14,7 @@ from nltk.metrics.agreement import AnnotationTask
 from nltk.metrics import masi_distance, binary_distance
 
 class CuratedDataUtils:
-  """This class permits generation of curation statistics and merged, consensus dataframes
+  """This class permits generation of curation statistics and merged, consensus dataframes.
 
   Attributes:
     * df: The dataframe being processed

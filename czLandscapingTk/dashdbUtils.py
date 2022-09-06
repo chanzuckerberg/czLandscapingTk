@@ -256,8 +256,10 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
     cs.execute("COMMIT")
 
-  def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col, subquery_df=None, subq_col=None,
-                                  delete_db=True, pm_include=True, epmc_include=True, sf_include=True):
+  def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col,
+                                  subquery_df=None, subq_col=None,
+                                  delete_db=True, pm_include=True,
+                                  epmc_include=True, sf_include=True):
     '''
     Function to generate a snowflake database of scientific papers based on a list of queries listed in a dataframe
     (and possibly faceted by a second set of queries in a second dataframe). This system will (optionally)
