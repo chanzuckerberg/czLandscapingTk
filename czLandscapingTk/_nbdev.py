@@ -62,7 +62,8 @@ index = {"dump_data_to_disk": "00_databricks_utils.ipynb",
          "CREATE_FULL_TEXT_ANNOTATION_TABLE": "06a_dashdb_queries.ipynb",
          "NetworkxS2AG": "07_networkxS2AG.ipynb",
          "BioLinkUtils": "08_bioLinkUtils.ipynb",
-         "MONDO_LATEST_URL": "08_bioLinkUtils.ipynb"}
+         "MONDO_LATEST_URL": "08_bioLinkUtils.ipynb",
+         "CentaurLabsUtils": "09_centaurLabUtils.ipynb"}
 
 modules = ["generalUtils.py",
            "queryTranslator.py",
@@ -72,7 +73,8 @@ modules = ["generalUtils.py",
            "dashdbUtils.py",
            "dashdbQueries.py",
            "networkXS2AG.py",
-           "bioLinkUtils.py"]
+           "bioLinkUtils.py",
+           "centaurLabsUtils.py"]
 
 doc_url = "https://GullyBurns.github.io/czLandscapingTk/"
 

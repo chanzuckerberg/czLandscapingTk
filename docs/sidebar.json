@@ -10,6 +10,7 @@
     "Dashboard Database Utilities": "dashdb_utils.html",
     "Dashboard Database Queries": "dashdb_queries.html",
     "NetworkX S2AG Tools ": "networkxS2AG.html",
-    "BioLink Query Tools ": "bioLinkUtils.html"
+    "BioLink Query Tools ": "bioLinkUtils.html",
+    "CentaurLab Utility Tools ": "centaurLabUtils.html"
   }
 }
