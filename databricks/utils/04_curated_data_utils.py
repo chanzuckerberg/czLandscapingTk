@@ -22,7 +22,7 @@ from nltk.metrics.agreement import AnnotationTask
 from nltk.metrics import masi_distance, binary_distance
 
 class CuratedDataUtils:
-  """This class permits generation of curation statistics and merged, consensus dataframes
+  """This class permits generation of curation statistics and merged, consensus dataframes. 
   
   Attributes:
     * df: The dataframe being processed
@@ -147,7 +147,6 @@ class CuratedDataUtils:
       sdf = sdf.join(sdf_temp.set_index(self.doc_id_column), 
                      lsuffix='_1', rsuffix='_2', on=self.doc_id_column, how='outer') 
     return sdf
-  
 
 # COMMAND ----------
 
@@ -160,3 +159,51 @@ show_doc(CuratedDataUtils.get_cross_curator_comparison)
 # COMMAND ----------
 
 show_doc(CuratedDataUtils.get_consensus_per_doc)
+
+# COMMAND ----------
+
+# Some additional distance functions 
+def ordinal_distance(label1, label2):
+  """Krippendorff's ordinal distance metric
+  Modified from Wikipedia page: https://en.wikipedia.org/wiki/Krippendorff%27s_alpha#Difference_functions
+  """
+  try:
+    return pow(sum([g for g in range(label1, label2+1)]) - (label1+label2)/2, 2)
+  #        return pow(list(label1)[0]-list(label2)[0],2)
+  except:
+    print("non-numeric labels not supported with ordinal distance")
+        
+def no_maybe_yes_distance(label1, label2):
+  """Simple distance for no / maybe / yes scale used to denote curation task. 
+  Lookup table
+  d(0,0) = 0.0
+  d(1,1) = 0.0
+  d(2,2) = 0.0
+  d(0,1) = 3.0
+  d(1,2) = 1.0
+  d(0,2) = 5.0
+  """
+  try:
+    l1, l2 = sorted([int(list(label1)[0]), int(list(label2)[0])])
+    if l1 == l2: 
+      return 0.0 
+    elif (l1==0 and l2==1) or (l2==0 and l1==1):
+      return 3.0
+    elif (l1==1 and l2==2) or (l2==1 and l1==2):
+      return 1.0
+    elif (l1==0 and l2==2) or (l2==0 and l1==2):
+      return 5.0
+  except:
+    print("error")
+    print(label1,label2)
+  print("error")
+  print(label1,label2)
+  return 1000.0
+
+# COMMAND ----------
+
+show_doc(ordinal_distance)
+
+# COMMAND ----------
+
+show_doc(no_maybe_yes_distance)
