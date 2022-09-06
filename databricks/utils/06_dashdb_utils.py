@@ -137,6 +137,7 @@ show_doc(Snowflake.execute_query)
 
 # COMMAND ----------
 
+# DBTITLE 1,Dashboard Creation Tools
 
 #export
 
