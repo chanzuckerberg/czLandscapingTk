@@ -143,7 +143,7 @@ class ESearchQuery:
     else: 
       esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=' + self.db + '&term='
 
-    #query = quote_plus(query)
+    query = quote_plus(query)
     print(esearch_stem + query)
     esearch_response = urlopen(esearch_stem + query)
     esearch_data = esearch_response.read().decode('utf-8')
