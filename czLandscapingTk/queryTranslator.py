@@ -41,8 +41,8 @@ class QueryTranslator():
       q = re.sub('\s+(AND)\s+',' & ',expr_string)
       q = re.sub('\s+(OR)\s+',' | ',q)
       q = re.sub('\s+(NOT)\s+',' ~',q)
-      q = re.sub('[\"\n]','',q)
-      q = re.sub('\[(ti|ab|ft|tiab)\]',r'_\g<1>', q).strip()
+      q = re.sub('[\n]','',q)
+      q = re.sub('\[(ti|ab|ft|tiab|mesh|dp)\]',r'_\g<1>', q).strip()
       return q
 
     self.id2terms = {}
@@ -67,7 +67,10 @@ class QueryTranslator():
       redq = fix_errors(str(tt).strip())
       for t in ordered_names:
         id = self.terms2id[t]
-        redq = re.sub('\\b'+t+'\\b', id, redq)
+        if '"' in t:
+          redq = re.sub(t, id, redq)
+        else:
+          redq = re.sub('\\b'+t+'\\b', id, redq)
       self.redq_list.append((row_id, redq))
 
   def generate_queries(self, query_type:QueryType, skipErrors=True):
@@ -164,6 +167,7 @@ class QueryTranslator():
       if m:
         t = m.group(1)
         f = m.group(2)
+        print(f)
         if f == 'ti':
           return '(TITLE:"%s")'%(t)
         elif f == 'ab':
@@ -184,9 +188,9 @@ class QueryTranslator():
 
   def _pubmed(self, ex):
     if isinstance(ex, Literal):
-      p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|date)$')
+      p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|dp)$')
       m = p.match( self.id2terms[ex.name] )
-      #print(m)
+      print(m)
       if m:
         t = m.group(1)
         f = m.group(2)
@@ -198,7 +202,7 @@ class QueryTranslator():
           return '%s[tiab]'%(t)
         elif f == 'mesh':
           return '%s[mesh]'%(t)
-        elif f == 'date':
+        elif f == 'dp':
           return '%s[dp]'%(t)
         elif f == 'ft':
           raise Exception("Can't run full text query on pubmed currently: " + self.id2terms[ex.name] )
