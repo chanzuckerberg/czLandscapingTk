@@ -162,6 +162,7 @@ show_doc(CuratedDataUtils.get_consensus_per_doc)
 
 # COMMAND ----------
 
+#export
 # Some additional distance functions 
 def ordinal_distance(label1, label2):
   """Krippendorff's ordinal distance metric
