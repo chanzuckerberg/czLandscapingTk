@@ -295,7 +295,6 @@ class DashboardDb:
           query = q
           if len(sq) > 0:
             query = '(%s) AND (%s)'%(q,sq)
-          query = re.sub('\s+','+',query)
           print(query)
           if query=='nan' or len(query)==0:
             pubmed_errors.append((pmid, i, j, query))

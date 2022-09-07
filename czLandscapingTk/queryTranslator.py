@@ -190,7 +190,7 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|dp)$')
       m = p.match( self.id2terms[ex.name] )
-      print(m)
+      #print(m)
       if m:
         t = m.group(1)
         f = m.group(2)
