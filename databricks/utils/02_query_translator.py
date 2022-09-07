@@ -192,25 +192,29 @@ class QueryTranslator():
 
   def _pubmed(self, ex):
     if isinstance(ex, Literal):
-      p = re.compile('^(.*)_(ti|ab|ft|tiab)$')
+      p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|date)$')
       m = p.match( self.id2terms[ex.name] )
       #print(m)
       if m:
         t = m.group(1)
         f = m.group(2)
         if f == 'ti':
-          return '"%s"[ti]'%(t)
+          return '%s[ti]'%(t)
         elif f == 'ab':
-          return '"%s"[ab]'%(t)
+          return '%s[ab]'%(t)
         elif f == 'tiab':
-          return '"%s"[tiab]'%(t)
+          return '%s[tiab]'%(t)
+        elif f == 'mesh':
+          return '%s[mesh]'%(t)
+        elif f == 'date':
+          return '%s[dp]'%(t)
         elif f == 'ft':
           raise Exception("Can't run full text query on pubmed currently: " + self.id2terms[ex.name] )
         else:
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:              
         t = self.id2terms[ex.name]
-        return '"%s"'%(t)
+        return '%s'%(t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
