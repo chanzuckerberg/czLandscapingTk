@@ -202,7 +202,7 @@ class QueryTranslator():
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:
         t = self.id2terms[ex.name]
-        return '"%s"[tiab]'%(t)
+        return '"%s"'%(t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):

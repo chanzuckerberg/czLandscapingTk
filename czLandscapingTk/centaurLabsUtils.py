@@ -10,6 +10,7 @@ import pandas as pd
 from tqdm import tqdm
 import os
 import urllib.request
+import spacy
 
 class CentaurLabsUtils:
   '''
@@ -33,6 +34,8 @@ class CentaurLabsUtils:
     self.year_col = year_col
     self.dis_col = dis_col
     self.label_col = label_col
+    self.nlp = spacy.load("en_core_sci_lg")
+
 
   def generate_html_column(self, maxpos, html_col='HTML'):
     final_list = []

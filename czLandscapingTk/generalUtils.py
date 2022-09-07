@@ -28,4 +28,4 @@ def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databr
   if name_match:
     name = name_match.group(1)
   print(name + ': '+url)
-  displayHTML('<a href="'+url+'" >LINK</a>' )
+  #displayHTML('<a href="'+url+'" >LINK</a>' )
