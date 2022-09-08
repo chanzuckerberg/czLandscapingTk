@@ -29,6 +29,103 @@ nb_path: "06_dashdb_utils.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="https://lucid.app/publicSegments/view/0388e058-e5f8-4914-9536-f718edf21d47/image.jpeg" alt="Schema for Dashboard Database"></p>
+<p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/29f3e2c7-cd56-46fa-a6ce-0dda18d819e1/edit?viewport_loc=-2670%2C-1547%2C3099%2C1648%2CoxaLRZ4JBiatT&amp;invitationId=inv_64fde248-ce31-40b5-85d5-2f3317b5f876#">Link</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Use this class to run queries from a spreadsheet across various online academic graph systems and generate a database based on the data from those queries.</p>
+<p>If we had a dataframe <code>query_df</code> where one of the columns described a literature query expressed in Boolean Logic:</p>
+<table>
+<thead><tr>
+<th>ID</th>
+<th>DISEASE NAME</th>
+<th>MONDO_ID</th>
+<th>QUERY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Adult Polyglucosan Body Disease</td>
+<td>MONDO:0009897</td>
+<td>Adult Polyglucosan Body Disease (APBD), also called Glycogen Storage Disease type IV (GSD IV)</td>
+<td>adult polyglucosan body disease | adult polyglucosan body neuropathy</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Creatine transporter deficiency</td>
+<td>MONDO:0010305</td>
+<td>creatine transporter deficiency | guanidinoacetate methyltransferase deficiency | AGAT deficiency | cerebral creatine deficiency syndrome 1 | X-linked creatine deficiency syndrome | Cerebral Creatine Deficiency Syndromes | creatine transporter defect | SLC6A8 deficiency | X-linked creatine transporter deficiency | X-linked creatine deficiency | X-linked creatine deficiency syndrome | guanidinoacetate methyltransferase deficiency | guanidinoacetate N-methyltransferase activity disease | GAMT deficiency | glycine amidinotransferase activity disease | arginine:glycine amidinotransferase deficiency | AGAT deficiency | GATM deficiency              </td>
+</tr>
+<tr>
+<td>3</td>
+<td>AGAT deficiency</td>
+<td>MONDO:0012996</td>
+<td>"GATM deficiency" | "AGAT deficiency" | "arginine:glycine amidinotransferase deficiency" | "L-arginine:glycine amidinotransferase deficiency"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Guanidinoacetate methyltransferase deficiency</td>
+<td>MONDO:0012999</td>
+<td>"guanidinoacetate methyltransferase deficiency" | "GAMT deficiency"</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CLOVES Syndrome</td>
+<td>MONDO:0013038</td>
+<td>"CLOVES syndrome | (congenital lipomatous overgrowth) &amp; (vascular malformation epidermal) &amp; (nevi-spinal) &amp; syndrome | (congenital lipomatous overgrowth) &amp; (vascular malformations) &amp; (Epidermal nevi) &amp; ((skeletal|spinal) &amp; abnormalities) | CLOVE syndrome | (congenital lipomatous overgrowth) &amp; (vascular malformation) &amp; (epidermal nevi)</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
+from czLandscapingTk.dashdbUtils import DashboardDb
+from czLandscapingTk.generalUtils import dump_data_to_disk
+import re
+
+at_ID_column = 'ID'
+at_query_column = 'QUERY'
+
+# this will be substituted into the tables above instead of 'PREFIX_'
+prefix = 'MY_AMAZING_DATABASE_' 
+
+# Databricks secret management
+secret_scope = 'secret-scope' 
+
+# Location of data in SNOWFLAKE
+warehouse = 'DEV_WAREHOUSE'
+database = 'DEV_DB' 
+schema = 'SKE'
+
+# SNOWFLAKE role for permissions
+role = 'ARST_TEAM'
+
+# Location of temp files in Databricks file storage
+loc = '/dbfs/FileStore/user/gully/'
+
+# See https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/
+pubmed_api_key = 'blahblahblahblah' 
+
+# SNOWFLAKE Login credentials to be stored in secrets
+user = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_USERNAME")
+pem = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
+pwd = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PASSPHRASE")
+
+# Execution of the query and generation of the dashboard database
+dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
+dashdb.build_database_from_queries(pubmed_api_key, queries_df, at_ID_column, at_query_column, 
+    sf_include=False, pm_include=True, epmc_include=False)</code></pre>
+<p>The parameters <code>sf_include</code>, <code>pm_include</code>, and <code>empc_include</code> denote whether the Boolean queries listed will be run on (A) our own internal SNOWFLAKE database; (B) Pubmed; and (C) European PMC. Records for each of these databases are differentiated based on the <code>CORPUS</code></p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
