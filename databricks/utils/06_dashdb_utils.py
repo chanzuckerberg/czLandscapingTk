@@ -22,7 +22,7 @@ from nbdev import *
 # MAGIC 
 # MAGIC | ID | DISEASE NAME | MONDO_ID | QUERY  | 
 # MAGIC |----|--------------|----------|--------|
-# MAGIC | 1 | Adult Polyglucosan Body Disease | MONDO:0009897 | Adult Polyglucosan Body Disease (APBD), also called Glycogen Storage Disease type IV (GSD IV) | adult polyglucosan body disease \| adult polyglucosan body neuropathy
+# MAGIC | 1 | Adult Polyglucosan Body Disease | MONDO:0009897 | adult polyglucosan body disease \| adult polyglucosan body neuropathy
 # MAGIC | 2 | Creatine transporter deficiency | MONDO:0010305 |creatine transporter deficiency \| guanidinoacetate methyltransferase deficiency \| AGAT deficiency \| cerebral creatine deficiency syndrome 1 \| X-linked creatine deficiency syndrome \| Cerebral Creatine Deficiency Syndromes \| creatine transporter defect \| SLC6A8 deficiency \| X-linked creatine transporter deficiency \| X-linked creatine deficiency \| X-linked creatine deficiency syndrome \| guanidinoacetate methyltransferase deficiency \| guanidinoacetate N-methyltransferase activity disease \| GAMT deficiency \| glycine amidinotransferase activity disease \| arginine:glycine amidinotransferase deficiency \| AGAT deficiency \| GATM deficiency              
 # MAGIC | 3 | AGAT deficiency | MONDO:0012996 |  "GATM deficiency" \| "AGAT deficiency" \| "arginine:glycine amidinotransferase deficiency" \| "L-arginine:glycine amidinotransferase deficiency"
 # MAGIC | 4 | Guanidinoacetate methyltransferase deficiency | MONDO:0012999 |  "guanidinoacetate methyltransferase deficiency" \| "GAMT deficiency"
