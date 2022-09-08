@@ -10,6 +10,68 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md ![Schema for Dashboard Database](https://lucid.app/publicSegments/view/0388e058-e5f8-4914-9536-f718edf21d47/image.jpeg)
+# MAGIC 
+# MAGIC Image source on LucidDraw: [Link](https://lucid.app/lucidchart/29f3e2c7-cd56-46fa-a6ce-0dda18d819e1/edit?viewport_loc=-2670%2C-1547%2C3099%2C1648%2CoxaLRZ4JBiatT&invitationId=inv_64fde248-ce31-40b5-85d5-2f3317b5f876#)
+
+# COMMAND ----------
+
+# MAGIC %md Use this class to run queries from a spreadsheet across various online academic graph systems and generate a database based on the data from those queries. 
+# MAGIC 
+# MAGIC If we had a dataframe `query_df` where one of the columns described a literature query expressed in Boolean Logic:
+# MAGIC 
+# MAGIC | ID | DISEASE NAME | MONDO_ID | QUERY  | 
+# MAGIC |----|--------------|----------|--------|
+# MAGIC | 1 | Adult Polyglucosan Body Disease | MONDO:0009897 | Adult Polyglucosan Body Disease (APBD), also called Glycogen Storage Disease type IV (GSD IV) | adult polyglucosan body disease \| adult polyglucosan body neuropathy
+# MAGIC | 2 | Creatine transporter deficiency | MONDO:0010305 |creatine transporter deficiency \| guanidinoacetate methyltransferase deficiency \| AGAT deficiency \| cerebral creatine deficiency syndrome 1 \| X-linked creatine deficiency syndrome \| Cerebral Creatine Deficiency Syndromes \| creatine transporter defect \| SLC6A8 deficiency \| X-linked creatine transporter deficiency \| X-linked creatine deficiency \| X-linked creatine deficiency syndrome \| guanidinoacetate methyltransferase deficiency \| guanidinoacetate N-methyltransferase activity disease \| GAMT deficiency \| glycine amidinotransferase activity disease \| arginine:glycine amidinotransferase deficiency \| AGAT deficiency \| GATM deficiency              
+# MAGIC | 3 | AGAT deficiency | MONDO:0012996 |  "GATM deficiency" \| "AGAT deficiency" \| "arginine:glycine amidinotransferase deficiency" \| "L-arginine:glycine amidinotransferase deficiency"
+# MAGIC | 4 | Guanidinoacetate methyltransferase deficiency | MONDO:0012999 |  "guanidinoacetate methyltransferase deficiency" \| "GAMT deficiency"
+# MAGIC | 5 | CLOVES Syndrome | MONDO:0013038 | "CLOVES syndrome \| (congenital lipomatous overgrowth) & (vascular malformation epidermal) & (nevi-spinal) & syndrome \| (congenital lipomatous overgrowth) & (vascular malformations) & (Epidermal nevi) & ((skeletal\|spinal) & abnormalities) \| CLOVE syndrome \| (congenital lipomatous overgrowth) & (vascular malformation) & (epidermal nevi)
+# MAGIC 
+# MAGIC ```
+# MAGIC from czLandscapingTk.airtableUtils import AirtableUtils
+# MAGIC from czLandscapingTk.dashdbUtils import DashboardDb
+# MAGIC from czLandscapingTk.generalUtils import dump_data_to_disk
+# MAGIC import re
+# MAGIC 
+# MAGIC at_ID_column = 'ID'
+# MAGIC at_query_column = 'QUERY'
+# MAGIC 
+# MAGIC # this will be substituted into the tables above instead of 'PREFIX_'
+# MAGIC prefix = 'MY_AMAZING_DATABASE_' 
+# MAGIC 
+# MAGIC # Databricks secret management
+# MAGIC secret_scope = 'secret-scope' 
+# MAGIC 
+# MAGIC # Location of data in SNOWFLAKE
+# MAGIC warehouse = 'DEV_WAREHOUSE'
+# MAGIC database = 'DEV_DB' 
+# MAGIC schema = 'SKE'
+# MAGIC 
+# MAGIC # SNOWFLAKE role for permissions
+# MAGIC role = 'ARST_TEAM'
+# MAGIC 
+# MAGIC # Location of temp files in Databricks file storage
+# MAGIC loc = '/dbfs/FileStore/user/gully/'
+# MAGIC 
+# MAGIC # See https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/
+# MAGIC pubmed_api_key = 'blahblahblahblah' 
+# MAGIC 
+# MAGIC # SNOWFLAKE Login credentials to be stored in secrets
+# MAGIC user = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_USERNAME")
+# MAGIC pem = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
+# MAGIC pwd = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PASSPHRASE")
+# MAGIC 
+# MAGIC # Execution of the query and generation of the dashboard database
+# MAGIC dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
+# MAGIC dashdb.build_database_from_queries(pubmed_api_key, queries_df, at_ID_column, at_query_column, 
+# MAGIC     sf_include=False, pm_include=True, epmc_include=False)
+# MAGIC ```
+# MAGIC 
+# MAGIC The parameters `sf_include`, `pm_include`, and `empc_include` denote whether the Boolean queries listed will be run on (A) our own internal SNOWFLAKE database; (B) Pubmed; and (C) European PMC. Records for each of these databases are differentiated based on the `CORPUS` 
+
+# COMMAND ----------
+
 #export
 
 from cryptography.hazmat.backends import default_backend
