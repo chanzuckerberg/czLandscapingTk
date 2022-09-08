@@ -28,6 +28,9 @@ from nbdev import *
 # MAGIC | 4 | Guanidinoacetate methyltransferase deficiency | MONDO:0012999 |  "guanidinoacetate methyltransferase deficiency" \| "GAMT deficiency"
 # MAGIC | 5 | CLOVES Syndrome | MONDO:0013038 | "CLOVES syndrome \| (congenital lipomatous overgrowth) & (vascular malformation epidermal) & (nevi-spinal) & syndrome \| (congenital lipomatous overgrowth) & (vascular malformations) & (Epidermal nevi) & ((skeletal\|spinal) & abnormalities) \| CLOVE syndrome \| (congenital lipomatous overgrowth) & (vascular malformation) & (epidermal nevi)
 # MAGIC 
+# MAGIC 
+# MAGIC It is straightforward to build a database of all corpora listed in the spreadsheet from the search queries expressed in the `QUERY` column:
+# MAGIC 
 # MAGIC ```
 # MAGIC from czLandscapingTk.airtableUtils import AirtableUtils
 # MAGIC from czLandscapingTk.dashdbUtils import DashboardDb
