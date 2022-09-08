@@ -17,7 +17,7 @@ import re
 
 def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databricks-workspace.cloud.databricks.com'):
   ''' 
-  Save a Pandas's Dataframe to disk and display a HTTP link to download it
+  Save a Pandas's Dataframe to disk and returns a URL where you can download it
   
   `file_stem`: the location to save the file in the databricks file system. String must start with '/dbfs/FileStore/'
   `databricks_url`: is the URL for the Databricks environment being used. Defaults to the CZI workspace. 
@@ -34,8 +34,7 @@ def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databr
   name_match = re.search('/([a-zA-Z0-9_]+)_*$', file_stem)
   if name_match:
     name = name_match.group(1)
-  print(name + ': '+url)
-  #displayHTML('<a href="'+url+'" >LINK</a>' )
+  return url
 
 # COMMAND ----------
 
