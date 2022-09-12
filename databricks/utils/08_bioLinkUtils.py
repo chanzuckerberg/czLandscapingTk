@@ -6,10 +6,22 @@ from nbdev import *
 
 # MAGIC %md # BioLink Query Tools 
 # MAGIC 
-# MAGIC > Tools to query and analyze data from the Monarch Initiative's BioLink interface. This provides a live queryable interface for disease-based knowledge derived from Monarch's KG. Access to the service is through [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/). 
+# MAGIC > Tools to query and analyze data from the Monarch Initiative's BioLink interface and from their MONDO ontology. This provides a live queryable interface for disease-based knowledge derived from Monarch's KG. Latest version of MONDO is from Github. Access to the service is through [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/). 
 
 # COMMAND ----------
 
+#export
+
+parent_sparql = '''PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
+SELECT DISTINCT ?parent_id ?parent_name
+WHERE {
+	?mondo_id rdf:type owl:Class .
+    ?mondo_id rdfs:label ?name .
+    ?mondo_id rdfs:subClassOf ?parent_id .
+    ?parent_id rdfs:label ?parent_name .
+}'''
 
 parent_sparql = '''PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -45,6 +57,23 @@ WHERE {
 }'''
 
 descendents_sparql = '''
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
+SELECT DISTINCT ?name ?parent_id ?parent_name ?descendent_id ?descendent_name
+WHERE {
+    ?mondo_id rdfs:label ?name .
+    ?descendent_id rdfs:subClassOf+ ?mondo_id .
+    ?descendent_id rdfs:label ?descendent_name .
+    ?descendent_id rdfs:subClassOf ?parent_id .
+	?parent_id rdfs:label ?parent_name .
+} '''
+
+rare_diseases_sparql = '''
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>

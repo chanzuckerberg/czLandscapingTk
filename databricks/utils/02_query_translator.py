@@ -236,7 +236,8 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
       t = re.sub("'", "''", t)
-      s = "(p.TITLE LIKE '*%s*' OR p.ABSTRACT LIKE '*%s*')"%(t,t)
+      t = re.sub('"', '', t)
+      s = "(lower(p.TITLE) LIKE '*%s*' OR lower(p.ABSTRACT) LIKE '*%s*')"%(t.lower(),t.lower())
       s = re.sub('\*', '%', s)
       return s
     elif isinstance(ex, AndOp):
