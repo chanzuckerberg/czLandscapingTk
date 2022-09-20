@@ -50,6 +50,7 @@ class QueryTranslator():
       q = re.sub('\s+(OR)\s+',' | ',q)
       q = re.sub('\s+(NOT)\s+',' ~',q)
       q = re.sub('[\n]','',q)
+      q = re.sub('\"','QQQ',q)
       q = re.sub('\[(ti|ab|ft|tiab|mesh|dp)\]',r'_\g<1>', q).strip()
       return q
 
@@ -126,6 +127,7 @@ class QueryTranslator():
   def _simple(self, ex):
     if isinstance(ex, Literal):
       term = re.sub('_(ti|ab|ft|tiab)', '', self.id2terms[ex.name])
+      term = re.sub('QQQ', '"', term)
       return term
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._simple(x) for x in ex.xs])+')'
@@ -135,6 +137,7 @@ class QueryTranslator():
   def _closed_quote(self, ex):
     if isinstance(ex, Literal):
       term = re.sub('_(ti|ab|ft|tiab)', '', self.id2terms[ex.name])
+      term = re.sub('QQQ', '', term)
       return '"'+term+'"'
     elif isinstance(ex, AndOp):
       return '('+' NOT '.join([self._closed_quote(x) for x in ex.xs])+')'
@@ -149,6 +152,7 @@ class QueryTranslator():
       m = p.match( self.id2terms[ex.name] )
       if m:
         t = m.group(1)
+        t = re.sub('QQQ', '"', t)
         f = m.group(2)
         if f == 'ti':
           return '(paper_title:"%s")'%(t)
@@ -162,6 +166,7 @@ class QueryTranslator():
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:              
         t = self.id2terms[ex.name]
+        t = re.sub('QQQ', '"', t)
         return '(paper_title:"%s" OR paper_abstract:"%s")'%(t,t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._solr(x) for x in ex.xs])+')'
@@ -174,6 +179,7 @@ class QueryTranslator():
       m = p.match( self.id2terms[ex.name] )
       if m:
         t = m.group(1)
+        t = re.sub('QQQ', '"', t)
         f = m.group(2)
         print(f)
         if f == 'ti':
@@ -188,6 +194,7 @@ class QueryTranslator():
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:              
         t = self.id2terms[ex.name]
+        t = re.sub('QQQ', '"', t)
         return '(paper_title:"%s" OR ABSTRACT:"%s")'%(t,t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._epmc(x) for x in ex.xs])+')'
@@ -202,6 +209,7 @@ class QueryTranslator():
       if m:
         t = m.group(1)
         f = m.group(2)
+        t = re.sub('QQQ', '"', t)
         if f == 'ti':
           return '%s[ti]'%(t)
         elif f == 'ab':
@@ -218,6 +226,7 @@ class QueryTranslator():
           raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
       else:              
         t = self.id2terms[ex.name]
+        t = re.sub('QQQ', '"', t)
         return '%s'%(t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
@@ -226,7 +235,8 @@ class QueryTranslator():
     
   def _plusPipe(self, ex):
     if isinstance(ex, Literal):
-      return '"%s"'%(self.id2terms[ex.name]) 
+      t = re.sub('QQQ', '', self.id2terms[ex.name])
+      return '"%s"'%(t) 
     elif isinstance(ex, AndOp):
       return '('+'+'.join([self._pubmed(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
@@ -235,6 +245,7 @@ class QueryTranslator():
   def _snowflake(self, ex):
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
+      t = re.sub('QQQ', '', t)
       t = re.sub("'", "''", t)
       t = re.sub('"', '', t)
       s = "(lower(p.TITLE) LIKE '*%s*' OR lower(p.ABSTRACT) LIKE '*%s*')"%(t.lower(),t.lower())

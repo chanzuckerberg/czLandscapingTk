@@ -102,7 +102,7 @@ from tqdm import tqdm
 import os
 import urllib.request 
 
-MONDO_LATEST_URL = 'https://github.com/monarch-initiative/mondo/releases/download/v2022-08-01/mondo.owl'
+MONDO_LATEST_URL = 'https://github.com/monarch-initiative/mondo/releases/download/v2022-09-06/mondo.owl'
 
 class BioLinkUtils: 
   descendents_lookup = {}
