@@ -293,12 +293,13 @@ class DashboardDb:
       for (i, q) in zip(corpus_ids, pubmed_queries):
         for (j, sq) in zip(subset_ids, pubmed_subset_queries):
           query = q
-          if len(sq) > 0:
-            query = '(%s) AND (%s)'%(q,sq)
           print(query)
           if query=='nan' or len(query)==0:
             pubmed_errors.append((pmid, i, j, query))
             continue
+          if len(sq) > 0:
+            query = '(%s) AND (%s)'%(q,sq)
+          print(query)
           esq = ESearchQuery(pubmed_api_key)
           try:
             pubmed_pmids = esq.execute_query(query)
@@ -319,11 +320,11 @@ class DashboardDb:
       for (i, q) in zip(corpus_ids, epmc_queries):
         for (j, sq) in zip(subset_ids, epmc_subset_queries):
           query = q
-          if len(sq) > 0:
-            query = '(%s) AND (%s)'%(q, sq)
           if query=='nan' or len(query)==0:
             epmc_errors.append((i, j, query))
             continue
+          if len(sq) > 0:
+            query = '(%s) AND (%s)'%(q, sq)
           epmcq = EuroPMCQuery()
           try:
             numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
@@ -344,11 +345,11 @@ class DashboardDb:
         for (j, sq) in zip(subset_ids, sf_subset_queries):
           stem = 'SELECT p.ID FROM FIVETRAN.KG_RDS_CORE_DB.PAPER as p WHERE '
           query = stem + q
-          if len(sq) > 0:
-            query = stem + '(%s) AND (%s)'%(q, sq)
           if query=='nan' or len(query)==0:
             sf_errors.append((i, j, query))
             continue
+          if len(sq) > 0:
+            query = stem + '(%s) AND (%s)'%(q, sq)
           print(query)
           df = self.execute_query(query, ['ID'], cs)
           numFound = len(df)
