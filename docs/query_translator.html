@@ -40,7 +40,7 @@ nb_path: "02_query_translator.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QueryType" class="doc_header"><code>QueryType</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/queryTranslator.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Enum</code> = [open, closed, solr, epmc, pubmed, andPlusOrPipe, pubmed_no_types, snowflake]</p>
+<h2 id="QueryType" class="doc_header"><code>QueryType</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/queryTranslator.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Enum</code> = [open, closed, solr, epmc, epmc_sections, pubmed, andPlusOrPipe, pubmed_no_types, snowflake]</p>
 </blockquote>
 <p>An enumeration that permits conversion of complex boolean queries to different formats</p>
 
@@ -65,7 +65,7 @@ nb_path: "02_query_translator.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QueryTranslator" class="doc_header"><code>class</code> <code>QueryTranslator</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/queryTranslator.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QueryTranslator</code>(<strong><code>df</code></strong>, <strong><code>id_col</code></strong>, <strong><code>query_col</code></strong>)</p>
+<h2 id="QueryTranslator" class="doc_header"><code>class</code> <code>QueryTranslator</code><a href="https://github.com/GullyBurns/czLandscapingTk/tree/master/czLandscapingTk/queryTranslator.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QueryTranslator</code>(<strong><code>df</code></strong>, <strong><code>id_col</code></strong>, <strong><code>query_col</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -96,7 +96,7 @@ nb_path: "02_query_translator.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="QueryTranslator.__init__" class="doc_header"><code>QueryTranslator.__init__</code><a href="__main__.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>QueryTranslator.__init__</code>(<strong><code>df</code></strong>, <strong><code>id_col</code></strong>, <strong><code>query_col</code></strong>)</p>
+<h4 id="QueryTranslator.__init__" class="doc_header"><code>QueryTranslator.__init__</code><a href="__main__.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>QueryTranslator.__init__</code>(<strong><code>df</code></strong>, <strong><code>id_col</code></strong>, <strong><code>query_col</code></strong>)</p>
 </blockquote>
 <p>This class allows a user to define a set of logical boolean queries in a Pandas dataframe and then convert them to a variety of formats for use on various online API systems.<BR>
 Functionality includes:</p>
@@ -131,7 +131,7 @@ Functionality includes:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="QueryTranslator.generate_queries" class="doc_header"><code>QueryTranslator.generate_queries</code><a href="__main__.py#L73" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>QueryTranslator.generate_queries</code>(<strong><code>query_type</code></strong>:<a href="/czLandscapingTk/query_translator.html#QueryType"><code>QueryType</code></a>, <strong><code>skipErrors</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="QueryTranslator.generate_queries" class="doc_header"><code>QueryTranslator.generate_queries</code><a href="__main__.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>QueryTranslator.generate_queries</code>(<strong><code>query_type</code></strong>:<a href="/czLandscapingTk/query_translator.html#QueryType"><code>QueryType</code></a>, <strong><code>skipErrors</code></strong>=<em><code>True</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Use this command to covert the queries to the different forms specified by the QueryType enumeration</p>
 

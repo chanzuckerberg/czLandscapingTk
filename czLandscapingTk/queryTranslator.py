@@ -20,10 +20,11 @@ class QueryType(Enum):
   closed = 2
   solr = 3
   epmc = 4
-  pubmed = 5
-  andPlusOrPipe = 6
-  pubmed_no_types = 7
-  snowflake = 8
+  epmc_sections = 5
+  pubmed = 6
+  andPlusOrPipe = 7
+  pubmed_no_types = 8
+  snowflake = 9
 
 class QueryTranslator():
   def __init__(self, df, id_col, query_col):
@@ -74,7 +75,7 @@ class QueryTranslator():
           redq = re.sub('\\b'+t+'\\b', id, redq)
       self.redq_list.append((row_id, redq))
 
-  def generate_queries(self, query_type:QueryType, skipErrors=True):
+  def generate_queries(self, query_type:QueryType, skipErrors=True, **kwargs):
     """
     Use this command to covert the queries to the different forms specified by the QueryType enumeration
     """
@@ -84,7 +85,7 @@ class QueryTranslator():
       try:
         if t:
           ex = expr(t)
-          queries.append(self._expand_expr(ex, query_type))
+          queries.append(self._expand_expr(ex, query_type, **kwargs))
         else:
           queries.append('')
         IDs.append(ID)
@@ -96,7 +97,8 @@ class QueryTranslator():
           raise
     return (IDs, queries)
 
-  def _expand_expr(self, ex, query_type:QueryType):
+  def _expand_expr(self, ex, query_type:QueryType, **kwargs):
+    print(kwargs)
     if query_type == QueryType.open:
       return self._simple(ex)
     elif query_type == QueryType.closed:
@@ -105,6 +107,9 @@ class QueryTranslator():
       return self._solr(ex)
     elif query_type == QueryType.epmc:
       return self._epmc(ex)
+    elif query_type == QueryType.epmc_sections:
+      print(kwargs)
+      return self._epmc_sections(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.pubmed:
       return self._pubmed(ex)
     elif query_type == QueryType.andPlusOrPipe:
@@ -192,6 +197,17 @@ class QueryTranslator():
       return '('+' AND '.join([self._epmc(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
       return '('+' OR '.join([self._epmc(x) for x in ex.xs])+')'
+
+  def _epmc_sections(self, ex, sections):
+    if isinstance(ex, Literal):
+      t = self.id2terms[ex.name]
+      t = re.sub('QQQ', '', t)
+      query = ' OR '.join(['%s:"%s"'%(s,t) for s in sections])
+      return query
+    elif isinstance(ex, AndOp):
+      return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+    elif isinstance(ex, OrOp):
+      return '('+' OR '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
 
   def _pubmed(self, ex):
     if isinstance(ex, Literal):

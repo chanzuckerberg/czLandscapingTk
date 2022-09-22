@@ -281,87 +281,136 @@ class DashboardDb:
       qt2 = QueryTranslator(subquery_df, id_col, subq_col)
     else:
       qt2 = None
-    corpus_paper_list = []
 
-    pubmed_errors = []
+    corpus_paper_list = []
     if pm_include:
-      (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-      if qt2:
-        (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed)
-      else:
-        (subset_ids, pubmed_subset_queries) = ([0],[''])
-      for (i, q) in zip(corpus_ids, pubmed_queries):
-        for (j, sq) in zip(subset_ids, pubmed_subset_queries):
-          query = q
-          print(query)
-          if query=='nan' or len(query)==0:
-            pubmed_errors.append((pmid, i, j, query))
-            continue
-          if len(sq) > 0:
-            query = '(%s) AND (%s)'%(q,sq)
-          print(query)
-          esq = ESearchQuery(pubmed_api_key)
-          try:
-            pubmed_pmids = esq.execute_query(query)
-          except:
-            pubmed_errors.append((i, j, query))
-            pummed_pmids = []
-          print(len(pubmed_pmids))
-          for pmid in pubmed_pmids:
-            corpus_paper_list.append((pmid, i, 'pubmed', j))
+      pubmed_corpus_paper_list, pubmed_errors = self.execute_pubmed_queries(qt, qt2)
+      corpus_paper_list.extend(pubmed_corpus_paper_list)
 
     epmc_errors = []
     if epmc_include:
-      (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.closed)
-      if qt2:
-        (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.closed)
-      else:
-        (subset_ids, epmc_subset_queries) = ([0],[''])
-      for (i, q) in zip(corpus_ids, epmc_queries):
-        for (j, sq) in zip(subset_ids, epmc_subset_queries):
-          query = q
-          if query=='nan' or len(query)==0:
-            epmc_errors.append((i, j, query))
-            continue
-          if len(sq) > 0:
-            query = '(%s) AND (%s)'%(q, sq)
-          epmcq = EuroPMCQuery()
-          try:
-            numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
-            for id in tqdm(epmc_pmids):
-              corpus_paper_list.append((id, i, 'epmc', j))
-          except:
-            epmc_errors.append((id, i, j, query))
+      epmc_corpus_paper_list, epmc_errors = self.execute_epmc_queries(qt, qt2)
+      corpus_paper_list.extend(epmc_corpus_paper_list)
 
     sf_errors = []
     if sf_include:
-      (corpus_ids, sf_queries) = qt.generate_queries(QueryType.snowflake)
-      if qt2:
-        (subset_ids, sf_subset_queries) = qt2.generate_queries(QueryType.snowflake)
-      else:
-        (subset_ids, sf_subset_queries) = ([0],[''])
-      cs = self.get_cursor()
-      for (i, q) in zip(corpus_ids, sf_queries):
-        for (j, sq) in zip(subset_ids, sf_subset_queries):
-          stem = 'SELECT p.ID FROM FIVETRAN.KG_RDS_CORE_DB.PAPER as p WHERE '
-          query = stem + q
-          if query=='nan' or len(query)==0:
-            sf_errors.append((i, j, query))
-            continue
-          if len(sq) > 0:
-            query = stem + '(%s) AND (%s)'%(q, sq)
-          print(query)
+      sf_corpus_paper_list, sf_errors_errors = self.execute_epmc_queries(qt, qt2)
+      corpus_paper_list.extend(sf_corpus_paper_list)
+
+    corpus_paper_df = pd.DataFrame(corpus_paper_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
+
+    self.build_db()
+
+  def execute_pubmed_queries(self, qt, qt2):
+    corpus_paper_list = []
+    pubmed_errors = []
+    (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed, skipErrors=False)
+    if qt2:
+      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed)
+    else:
+      (subset_ids, pubmed_subset_queries) = ([0],[''])
+    for (i, q) in zip(corpus_ids, pubmed_queries):
+      for (j, sq) in zip(subset_ids, pubmed_subset_queries):
+        query = q
+        print(query)
+        if query=='nan' or len(query)==0:
+          pubmed_errors.append((i, j, query))
+          continue
+        if len(sq) > 0:
+          query = '(%s) AND (%s)'%(q,sq)
+        print(query)
+        esq = ESearchQuery(pubmed_api_key)
+        try:
+          pubmed_pmids = esq.execute_query(query)
+        except:
+          pubmed_errors.append((i, j, query))
+          pummed_pmids = []
+        print(len(pubmed_pmids))
+        for pmid in pubmed_pmids:
+          corpus_paper_list.append((pmid, i, 'pubmed', j))
+    return corpus_paper_list, pubmed_errors
+
+  def execute_epmc_queries(self, qt, qt2):
+    corpus_paper_list = []
+    epmc_errors = []
+    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.closed)
+    if qt2:
+      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.closed)
+    else:
+      (subset_ids, epmc_subset_queries) = ([0],[''])
+    for (i, q) in zip(corpus_ids, epmc_queries):
+      for (j, sq) in zip(subset_ids, epmc_subset_queries):
+        query = q
+        if query=='nan' or len(query)==0:
+          epmc_errors.append((i, j, query))
+          continue
+        if len(sq) > 0:
+          query = '(%s) AND (%s)'%(q, sq)
+        epmcq = EuroPMCQuery()
+        try:
+          numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
+          for id in tqdm(epmc_pmids):
+            corpus_paper_list.append((id, i, 'epmc', j))
+        except:
+          epmc_errors.append((id, i, j, query))
+    return corpus_paper_list, epmc_errors
+
+  def execute_epmc_queries_on_sections(self, qt, qt2, sections=['TITLE', 'ABSTRACT']):
+    corpus_paper_list = []
+    epmc_errors = []
+    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc_sections)
+    if qt2:
+      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc_sections)
+    else:
+      (subset_ids, epmc_subset_queries) = ([0],[''])
+    for (i, q) in zip(corpus_ids, epmc_queries):
+      for (j, sq) in zip(subset_ids, epmc_subset_queries):
+        query = q
+        if query=='nan' or len(query)==0:
+          epmc_errors.append((i, j, query))
+          continue
+        if len(sq) > 0:
+          query = '(%s) AND (%s)'%(q, sq)
+        epmcq = EuroPMCQuery()
+        try:
+          numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
+          for id in tqdm(epmc_pmids):
+            corpus_paper_list.append((id, i, 'epmc', j))
+        except:
+          epmc_errors.append((id, i, j, query))
+    return corpus_paper_list, epmc_errors
+
+  def execute_sf_queries(self, qt, qt2):
+    corpus_paper_list = []
+    sf_errors = []
+    (corpus_ids, sf_queries) = qt.generate_queries(QueryType.snowflake)
+    if qt2:
+      (subset_ids, sf_subset_queries) = qt2.generate_queries(QueryType.snowflake)
+    else:
+      (subset_ids, sf_subset_queries) = ([0],[''])
+    cs = self.get_cursor()
+    for (i, q) in zip(corpus_ids, sf_queries):
+      for (j, sq) in zip(subset_ids, sf_subset_queries):
+        stem = 'SELECT p.ID FROM FIVETRAN.KG_RDS_CORE_DB.PAPER as p WHERE '
+        query = stem + q
+        if query=='nan' or len(query)==0:
+          sf_errors.append((i, j, query))
+          continue
+        if len(sq) > 0:
+          query = stem + '(%s) AND (%s)'%(q, sq)
+        print(query)
+        try:
           df = self.execute_query(query, ['ID'], cs)
           numFound = len(df)
           print(i, q, numFound)
           sf_ids = df.ID.to_list()
           for id in tqdm(sf_ids):
             corpus_paper_list.append((id, i, 'czkg', j))
-          #except:
-          #  sf_errors.append((i, j, query))
+        except:
+          sf_errors.append((i, j, query))
+    return corpus_paper_list, sf_errors
 
-    corpus_paper_df = pd.DataFrame(corpus_paper_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
-
+  def build_db(self, query_df, subquery_df, corpus_paper_df):
     cs = self.get_cursor()
     cs.execute("BEGIN")
     if delete_db:
