@@ -10,6 +10,10 @@ from nbdev import *
 
 # COMMAND ----------
 
+# MAGIC %md ## NCBI Tools
+
+# COMMAND ----------
+
 #export
 """
 A package designed for interactions with the EUtils tools from the National Library of Medicine
@@ -408,6 +412,10 @@ show_doc(EFetchQuery.generate_data_frame_from_id_list)
 # COMMAND ----------
 
 show_doc(EFetchQuery.generate_mesh_data_frame_from_id_list)
+
+# COMMAND ----------
+
+# MAGIC %md ## EuroPMCQuery
 
 # COMMAND ----------
 
