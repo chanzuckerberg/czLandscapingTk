@@ -33,6 +33,7 @@ class QueryType(Enum):
   andPlusOrPipe = 7
   pubmed_no_types = 8
   snowflake = 9
+  pubmed_sections = 10
 
 class QueryTranslator(): 
   def __init__(self, df, id_col, query_col):
@@ -118,6 +119,8 @@ class QueryTranslator():
       return self._epmc_sections(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.pubmed:
       return self._pubmed(ex)
+    elif query_type == QueryType.pubmed_sections:
+      return self._pubmed_sections(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.andPlusOrPipe:
       return self._plusPipe(ex)
     elif query_type == QueryType.pubmed_no_types:
@@ -213,7 +216,18 @@ class QueryTranslator():
       return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
       return '('+' OR '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
-    
+
+  def _pubmed_sections(self, ex, sections):
+    if isinstance(ex, Literal):
+      t = self.id2terms[ex.name]
+      t = re.sub('QQQ', '', t)
+      query = '('+' OR '.join(['"%s"[%s]'%(t,s) for s in sections])+')'
+      return query
+    elif isinstance(ex, AndOp):
+      return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+    elif isinstance(ex, OrOp):
+      return '('+' OR '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+
   def _pubmed(self, ex):
     if isinstance(ex, Literal):
       p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|dp)$')
