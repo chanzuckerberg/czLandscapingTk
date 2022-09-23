@@ -441,11 +441,12 @@ class DashboardDb:
   def execute_epmc_queries_on_sections(self, qt, qt2, sections=['TITLE', 'ABSTRACT']):
     corpus_paper_list = []
     epmc_errors = []
-    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc_sections)
+    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc_sections, sections=sections)
     if qt2:
-      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc_sections)
+      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc_sections, sections=sections)
     else: 
       (subset_ids, epmc_subset_queries) = ([0],[''])
+    print(epmc_queries)
     for (i, q) in zip(corpus_ids, epmc_queries):
       for (j, sq) in zip(subset_ids, epmc_subset_queries):
         query = q
@@ -493,7 +494,7 @@ class DashboardDb:
           sf_errors.append((i, j, query))
     return corpus_paper_list, sf_errors
   
-  def build_db(self, query_df, subquery_df, corpus_paper_df):
+  def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
     cs = self.get_cursor()
     cs.execute("BEGIN")
     if delete_db:
