@@ -98,7 +98,6 @@ class QueryTranslator():
     return (IDs, queries)
 
   def _expand_expr(self, ex, query_type:QueryType, **kwargs):
-    print(kwargs)
     if query_type == QueryType.open:
       return self._simple(ex)
     elif query_type == QueryType.closed:
@@ -108,7 +107,6 @@ class QueryTranslator():
     elif query_type == QueryType.epmc:
       return self._epmc(ex)
     elif query_type == QueryType.epmc_sections:
-      print(kwargs)
       return self._epmc_sections(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.pubmed:
       return self._pubmed(ex)
@@ -178,7 +176,6 @@ class QueryTranslator():
         t = m.group(1)
         t = re.sub('QQQ', '"', t)
         f = m.group(2)
-        print(f)
         if f == 'ti':
           return '(TITLE:"%s")'%(t)
         elif f == 'ab':
@@ -202,7 +199,7 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
       t = re.sub('QQQ', '', t)
-      query = ' OR '.join(['%s:"%s"'%(s,t) for s in sections])
+      query = '('+' OR '.join(['%s:"%s"'%(s,t) for s in sections])+')'
       return query
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
