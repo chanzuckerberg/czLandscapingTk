@@ -108,6 +108,7 @@ class ESearchQuery:
       esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
     else:
       esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
+    query = quote_plus(query)
     esearch_response = urlopen(esearch_stem + query)
     esearch_data = esearch_response.read().decode('utf-8')
     esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -436,6 +437,7 @@ class EuroPMCQuery():
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=10)
         data = json.loads(r.text)
+        print(data)
         numFound = data['hitCount']
         print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
         pmids_from_q = set()
@@ -481,10 +483,9 @@ import urllib.parse
 from time import time, sleep
 
 esq = ESearchQuery()
-pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
-print(esq.execute_count_query(pcd_search))
+print(esq.execute_count_query("Primary Ciliary Dyskinesia"))
 sleep(3) # Sleep for 3 seconds
-esq.execute_query(pcd_search)
+esq.execute_query("Primary Ciliary Dyskinesia")
 
 efq = EFetchQuery()
 sleep(3) # Sleep for 3 seconds
@@ -495,4 +496,5 @@ efq.execute_efetch(35777446)
 # Tests for European PMC
 epmcq = EuroPMCQuery()
 id_list, q_list = qt.generate_queries(QueryType.epmc)
+print(q_list)
 epmcq.run_empc_query(q_list[0])

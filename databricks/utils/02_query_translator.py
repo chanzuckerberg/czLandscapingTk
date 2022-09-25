@@ -28,12 +28,10 @@ class QueryType(Enum):
   closed = 2
   solr = 3
   epmc = 4
-  epmc_sections = 5
-  pubmed = 6
-  andPlusOrPipe = 7
-  pubmed_no_types = 8
-  snowflake = 9
-  pubmed_sections = 10
+  pubmed = 5
+  andPlusOrPipe = 6
+  pubmed_no_types = 7
+  snowflake = 8
 
 class QueryTranslator(): 
   def __init__(self, df, id_col, query_col):
@@ -84,7 +82,7 @@ class QueryTranslator():
           redq = re.sub('\\b'+t+'\\b', id, redq)        
       self.redq_list.append((row_id, redq))
 
-  def generate_queries(self, query_type:QueryType, skipErrors=True, **kwargs):
+  def generate_queries(self, query_type:QueryType, skipErrors=False, **kwargs):
     """
     Use this command to covert the queries to the different forms specified by the QueryType enumeration
     """
@@ -114,17 +112,11 @@ class QueryTranslator():
     elif query_type == QueryType.solr:
       return self._solr(ex)
     elif query_type == QueryType.epmc:
-      return self._epmc(ex)
-    elif query_type == QueryType.epmc_sections:
-      return self._epmc_sections(ex, sections=kwargs.get('sections',[]))
+      return self._epmc(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.pubmed:
-      return self._pubmed(ex)
-    elif query_type == QueryType.pubmed_sections:
-      return self._pubmed_sections(ex, sections=kwargs.get('sections',[]))
+      return self._pubmed(ex, sections=kwargs.get('sections',[]))
     elif query_type == QueryType.andPlusOrPipe:
       return self._plusPipe(ex)
-    elif query_type == QueryType.pubmed_no_types:
-      return self._pubmed_no_types(ex)
     elif query_type == QueryType.snowflake:
       return self._snowflake(ex)
 
@@ -179,86 +171,35 @@ class QueryTranslator():
     elif isinstance(ex, OrOp):
       return '('+' OR '.join([self._solr(x) for x in ex.xs])+')'
 
-  def _epmc(self, ex):
-    if isinstance(ex, Literal):
-      p = re.compile('^(.*)_(ti|ab|ft|tiab)')
-      m = p.match( self.id2terms[ex.name] )
-      if m:
-        t = m.group(1)
-        t = re.sub('QQQ', '"', t)
-        f = m.group(2)
-        if f == 'ti':
-          return '(TITLE:"%s")'%(t)
-        elif f == 'ab':
-          return '(ABSTRACT:"%s")'%(t)
-        elif f == 'tiab':
-          return '(TITLE:"%s" OR ABSTRACT:"%s")'%(t,t)
-        elif f == 'ft':
-          return '"%s"'%(t)
-        else:
-          raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
-      else:              
-        t = self.id2terms[ex.name]
-        t = re.sub('QQQ', '"', t)
-        return '(paper_title:"%s" OR ABSTRACT:"%s")'%(t,t)
-    elif isinstance(ex, AndOp):
-      return '('+' AND '.join([self._epmc(x) for x in ex.xs])+')'
-    elif isinstance(ex, OrOp):
-      return '('+' OR '.join([self._epmc(x) for x in ex.xs])+')'
-
-  def _epmc_sections(self, ex, sections):
+  def _epmc(self, ex, sections=None):
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
-      t = re.sub('QQQ', '', t)
-      query = '('+' OR '.join(['%s:"%s"'%(s,t) for s in sections])+')'
+      if len(sections)>0:
+        t = re.sub('QQQ', '', t)
+        query = '('+' OR '.join(['%s:"%s"'%(s,t) for s in sections])+')'
+      else: 
+        t = re.sub('QQQ', '"', t)
+        query = '('+t+')'
       return query
     elif isinstance(ex, AndOp):
-      return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+      return '('+' AND '.join([self._epmc(x, sections) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
-      return '('+' OR '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+      return '('+' OR '.join([self._epmc(x, sections) for x in ex.xs])+')'
 
-  def _pubmed_sections(self, ex, sections):
+  def _pubmed(self, ex, sections):
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
-      t = re.sub('QQQ', '', t)
-      query = '('+' OR '.join(['"%s"[%s]'%(t,s) for s in sections])+')'
+      if len(sections)>0:
+        t = re.sub('QQQ', '', t)
+        query = '('+' OR '.join(['"%s"[%s]'%(t,s) for s in sections])+')'
+      else: 
+        t = re.sub('QQQ', '"', t)
+        query = '('+t+')'
       return query
     elif isinstance(ex, AndOp):
-      return '('+' AND '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
+      return '('+' AND '.join([self._pubmed(x, sections) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
-      return '('+' OR '.join([self._epmc_sections(x, sections) for x in ex.xs])+')'
-
-  def _pubmed(self, ex):
-    if isinstance(ex, Literal):
-      p = re.compile('^(.*)_(ti|ab|ft|tiab|mesh|dp)$')
-      m = p.match( self.id2terms[ex.name] )
-      #print(m)
-      if m:
-        t = m.group(1)
-        f = m.group(2)
-        t = re.sub('QQQ', '"', t)
-        if f == 'ti':
-          return '%s[ti]'%(t)
-        elif f == 'ab':
-          return '%s[ab]'%(t)
-        elif f == 'tiab':
-          return '%s[tiab]'%(t)
-        elif f == 'mesh':
-          return '%s[mesh]'%(t)
-        elif f == 'dp':
-          return '%s[dp]'%(t)
-        elif f == 'ft':
-          raise Exception("Can't run full text query on pubmed currently: " + self.id2terms[ex.name] )
-        else:
-          raise Exception("Incorrect field specification, must be 'ti', 'ab', 'tiab', or 'ft': " + self.id2terms[ex.name] )
-      else:              
-        t = self.id2terms[ex.name]
-        t = re.sub('QQQ', '"', t)
-        return '%s'%(t)
-    elif isinstance(ex, AndOp):
-      return '('+' AND '.join([self._pubmed(x) for x in ex.xs])+')'
-    elif isinstance(ex, OrOp):
-      return '('+' OR '.join([self._pubmed(x) for x in ex.xs])+')'
+      return '('+' OR '.join([self._pubmed(x, sections) for x in ex.xs])+')'
     
   def _plusPipe(self, ex):
     if isinstance(ex, Literal):

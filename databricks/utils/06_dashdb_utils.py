@@ -437,16 +437,40 @@ class DashboardDb:
         except:
           epmc_errors.append((id, i, j, query))
     return corpus_paper_list, epmc_errors
-
-  def execute_epmc_queries_on_sections(self, qt, qt2, sections=['TITLE', 'ABSTRACT']):
+  
+  def execute_pubmed_queries_on_sections(self, qt, qt2, api_key='', sections=['tiab']):
     corpus_paper_list = []
-    epmc_errors = []
+    errors = []
+    (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed_sections, sections=sections)
+    if qt2:
+      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed_sections, sections=sections)
+    else: 
+      (subset_ids, pubmed_subset_queries) = ([0],[''])
+    for (i, q) in zip(corpus_ids, pubmed_queries):
+      for (j, sq) in zip(subset_ids, pubmed_subset_queries):
+        query = q
+        if query=='nan' or len(query)==0: 
+          errors.append((i, j, query))
+          continue
+        if len(sq) > 0:
+          query = '(%s) AND (%s)'%(q, sq) 
+        pmq = ESearchQuery(api_key=api_key)
+        num_found = pmq.execute_count_query(query)
+        if num_found>0:
+          pmids = pmq.execute_query(query)
+          for id in tqdm(pmids):
+            corpus_paper_list.append((id, i, 'pubmed', j))
+        else:
+          corpus_paper_list = []
+    return corpus_paper_list
+
+  def execute_epmc_queries_on_sections(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
+    corpus_paper_list = []
     (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc_sections, sections=sections)
     if qt2:
       (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc_sections, sections=sections)
     else: 
       (subset_ids, epmc_subset_queries) = ([0],[''])
-    print(epmc_queries)
     for (i, q) in zip(corpus_ids, epmc_queries):
       for (j, sq) in zip(subset_ids, epmc_subset_queries):
         query = q
@@ -456,13 +480,10 @@ class DashboardDb:
         if len(sq) > 0:
           query = '(%s) AND (%s)'%(q, sq) 
         epmcq = EuroPMCQuery()
-        try: 
-          numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
-          for id in tqdm(epmc_pmids):
-            corpus_paper_list.append((id, i, 'epmc', j))
-        except:
-          epmc_errors.append((id, i, j, query))
-    return corpus_paper_list, epmc_errors
+        numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
+        for id in tqdm(epmc_pmids):
+          corpus_paper_list.append((id, i, 'epmc', j))
+    return corpus_paper_list
 
   def execute_sf_queries(self, qt, qt2):
     corpus_paper_list = []
