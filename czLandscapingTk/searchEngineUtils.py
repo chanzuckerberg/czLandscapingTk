@@ -96,6 +96,7 @@ class ESearchQuery:
       esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?api_key='+self.api_key+'&db=' + self.db + '&term='
     else:
       esearch_stem = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db='+self.db + '&term='
+    query = quote_plus(query)
     esearch_response = urlopen(esearch_stem + query)
     esearch_data = esearch_response.read().decode('utf-8')
     esearch_soup = BeautifulSoup(esearch_data, "lxml-xml")
@@ -380,6 +381,7 @@ class EuroPMCQuery():
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=10)
         data = json.loads(r.text)
+        print(data)
         numFound = data['hitCount']
         print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
         pmids_from_q = set()
