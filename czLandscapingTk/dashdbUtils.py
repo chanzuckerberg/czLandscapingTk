@@ -358,12 +358,14 @@ class DashboardDb:
   def execute_pubmed_queries_on_sections(self, qt, qt2, api_key='', sections=['tiab']):
     corpus_paper_list = []
     errors = []
-    (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed_sections, sections=sections)
+    (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed, sections=sections)
     if qt2:
-      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed_sections, sections=sections)
+      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed, sections=sections)
     else:
       (subset_ids, pubmed_subset_queries) = ([0],[''])
     for (i, q) in zip(corpus_ids, pubmed_queries):
+      #if i != 851:
+      #  continue
       for (j, sq) in zip(subset_ids, pubmed_subset_queries):
         query = q
         if query=='nan' or len(query)==0:
@@ -373,19 +375,19 @@ class DashboardDb:
           query = '(%s) AND (%s)'%(q, sq)
         pmq = ESearchQuery(api_key=api_key)
         num_found = pmq.execute_count_query(query)
+        print(num_found)
         if num_found>0:
           pmids = pmq.execute_query(query)
+          sleep(0.5) # Sleep for half a second
           for id in tqdm(pmids):
             corpus_paper_list.append((id, i, 'pubmed', j))
-        else:
-          corpus_paper_list = []
     return corpus_paper_list
 
   def execute_epmc_queries_on_sections(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
     corpus_paper_list = []
-    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc_sections, sections=sections)
+    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc, sections=sections)
     if qt2:
-      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc_sections, sections=sections)
+      (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc, sections=sections)
     else:
       (subset_ids, epmc_subset_queries) = ([0],[''])
     for (i, q) in zip(corpus_ids, epmc_queries):
