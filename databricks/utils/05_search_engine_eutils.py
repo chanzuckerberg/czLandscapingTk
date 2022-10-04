@@ -471,9 +471,9 @@ show_doc(EuroPMCQuery.run_empc_query)
 # COMMAND ----------
 
 query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
-df = pd.DataFrame(query)
-qt = QueryTranslator(df, 'ID', 'query')
-print(qt.generate_queries(QueryType.pubmed))
+df_test = pd.DataFrame(query)
+qt_test = QueryTranslator(df_test, 'ID', 'query')
+print(qt_test.generate_queries(QueryType.pubmed))
 
 # COMMAND ----------
 
@@ -495,6 +495,6 @@ efq.execute_efetch(35777446)
 
 # Tests for European PMC
 epmcq = EuroPMCQuery()
-id_list, q_list = qt.generate_queries(QueryType.epmc)
+id_list, q_list = qt_test.generate_queries(QueryType.epmc)
 print(q_list)
 epmcq.run_empc_query(q_list[0])
