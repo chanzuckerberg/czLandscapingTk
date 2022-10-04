@@ -452,9 +452,9 @@ Each instance of this class executes queries of a given type</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;ID&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="s1">&#39;(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; | &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;&#39;</span><span class="p">}]</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-<span class="n">qt</span> <span class="o">=</span> <span class="n">QueryTranslator</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">generate_queries</span><span class="p">(</span><span class="n">QueryType</span><span class="o">.</span><span class="n">pubmed</span><span class="p">))</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="n">qt_test</span> <span class="o">=</span> <span class="n">QueryTranslator</span><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;query&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qt_test</span><span class="o">.</span><span class="n">generate_queries</span><span class="p">(</span><span class="n">QueryType</span><span class="o">.</span><span class="n">pubmed</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -500,7 +500,7 @@ Each instance of this class executes queries of a given type</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">epmcq</span> <span class="o">=</span> <span class="n">EuroPMCQuery</span><span class="p">()</span>
-<span class="n">id_list</span><span class="p">,</span> <span class="n">q_list</span> <span class="o">=</span> <span class="n">qt</span><span class="o">.</span><span class="n">generate_queries</span><span class="p">(</span><span class="n">QueryType</span><span class="o">.</span><span class="n">epmc</span><span class="p">)</span>
+<span class="n">id_list</span><span class="p">,</span> <span class="n">q_list</span> <span class="o">=</span> <span class="n">qt_test</span><span class="o">.</span><span class="n">generate_queries</span><span class="p">(</span><span class="n">QueryType</span><span class="o">.</span><span class="n">epmc</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">q_list</span><span class="p">)</span>
 <span class="n">epmcq</span><span class="o">.</span><span class="n">run_empc_query</span><span class="p">(</span><span class="n">q_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>

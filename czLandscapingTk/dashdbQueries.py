@@ -11,7 +11,7 @@ __all__ = ['DASHBOARD_CORPUS', 'DASHBOARD_CORPUS_TO_PAPER', 'DASHBOARD_PAPER', '
            'CREATE_DASH_PAPER_COUNT', 'DASH_OA_PAPER_COUNT_SQL', 'CREATE_DASH_OA_PAPER_COUNT', 'DASH_AUTHOR_COUNT_SQL',
            'CREATE_DASH_AUTHOR_COUNT_SQL', 'DASH_AUTHOR_SQL', 'CREATE_DASH_AUTHOR_SQL', 'DASH_PAPERS_SQL',
            'CREATE_DASH_PAPERS_SQL', 'DASH_CONCEPTS_COLUMNS', 'DASH_CONCEPTS_SQL', 'CREATE_DASH_CONCEPTS_SQL',
-           'DASH_GEO_MAP_SQL', 'CREATE_DASH_GEO_MAP_SQL', 'CONTENT_CORPUS_SQL', 'MONDO_SEARCH_TERMS',
+           'DASH_GEO_MAP_SQL', 'CREATE_DASH_GEO_MAP_SQL', 'CONTENT_CORPUS_SQL', 'H_INDEX_SQL', 'MONDO_SEARCH_TERMS',
            'CREATE_FULL_TEXT_DOCUMENT_TABLE', 'CREATE_FULL_TEXT_ANNOTATION_TABLE']
 
 # Cell
@@ -366,6 +366,29 @@ CONTENT_CORPUS_SQL = '''SELECT DISTINCT p.id as PMID,
     ORDER BY N_CITATIONS DESC
 '''
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# NONFUNCTIONAL SQL LOGIC FROM OLD DATABASE TO COMPUTE H-INDEX FROM DATA.
+# KEEPING HERE AS A RECORD.
+H_INDEX_SQL = '''
+  select do_id, a_id, a_name, count(*) as h_index
+        from (
+          select do.id as do_id,
+              a.id as a_id,
+              a.name as a_name,
+              p.id as p_id,
+              cc.CITATION_COUNT as citation_count,
+              rank() over (partition by a.id order by cc.CITATION_COUNT desc) as ranking
+          from MFP_CITATION_COUNTS as cc
+              JOIN MFP_PAPER as p ON (p.id=cc.id)
+              JOIN MFP_PAPER_TO_AUTHOR as pa ON (p.id=pa.ID_PAPER)
+              JOIN MFP_AUTHOR as a ON (pa.ID_AUTHOR=a.ID)
+              JOIN MFP_PATIENT_ORGANIZATION_TO_PAPER as dop on (p.id=dop.id_paper)
+              JOIN MFP_PATIENT_ORGANIZATION as do on (dop.id_org=do.id)
+          order by a_name, citation_count desc
+        ) t
+        where ranking <= citation_count
+        group by do_id, a_id, a_name
+        order by a_name;
+'''
 
 MONDO_SEARCH_TERMS = '''
 '''
