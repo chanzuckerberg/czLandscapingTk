@@ -212,6 +212,8 @@ from czLandscapingTk.queryTranslator import QueryTranslator, QueryType
 import czLandscapingTk.dashdbQueries
 
 from datetime import datetime
+from time import time,sleep
+
 import requests
 import json
 from tqdm import tqdm
@@ -431,9 +433,9 @@ class DashboardDb:
           query = '(%s) AND (%s)'%(q, sq) 
         epmcq = EuroPMCQuery()
         try: 
-          numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
-          for id in tqdm(epmc_pmids):
-            corpus_paper_list.append((id, i, 'epmc', j))
+          numFound, epmc_pmids = epmcq.run_empc_query(query)
+          for id, doi in tqdm(epmc_pmids):
+            corpus_paper_list.append((id, i, 'epmc', j, doi))
         except:
           epmc_errors.append((id, i, j, query))
     return corpus_paper_list, epmc_errors
@@ -477,14 +479,13 @@ class DashboardDb:
       for (j, sq) in zip(subset_ids, epmc_subset_queries):
         query = q
         if query=='nan' or len(query)==0: 
-          epmc_errors.append((i, j, query))
           continue
         if len(sq) > 0:
           query = '(%s) AND (%s)'%(q, sq) 
         epmcq = EuroPMCQuery()
-        numFound, epmc_pmids, other_ids = epmcq.run_empc_query(query)
-        for id in tqdm(epmc_pmids):
-          corpus_paper_list.append((id, i, 'epmc', j))
+        numFound, epmc_pmids = epmcq.run_empc_query(query)
+        for id, doi in tqdm(epmc_pmids):
+          corpus_paper_list.append((id, i, 'epmc', j, doi))
     return corpus_paper_list
 
   def execute_sf_queries(self, qt, qt2):
