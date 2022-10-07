@@ -6,8 +6,8 @@ title: HuggingFace Document Classification Utils
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Classes to build and run document classification pipelines using baseline HuggingFace functionality."
-description: "Classes to build and run document classification pipelines using baseline HuggingFace functionality."
+summary: "Classes and functions to train and run document classification pipelines using baseline HuggingFace functionality."
+description: "Classes and functions to train and run document classification pipelines using baseline HuggingFace functionality."
 nb_path: "10_hfDocClassify.ipynb"
 ---
 <!--
@@ -56,9 +56,11 @@ nb_path: "10_hfDocClassify.ipynb"
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This library contains a single utility class and several functions to make it easy to run a simple document classifier for scientific papers.</p>
 <p>An example code run through is as follows:</p>
-<p>```</p>
-<h1 id="DRSM-BASIC-TRAINING-ANALYSIS">DRSM BASIC TRAINING ANALYSIS<a class="anchor-link" href="#DRSM-BASIC-TRAINING-ANALYSIS"> </a></h1><p>import datasets</p>
-<p>column_names =['ID_PAPER', 'Labeling_State', 'Comments', 'Explanation', 'Correct_Label', 'Agreement', 'TRIMMED_TEXT']
+
+<pre><code># DRSM BASIC TRAINING ANALYSIS  
+import datasets
+
+column_names =['ID_PAPER', 'Labeling_State', 'Comments', 'Explanation', 'Correct_Label', 'Agreement', 'TRIMMED_TEXT']
 text_columns = ['TRIMMED_TEXT']
 label_column = 'Correct_Label'
 drsm_categories = ['clinical characteristics or disease pathology',
@@ -66,14 +68,15 @@ drsm_categories = ['clinical characteristics or disease pathology',
               'disease mechanism', 
               'patient-based therapeutics', 
               'other',
-              'irrelevant']</p>
-<p>ds_temp = datasets.load_dataset('csv', delimiter="\t", data_files='/dbfs/FileStore/user/gully/drsm_curated_data/labeled_data_2022_01_03.tsv')
+              'irrelevant']
+
+ds_temp = datasets.load_dataset('csv', delimiter="\t", data_files='/dbfs/FileStore/user/gully/drsm_curated_data/labeled_data_2022_01_03.tsv')
 train_test_valid = ds_temp['train'].train_test_split(0.1)
 test_valid = train_test_valid['test'].train_test_split(0.5)
 drsm_ds = datasets.DatasetDict({
     'train': train_test_valid['train'],
     'test': test_valid['test'],
-    'valid': test_valid['train']})</p>
+    'valid': test_valid['train']})</code></pre>
 
 </div>
 </div>
