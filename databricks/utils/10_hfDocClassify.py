@@ -16,6 +16,7 @@ from nbdev import *
 # MAGIC 
 # MAGIC An example code run through is as follows: 
 # MAGIC 
+# MAGIC 
 # MAGIC ```
 # MAGIC # DRSM BASIC TRAINING ANALYSIS  
 # MAGIC import datasets
@@ -61,12 +62,9 @@ from transformers import (AutoTokenizer,
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score, classification_report, confusion_matrix, multilabel_confusion_matrix, f1_score, accuracy_score
 
 import pickle
+i = 1
 
 print(f"Running on transformers v{transformers.__version__} and datasets v{datasets.__version__}")
-
-# COMMAND ----------
-
-
 
 # COMMAND ----------
 
