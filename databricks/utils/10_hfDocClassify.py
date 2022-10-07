@@ -6,7 +6,7 @@ from nbdev import *
 
 # MAGIC %md # HuggingFace Document Classification Utils 
 # MAGIC 
-# MAGIC > Classes to build and run document classification pipelines using baseline HuggingFace functionality.
+# MAGIC > Classes and functions to train and run document classification pipelines using baseline HuggingFace functionality.
 
 # COMMAND ----------
 
@@ -38,6 +38,7 @@ from nbdev import *
 # MAGIC     'train': train_test_valid['train'],
 # MAGIC     'test': test_valid['test'],
 # MAGIC     'valid': test_valid['train']})
+# MAGIC ```
 
 # COMMAND ----------
 
