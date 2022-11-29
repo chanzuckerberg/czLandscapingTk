@@ -2,9 +2,9 @@
 > This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. 
 
 
- ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/f36c6769-e10f-4741-8037-a4ce0dcec7c6/image.png)
+ ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/fff0cc6d-c52d-447d-80ce-2f99f8ac0d29/image.png)
 
-Image source on LucidDraw: [Link](https://lucid.app/lucidchart/28a5a90d-0c96-43e3-b569-7ed7dfb0fbd3/edit?viewport_loc=-62%2C-519%2C2266%2C1916%2C0_0&invitationId=inv_66c5fd70-6e98-4631-bb39-f2c9df08dbeb#)
+Image source on LucidDraw: [Link](https://lucid.app/lucidchart/a49ee803-ac2d-47ac-a628-492f95dd9346/edit?viewport_loc=2%2C-253%2C2225%2C1488%2C0_0&invitationId=inv_d95f59bf-a965-4f07-a30e-4da281aab979)
 
  
 
