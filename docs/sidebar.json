@@ -11,6 +11,7 @@
     "Dashboard Database Queries": "dashdb_queries.html",
     "NetworkX S2AG Tools ": "networkxS2AG.html",
     "BioLink Query Tools ": "bioLinkUtils.html",
-    "CentaurLab Utility Tools ": "centaurLabUtils.html"
+    "CentaurLab Utility Tools ": "centaurLabUtils.html",
+    "HuggingFace Document Classification Utils ": "hfDocClassify.html"
   }
 }

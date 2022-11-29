@@ -42,6 +42,9 @@ entries:
     - output: web,pdf
       title: 'CentaurLab Utility Tools '
       url: centaurLabUtils.html
+    - output: web,pdf
+      title: 'HuggingFace Document Classification Utils '
+      url: hfDocClassify.html
     output: web
     title: czLandscapingTk
   output: web

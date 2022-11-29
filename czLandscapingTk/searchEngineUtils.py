@@ -377,28 +377,23 @@ class EuroPMCQuery():
         self.oa = oa
 
     def run_empc_query(self, q, page_size=1000):
-        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?resultType=idlist&format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
+        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=10)
         data = json.loads(r.text)
-        print(data)
         numFound = data['hitCount']
         print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
-        pmids_from_q = set()
-        otherIds_from_q = set()
+        ids_from_q = set()
         cursorMark = '*'
         for i in tqdm(range(0, numFound, page_size)):
             url = EMPC_API_URL + '&cursorMark=' + cursorMark + '&query=' + q
             r = requests.get(url)
             data = json.loads(r.text)
-            # print(data.keys())
+            #print(data)
             if data.get('nextCursorMark'):
                 cursorMark = data['nextCursorMark']
             for d in data['resultList']['result']:
-                if d.get('pmid'):
-                    pmids_from_q.add(str(d['pmid']))
-                else:
-                    otherIds_from_q.add(str(d['id']))
-            # pp.pprint(data)
-            # break
-        return (numFound, list(pmids_from_q), list(otherIds_from_q))
+                if d.get('pubType','') != 'patent':
+                  ids_from_q.add((d.get('id',-1),d.get('doi','')))
+        ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
+        return (numFound, ids_from_q)
