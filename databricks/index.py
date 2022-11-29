@@ -11,9 +11,9 @@ from nbdev import *
 
 # COMMAND ----------
 
-# MAGIC %md ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/f36c6769-e10f-4741-8037-a4ce0dcec7c6/image.png)
+# MAGIC %md ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/fff0cc6d-c52d-447d-80ce-2f99f8ac0d29/image.png)
 # MAGIC 
-# MAGIC Image source on LucidDraw: [Link](https://lucid.app/lucidchart/28a5a90d-0c96-43e3-b569-7ed7dfb0fbd3/edit?viewport_loc=-62%2C-519%2C2266%2C1916%2C0_0&invitationId=inv_66c5fd70-6e98-4631-bb39-f2c9df08dbeb#)
+# MAGIC Image source on LucidDraw: [Link](https://lucid.app/lucidchart/a49ee803-ac2d-47ac-a628-492f95dd9346/edit?viewport_loc=2%2C-253%2C2225%2C1488%2C0_0&invitationId=inv_d95f59bf-a965-4f07-a30e-4da281aab979)
 
 # COMMAND ----------
 
