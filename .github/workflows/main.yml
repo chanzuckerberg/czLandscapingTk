@@ -21,7 +21,8 @@ jobs:
     - name: Convert databricks notebooks to Jupyter
       run: |
         echo "Removing all existing *.ipynb files from top level directory."
-        rm *.ipynb
+        rm -rf nbdev
+        mkdir nbdev
         echo "Convert from Databricks to Jupyter"
         python db2nb/convert_databricks_to_jupyter.py
     - name: Convert databricks notebooks to Jupyter and commit/push to git repo
