@@ -9,42 +9,6 @@ entries:
     - output: web,pdf
       title: Overview
       url: /
-    - output: web,pdf
-      title: 'Databricks Utilities '
-      url: databricks_utils.html
-    - output: web,pdf
-      title: 'General Utilities  '
-      url: general_utils.html
-    - output: web,pdf
-      title: 'Query Translation Tools  '
-      url: query_translator.html
-    - output: web,pdf
-      title: Airtable Utilities
-      url: airtable_utils.html
-    - output: web,pdf
-      title: Curated Dataframe Utilities
-      url: curated_data_utils.html
-    - output: web,pdf
-      title: 'Search Engine Tools  '
-      url: search_engine_eutils.html
-    - output: web,pdf
-      title: Dashboard Database Utilities
-      url: dashdb_utils.html
-    - output: web,pdf
-      title: Dashboard Database Queries
-      url: dashdb_queries.html
-    - output: web,pdf
-      title: 'NetworkX S2AG Tools '
-      url: networkxS2AG.html
-    - output: web,pdf
-      title: 'BioLink Query Tools '
-      url: bioLinkUtils.html
-    - output: web,pdf
-      title: 'CentaurLab Utility Tools '
-      url: centaurLabUtils.html
-    - output: web,pdf
-      title: 'HuggingFace Document Classification Utils '
-      url: hfDocClassify.html
     output: web
     title: czLandscapingTk
   output: web
