@@ -254,7 +254,7 @@ pwd = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PASSPH
 dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
 </code></pre>
 <p>Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command:</p>
-<pre><code>queries_df = pd.read_csv('...', sep='\t')
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><pre><code>queries_df = pd.read_csv('...', sep='\t')
 ID_column = 'ID'
 query_column = 'Queries'  
 pubmed_api_key = 'ENTER YOUR KEY INFORMATION HERE'

@@ -189,6 +189,7 @@ dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, 
   
 Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command: 
   
+# MAGIC
 ```
 queries_df = pd.read_csv('...', sep='\t')
 ID_column = 'ID'
