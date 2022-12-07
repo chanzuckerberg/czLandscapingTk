@@ -234,7 +234,6 @@ from nbdev import *
 # MAGIC   
 # MAGIC Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command: 
 # MAGIC   
-# MAGIC
 # MAGIC ```
 # MAGIC queries_df = pd.read_csv('...', sep='\t')
 # MAGIC ID_column = 'ID'

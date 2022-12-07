@@ -16,7 +16,7 @@ jobs:
         regex: '^.*/(.*?)$'
     - name: Install the library
       run: |
-        pip install nbdev jupyter
+        pip install nbdev==1.2.11 jupyter
         pip install -e .
     - name: Convert databricks notebooks to Jupyter
       run: |
