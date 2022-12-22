@@ -4,7 +4,8 @@
     "Query Translator": "/query_translator.html",
     "Online Literature Databases": "/nlm_eutils.html",
     "Database Dashboard Generator": "/dashdb_utils.html",
-    "S2AG Key Opinion Leader Analysis": "/networkxS2AG.html"
+    "S2AG Key Opinion Leader Analysis": "/networkxS2AG.html",
+    "Document Classification": "hfDocClassify.html"
   },
   "Utilities": {
     "Airtable": "/airtable_utils.html",
