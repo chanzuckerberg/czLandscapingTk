@@ -21,6 +21,9 @@ entries:
     - output: web,pdf
       title: S2AG Key Opinion Leader Analysis
       url: /networkxS2AG.html
+    - output: web,pdf
+      title: Document Classification
+      url: hfDocClassify.html
     output: web
     title: CZ Science Landscaping
   - folderitems:
