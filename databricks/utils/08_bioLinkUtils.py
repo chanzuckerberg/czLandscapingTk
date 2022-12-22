@@ -1,4 +1,8 @@
 # Databricks notebook source
+
+
+# COMMAND ----------
+
 # default_exp bioLinkUtils
 from nbdev import *
 
@@ -11,6 +15,25 @@ from nbdev import *
 # COMMAND ----------
 
 #export
+
+rare_sparql = '''
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?d 
+WHERE {
+  ?d rdf:type owl:Class .
+  ?d rdfs:label ?dName .
+  ?d rdfs:subClassOf+ obo:MONDO_0000001 .
+  ?d rdfs:subClassOf+ ?t .
+  ?t rdf:type owl:Restriction .
+  ?t owl:onProperty obo:RO_0002573 .
+  ?t owl:someValuesFrom obo:MONDO_0021136 .
+}'''
 
 parent_sparql = '''PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -92,7 +115,7 @@ WHERE {
 
 # COMMAND ----------
 
-#export
+""#export
 
 import json
 import requests
@@ -131,16 +154,20 @@ class BioLinkUtils:
         self.descendents_lookup[m] = [d]
       else:
         self.descendents_lookup.get(m).append(d)
+        
+  def load_ontology(self):
+    self.mondo = get_ontology(self.mondo_path).load()
 
-  def _run_substituted_sparql_over_mondo_ids(self, sparql, mondo_ids):
+  def run_substituted_sparql_over_mondo_ids(self, sparql, mondo_ids):
     df = pd.DataFrame()
     for mondo_id in mondo_ids:
-      print(mondo_id)
-      ldf = self._run_substituted_mondo_sparql(sparql, mondo_id)
-      df = df.append(ldf)
-    return df
+      #print(mondo_id)
+      ldf = self.run_substituted_mondo_sparql(sparql, mondo_id)
+      ldf['?mondo_id'] = mondo_id
+      df = pd.concat([df, ldf])
+    return df.reset_index(drop=True)
 
-  def _run_substituted_mondo_sparql(self, sparql, mondo_id):
+  def run_substituted_mondo_sparql(self, sparql, mondo_id):
     if mondo_id == 'obo:':
       return pd.DataFrame()
     obo = get_namespace("http://purl.obolibrary.org/obo/")
@@ -153,7 +180,18 @@ class BioLinkUtils:
     l = [i for i in default_world.sparql(sparql)]
     df = pd.DataFrame(l, columns=col_headings)
     return df
-  
+
+  def run_sparql(self, sparql):
+    obo = get_namespace("http://purl.obolibrary.org/obo/")
+    m = re.search('SELECT DISTINCT (.*)\n', sparql)
+    if m is not None:
+      col_headings = m.group(1).split(' ')
+    else:
+      raise Exception("Can't read column headings in " + sparql )  
+    l = [i for i in default_world.sparql(sparql)]
+    df = pd.DataFrame(l, columns=col_headings)
+    return df
+
   def query_diseases(self, disease_ids):
     BIOLINK_STEM = "https://api.monarchinitiative.org/api/bioentity/"
     for id in disease_ids:
@@ -177,9 +215,11 @@ class BioLinkUtils:
     '''
     df = pd.DataFrame()
     for (d_id, d_name) in zip(disease_ids, disease_names):
+      if d_id != d_id:
+        continue
       m = re.match("^(MONDO\:\d{7})", d_id)
       if m is not None:
-        df = df.append(self.compute_disease_similarity(m.group(1), d_name, metric=metric, taxon=taxon, limit=limit, threshold=threshold))
+        df = pd.concat([df,self.compute_disease_similarity(m.group(1), d_name, metric=metric, taxon=taxon, limit=limit, threshold=threshold)])
       else:
         print(d_id)
     return df  
@@ -188,14 +228,20 @@ class BioLinkUtils:
     '''
     Computes similar diesases (with scores) for a single MONDO URI based on a phenotypic overlap metric (e.g., phenodigm). 
     Analysis is performed remotely. 
+    Possible similarity metrics: phenodigm, jaccard, simGIC, resnik, symmetric_resnik
     '''
+    print(disease_name)
     BIOLINK_STEM = "https://api.monarchinitiative.org/api/sim/search?is_feature_set=false&"
     url = BIOLINK_STEM + 'metric='+metric+'&id='+disease_id+'&limit=100&taxon='+str(taxon)
     r = requests.get(url)
     d = r.content.decode('utf-8')
     sim_data = json.loads(d)
     l = []
-    print(disease_name + ': ' + str(len(sim_data.get('matches'))))
+    if len(sim_data.get('matches'))>0:
+      print('\tFOUND')
+    else:
+      print('\tNOT FOUND')
+      print('\t'+url)
     for match in sim_data.get('matches'):
       t_id = match.get('id')
       if self.descendents_lookup.get(disease_id) is not None and t_id in self.descendents_lookup.get(disease_id):

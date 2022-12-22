@@ -57,14 +57,36 @@ class ESearchQuery:
     self.idPrefix = ''
     self.oa = oa
     self.db = db
-        
-  def check_query_phrase(self, phrase):
+  
+  def build_query_tuples(self, df, check_threshold, name_col, terms_col, sep):
+    '''
+    Given a dataframe defining a set of 'OR' queries (i.e., entirely broken into | clauses), 
+    check each indvidual term in Pubmed and return complete queries with problematic terms 
+    stripped.
+    '''
+    query_tuples = []
+    phrase_counts = []
+    for ind in df.index:
+      search_l = []
+      terms_to_check = [df[name_col][ind]]
+      terms_to_check.extend(df[terms_col][ind].split('|'))
+      for s in terms_to_check: 
+        go_no_go, phrase, count = _check_query_phrase(self, s.strip())
+        print(go_no_go, phrase, count)
+        if go_no_go:
+          search_l.append(phrase)
+          sleep(0.10)
+          if count>check_threshold:
+            phrase_counts.append((phrase, count))
+      query_tuples.append( (ind, df[name_col][ind], ' OR '.join(search_l)) )
+    return query_tuples, phrase_counts
+  
+  def _check_query_phrase(self, phrase):
     """
-    Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). Use this as a check for synonyms.   
+    Checks whether a phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). 
+    Use this as a check for synonyms.   
     """
-
     idPrefix = ''
-
     m1 = re.match('^[a-zA-Z0-9]{1,5}$', phrase)
     if m1 is not None:
       return False, 'Abbreviation', 0
@@ -89,8 +111,11 @@ class ESearchQuery:
     count = int(esearch_soup.find('Count').string)
     #n_translations = len(esearch_soup.find('TranslationStack').findAll('TermSet'))
     phrase_not_found = esearch_soup.find('PhraseNotFound')
-    if phrase_not_found is not None:
-      return False, 'Phrase not found', 0
+    quoted_phrase_not_found = esearch_soup.find('QuotedPhraseNotFound')
+    if phrase_not_found is not None or quoted_phrase_not_found is not None:
+      return False, '"'+phrase+'" not found', 0
+    if count == 0:
+      return False, phrase, count
     return True, phrase, count        
 
   def execute_count_query(self, query):
@@ -173,24 +198,6 @@ class ESearchQuery:
         sleep(TIME_THRESHOLD - delta_time)
         
     return ids
-
-  def build_query_tuples(self, disease_lookup, check_threshold):
-    query_tuples = []
-    phrase_counts = []
-    for i, id in tqdm(enumerate(disease_lookup)): 
-      search_l = []
-      for s in disease_lookup.get(id):
-        go_no_go, phrase, count = self.check_query_phrase(s)
-        print(go_no_go, phrase, count)
-        if go_no_go:
-          search_l.append(phrase)
-          print(phrase)
-          time.sleep(0.10)
-          if count>check_threshold:
-            phrase_counts.append((phrase, count))
-      query_tuples.append( (i, id, disease_lookup.get(id)[0], ' OR '.join(search_l)) )
-    return query_tuples, phrase_counts
-      
 
 # COMMAND ----------
 
