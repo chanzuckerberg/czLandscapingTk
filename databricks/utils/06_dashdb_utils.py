@@ -67,7 +67,7 @@ from nbdev import *
 # MAGIC 
 # MAGIC # Execution of the query and generation of the dashboard database
 # MAGIC dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
-# MAGIC dashdb.build_database_from_queries(pubmed_api_key, queries_df, at_ID_column, at_query_column, 
+# MAGIC corpus_paper_df = dashdb.run_remote_paper_queries(pubmed_api_key, queries_df, at_ID_column, at_query_column, 
 # MAGIC     sf_include=False, pm_include=True, epmc_include=False)
 # MAGIC ```
 # MAGIC 
@@ -532,4 +532,4 @@ class DashboardDb:
 
 # COMMAND ----------
 
-show_doc(DashboardDb.build_database_from_queries)
+show_doc(DashboardDb.run_remote_paper_queries)
