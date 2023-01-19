@@ -1,6 +1,6 @@
 # Databricks notebook source
 # default_exp docClassify
-from nbdev import *
+#from nbdev import *
 
 # COMMAND ----------
 
@@ -59,7 +59,8 @@ from datasets import list_datasets, load_dataset, load_metric
 from transformers import (AutoTokenizer, 
                           AutoModelForSequenceClassification, AutoConfig, 
                           TrainingArguments, Trainer)
-from sklearn.metrics import precision_recall_fscore_support, accuracy_score, classification_report, confusion_matrix, multilabel_confusion_matrix, f1_score, accuracy_score
+from sklearn.metrics import (f1_score, precision_score, recall_score, accuracy_score, 
+                             classification_report, confusion_matrix, multilabel_confusion_matrix)
 
 import pickle
 
@@ -174,8 +175,6 @@ class HF_trainer_wrapper():
   def build_trainer(self, warmup_prop = 0.1, batch_size = 8, gradient_accumulation_steps = 2):
     
     def compute_metrics(pred):
-      #print(pred.label_ids)
-      #print(pred.predictions)
       if self.problem_type=="multi_label_classification": 
         labels = pred.label_ids
         preds = torch.sigmoid(torch.FloatTensor(pred.predictions)).round().long().cpu().detach().numpy()
@@ -185,9 +184,11 @@ class HF_trainer_wrapper():
         preds = np.argmax(pred.predictions, axis=1)
         labels = pred.label_ids
       
-      precision, recall, f1, _ = precision_recall_fscore_support(labels, preds, average='micro')
+      precision = precision_score(labels, preds, average='weighted')
+      recall = recall_score(labels, preds, average='weighted')
+      f1 = f1_score(labels, preds, average='weighted')
       acc = accuracy_score(labels, preds)
-
+      
       return {
           'accuracy': acc,
           'f1': f1,
@@ -229,7 +230,14 @@ class HF_trainer_wrapper():
     self.trainer.evaluate()
    
   def test(self):
-    return self.trainer.predict(self.ds_enc['test'])
+    self.last_prediction = self.trainer.predict(self.ds_enc['test'])
+    return self.last_prediction
+  
+  def print_report(self):
+    if self.last_prediction is not None:
+      preds = np.argmax(self.last_prediction.predictions, axis=1)
+      labels = self.last_prediction.label_ids
+      print(classification_report(labels, preds, target_names=self.categories)) 
 
   def save(self):
     with open(output_dir+'/hft.pickle', 'wb') as f:
@@ -319,6 +327,7 @@ def get_folds_from_dataframe(df, id_col, category_col, n_splits):
 #export 
 
 import mlflow
+import os
 from datasets import concatenate_datasets
 
 def run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, categories, run_name, 
@@ -340,6 +349,7 @@ def run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, cate
                                          run_training=run_training,
                                          freeze_layers=freeze_layers)
     
+    os.makedirs(log_path)
     with open(log_path+'/fold'+str(i)+'/pdat.pkl', 'rb') as f:
       pdat = pickle.load(f)
     tuple = (pdat.metrics['test_accuracy'], pdat.metrics['test_f1'], pdat.metrics['test_precision'], pdat.metrics['test_recall'])

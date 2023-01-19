@@ -341,7 +341,7 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
     cs.execute("COMMIT")
 
-  def build_database_from_queries(self, pubmed_api_key, query_df, id_col, q_col, 
+  def run_remote_paper_queries(self, pubmed_api_key, query_df, id_col, q_col, 
                                   subquery_df=None, subq_col=None, 
                                   delete_db=True, pm_include=True, 
                                   epmc_include=True, sf_include=True):
@@ -384,7 +384,7 @@ class DashboardDb:
 
     corpus_paper_df = pd.DataFrame(corpus_paper_list, columns=['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE'])
 
-    self.build_db()   
+    return corpus_paper_df   
     
   def execute_pubmed_queries(self, qt, qt2): 
     corpus_paper_list = []
