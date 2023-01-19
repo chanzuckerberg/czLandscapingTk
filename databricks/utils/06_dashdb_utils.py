@@ -518,6 +518,7 @@ class DashboardDb:
           sf_errors.append((i, j, query))
     return corpus_paper_list, sf_errors
   
+  
   def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
     cs = self.get_cursor()
     cs.execute("BEGIN")
