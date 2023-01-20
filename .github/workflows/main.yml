@@ -61,6 +61,7 @@ jobs:
         git add ./docs
         git add ./README.md
         git add ./${{steps.regex-match.outputs.group1}}
+        git rm Makefile
         git commit -am "Updating the repository GitHub html pages in the docs folder + README.md"
     - name: Push changes # push the output folder to your repo
       uses: ad-m/github-push-action@master
