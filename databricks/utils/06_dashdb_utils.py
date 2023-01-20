@@ -292,6 +292,7 @@ class DashboardDb:
     table_name = re.sub('PREFIX_', self.prefix, 'PREFIX_CORPUS_TO_PAPER')
     cs.execute('DROP TABLE IF EXISTS ' + table_name + ';')
 
+
   def build_lookup_table(self, cs=None, delete_existing=False):
     if cs is None: 
       cs = self.get_cursor()
