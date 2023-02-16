@@ -44,8 +44,7 @@ class DRSMCollection():
     self.name_col = name_col
     self.query_col = query_col
     self.mondo_col = mondo_col
-    a=1
-  
+
   def check_query_phrase(self, phrase):
     """
     Checks whether a single phrase would work on Pubmed or would be expanded (which can lead to unpredictable errors). 
