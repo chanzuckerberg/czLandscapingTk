@@ -307,7 +307,7 @@ class DashboardDb:
       ORDER BY p.PMID DESC
     '''
     BUILD_PMID_LOOKUP_SQL = "create table if not exists PMID_LOOKUP as " + SQL
-    if deleted_existing: 
+    if delete_existing:
       cs.execute('drop table if exists PMID_LOOKUP')
     cs.execute(BUILD_PMID_LOOKUP_SQL)    
     

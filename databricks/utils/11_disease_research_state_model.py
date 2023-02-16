@@ -40,6 +40,7 @@ class DRSMCollection():
     Initializes the DRSM Collection object.
     '''
     self.study_name = name
+    a=1
     self.corpora_df = corpora_df
     self.name_col = name_col
     self.query_col = query_col
