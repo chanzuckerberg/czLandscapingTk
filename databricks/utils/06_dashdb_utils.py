@@ -445,7 +445,7 @@ class DashboardDb:
     errors = []
     (corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed, sections=sections)
     if qt2:
-      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed, sections=sections)
+      (subset_ids, pubmed_subset_queries) = qt2.generate_queries(QueryType.pubmed, sections=[])
     else: 
       (subset_ids, pubmed_subset_queries) = ([0],[''])
     for (i, q) in zip(corpus_ids, pubmed_queries):
@@ -460,6 +460,7 @@ class DashboardDb:
           query = '(%s) AND (%s)'%(q, sq) 
         pmq = ESearchQuery(api_key=api_key)
         num_found = pmq.execute_count_query(query)
+        print(query)
         print(num_found)
         if num_found>0:
           pmids = pmq.execute_query(query)
@@ -519,7 +520,7 @@ class DashboardDb:
     return corpus_paper_list, sf_errors
   
   
-  def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
+  def build_db(self, query_df, corpus_paper_df, subquery_df=None, delete_db=True):
     cs = self.get_cursor()
     cs.execute("BEGIN")
     if delete_db:

@@ -92,6 +92,26 @@ class NetworkxS2AG:
     df2['Top 10 Pubs'] = paper_titles
     return df2
 
+  def search_for_disambiguated_author_with_papers(self, author_name, paper_dois):
+    """ Searches for an author with their papers and returns most likely ids within semantic scholar . 
+    """
+    count = {}
+    names = {}
+    for doi in paper_dois:
+      search_url = self.paper_stem_url+doi+'?fields=authors'
+      r = requests.get(search_url, headers={"x-api-key":self.x_api_key})   
+      author_data = json.loads(r.content.decode(r.encoding))
+      for m in author_data.get('authors',[]):
+        count[m['authorId']] = count.get(m['authorId'], 0)+1
+      for m in author_data.get('authors',[]):
+        s = names.get(m['authorId'], set())
+        s.add(m['name'])
+        names[m['authorId']] = s
+    for k in sorted(count, key=count.get, reverse=True):
+      overlap_names = set([n for nn in names[k] for n in nn.split(' ')])&set(author_name.split(' ')) 
+      if len(list(overlap_names))>0:
+        return k, overlap_names
+
   def build_author_citation_graph(self, authorId, influentialOnly=True, pkl_file=None):
     """This builds a complete graph for a given individual based on 
     their papers, and 'highly influential' references + citations of those papers.

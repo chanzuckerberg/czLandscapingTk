@@ -51,7 +51,7 @@ class QueryTranslator():
       q = re.sub('\s+(NOT)\s+',' ~',q)
       q = re.sub('[\n]','',q)
       q = re.sub('\"','QQQ',q)
-      q = re.sub('\[(ti|ab|ft|tiab|mesh|dp)\]',r'_\g<1>', q).strip()
+      q = re.sub('\[(\w+?)\]',r'__\g<1>__', q).strip()
       return q
 
     self.id2terms = {}
@@ -126,6 +126,7 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       term = re.sub('_(ti|ab|ft|tiab)', '', self.id2terms[ex.name])
       term = re.sub('QQQ', '"', term)
+      term = re.sub('__(\w+)__', '[\g<1>]', term)
       return term
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._simple(x) for x in ex.xs])+')'
@@ -136,6 +137,7 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       term = re.sub('_(ti|ab|ft|tiab)', '', self.id2terms[ex.name])
       term = re.sub('QQQ', '', term)
+      term = re.sub('__(\w+)__', '[\g<1>]', term)
       return '"'+term+'"'
     elif isinstance(ex, AndOp):
       return '('+' NOT '.join([self._closed_quote(x) for x in ex.xs])+')'
@@ -151,6 +153,7 @@ class QueryTranslator():
       if m:
         t = m.group(1)
         t = re.sub('QQQ', '"', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         f = m.group(2)
         if f == 'ti':
           return '(paper_title:"%s")'%(t)
@@ -165,6 +168,7 @@ class QueryTranslator():
       else:              
         t = self.id2terms[ex.name]
         t = re.sub('QQQ', '"', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         return '(paper_title:"%s" OR paper_abstract:"%s")'%(t,t)
     elif isinstance(ex, AndOp):
       return '('+' AND '.join([self._solr(x) for x in ex.xs])+')'
@@ -176,9 +180,11 @@ class QueryTranslator():
       t = self.id2terms[ex.name]
       if len(sections)>0:
         t = re.sub('QQQ', '', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         query = '('+' OR '.join(['%s:"%s"'%(s,t) for s in sections])+')'
       else: 
         t = re.sub('QQQ', '"', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         query = '('+t+')'
       return query
     elif isinstance(ex, AndOp):
@@ -191,9 +197,11 @@ class QueryTranslator():
       t = self.id2terms[ex.name]
       if len(sections)>0:
         t = re.sub('QQQ', '', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         query = '('+' OR '.join(['"%s"[%s]'%(t,s) for s in sections])+')'
       else: 
         t = re.sub('QQQ', '"', t)
+        t = re.sub('__(\w+)__', '[\g<1>]', t)
         query = '('+t+')'
       return query
     elif isinstance(ex, AndOp):
@@ -204,6 +212,7 @@ class QueryTranslator():
   def _plusPipe(self, ex):
     if isinstance(ex, Literal):
       t = re.sub('QQQ', '', self.id2terms[ex.name])
+      t = re.sub('__(\w+)__', '[\g<1>]', t)
       return '"%s"'%(t) 
     elif isinstance(ex, AndOp):
       return '('+'+'.join([self._pubmed(x) for x in ex.xs])+')'
@@ -214,6 +223,7 @@ class QueryTranslator():
     if isinstance(ex, Literal):
       t = self.id2terms[ex.name]
       t = re.sub('QQQ', '', t)
+      t = re.sub('__(\w+)__', '[\g<1>]', t)
       t = re.sub("'", "''", t)
       t = re.sub('"', '', t)
       s = "(lower(p.TITLE) LIKE '*%s*' OR lower(p.ABSTRACT) LIKE '*%s*')"%(t.lower(),t.lower())
