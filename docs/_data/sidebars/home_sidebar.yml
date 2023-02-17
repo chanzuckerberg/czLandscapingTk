@@ -9,37 +9,7 @@ entries:
     - output: web,pdf
       title: Overview
       url: /
-    - output: web,pdf
-      title: Query Translator
-      url: /query_translator.html
-    - output: web,pdf
-      title: Online Literature Databases
-      url: /nlm_eutils.html
-    - output: web,pdf
-      title: Database Dashboard Generator
-      url: /dashdb_utils.html
-    - output: web,pdf
-      title: S2AG Key Opinion Leader Analysis
-      url: /networkxS2AG.html
-    - output: web,pdf
-      title: Document Classification
-      url: hfDocClassify.html
     output: web
-    title: CZ Science Landscaping
-  - folderitems:
-    - output: web,pdf
-      title: Airtable
-      url: /airtable_utils.html
-    - output: web,pdf
-      title: BioLink
-      url: /bioLinkUtils.html
-    - output: web,pdf
-      title: CentaurLabs
-      url: /centaurLabUtils.html
-    - output: web,pdf
-      title: Databricks Functions
-      url: /databricks_utils.html
-    output: web
-    title: Utilities
+    title: czLandscapingTk
   output: web
   title: Sidebar
