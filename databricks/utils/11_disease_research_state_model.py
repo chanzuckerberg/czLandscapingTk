@@ -12,7 +12,6 @@ from nbdev import *
 
 import activesoup
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
-from czLandscapingTk.bioLinkUtils import BioLinkUtils, descendents_sparql
 import datetime
 from enum import Enum
 import json 
