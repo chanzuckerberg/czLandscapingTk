@@ -56,7 +56,6 @@ jobs:
         nbdev_build_lib
     - name: Generate documentation and add back to github
       run: |
-        rm -rf ./docs/*
         nbdev_build_docs
     - name: Add built libraries and documentation back to github
       run: |
