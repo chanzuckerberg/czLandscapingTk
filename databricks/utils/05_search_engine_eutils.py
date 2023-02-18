@@ -217,7 +217,7 @@ show_doc(ESearchQuery.execute_query)
 
 # COMMAND ----------
 
-show_doc(ESearchQuery.check_query_phrase)
+show_doc(ESearchQuery._check_query_phrase)
 
 # COMMAND ----------
 
