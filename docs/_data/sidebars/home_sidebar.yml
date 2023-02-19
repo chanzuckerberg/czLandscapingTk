@@ -17,13 +17,13 @@ entries:
       url: /query_translator.html
     - output: web,pdf
       title: Dashboard Utils
-      url: /airtable_utils.html
+      url: /dashdb_utils.html
     - output: web,pdf
       title: HuggingFace Document Classifier
       url: /hfDocClassify.html
     - output: web,pdf
       title: S2AG + NetworkX
-      url: /airtable_utils.html
+      url: /networkxS2AG.html
     output: web
     title: czLandscapingTk
   output: web
