@@ -28,7 +28,10 @@ jobs:
     - name: Convert databricks notebooks to Jupyter and commit/push to git repo
       run: |
         #nbdev_install_git_hooks
-        git config --global user.name $github.actor
+        echo "The name of the pusher: ${{ github.event.pusher.name }}"
+        echo "The email of the pusher: ${{ github.event.pusher.email }}"
+        git config --local user.name $github.event.pusher.name
+        git config --local user.email $github.event.pusher.email
         git checkout master
         git add *.ipynb
         #find . -name '*.ipynb' | xargs git add
