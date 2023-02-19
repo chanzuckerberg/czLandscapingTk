@@ -9,6 +9,21 @@ entries:
     - output: web,pdf
       title: Overview
       url: /
+    - output: web,pdf
+      title: Search Engine Utils
+      url: /search_engine_eutils.html
+    - output: web,pdf
+      title: Query Translator
+      url: /query_translator.html
+    - output: web,pdf
+      title: Dashboard Utils
+      url: /airtable_utils.html
+    - output: web,pdf
+      title: HuggingFace Document Classifier
+      url: /hfDocClassify.html
+    - output: web,pdf
+      title: S2AG + NetworkX
+      url: /airtable_utils.html
     output: web
     title: czLandscapingTk
   output: web
