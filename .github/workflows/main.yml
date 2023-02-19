@@ -28,7 +28,7 @@ jobs:
     - name: Convert databricks notebooks to Jupyter and commit/push to git repo
       run: |
         #nbdev_install_git_hooks
-        git config --local user.name $github.actor
+        git config --global user.name $github.actor
         git checkout master
         git add *.ipynb
         #find . -name '*.ipynb' | xargs git add
