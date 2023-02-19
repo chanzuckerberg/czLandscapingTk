@@ -31,7 +31,7 @@ nb_path: "nbdev/index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://lucid.app/publicSegments/view/fff0cc6d-c52d-447d-80ce-2f99f8ac0d29/image.png" alt="General proposed workflow for Landscaping systems"></p>
+<p><img src="https://lucid.app/publicSegments/view/fff0cc6d-c52d-447d-80ce-2f99f8ac0d29/image.png" alt="General proposed workflow for Landscaping systems" /></p>
 <p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/a49ee803-ac2d-47ac-a628-492f95dd9346/edit?viewport_loc=2%2C-253%2C2225%2C1488%2C0_0&amp;invitationId=inv_d95f59bf-a965-4f07-a30e-4da281aab979">Link</a></p>
 
 </div>
@@ -69,10 +69,10 @@ nb_path: "nbdev/index.ipynb"
 <p>This libray is built on <a href="https://github.com/GullyBurns/databricks_to_nbdev_template">databricks_to_nbdev_template</a>, which is modified version of <a href="https://github.com/fastai/nbdev_template">nbdev_template</a> tailored to work with databricks notebooks.</p>
 <p>The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team:</p>
 <ol>
-<li>Clone this library from within databricks. </li>
+<li>Clone this library from within databricks.</li>
 <li>Place your scripts and utility notebooks in subdirectories of the <code>databricks</code> folder in the file hierarchy.</li>
 <li>Any databricks notebooks that contain the text: <code>from nbdev import *</code> will be automatically converted to Jupyter notebooks that live at the root level of the repository.</li>
-<li>When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to <a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> for full documentation on how to do this). Note that pushing code to Github will add and commit <em>more</em> code to github, requiring you to perform another <code>git pull</code> to load and refer to the latest changes in your code. </li>
+<li>When you push this repository to Github from Databricks, Jupyter notebooks will be built, added to the repo and then processed by nbdev to generate modules and documentation (refer to <a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> for full documentation on how to do this). Note that pushing code to Github will add and commit <em>more</em> code to github, requiring you to perform another <code>git pull</code> to load and refer to the latest changes in your code.</li>
 </ol>
 
 </div>
@@ -93,18 +93,18 @@ nb_path: "nbdev/index.ipynb"
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Load the class and instantiate it with the API-KEY from Airtable:</p>
-
 <pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
-atu = AirtableUtils('keyXYZXYZXYZYXZY')</code></pre>
+atu = AirtableUtils('keyXYZXYZXYZYXZY')
+</code></pre>
 <p>Read a complete table into a pandas dataframe:</p>
-
 <pre><code># atu.read_airtable(&lt;notebook id&gt;, &lt;table id&gt;)
-df = atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')</code></pre>
+df = atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
+</code></pre>
 <p>Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time):</p>
-
 <pre><code># atu.send_df_to_airtable(&lt;notebook id&gt;, &lt;table id&gt;, df):
 df = &lt;YOUR DATA&gt;
-atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)</code></pre>
+atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
+</code></pre>
 
 </div>
 </div>
@@ -118,22 +118,23 @@ atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
-
 <pre><code>from czLandscapingTk.networkxS2AG import NetworkxS2AG
-kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')</code></pre>
+kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')
+</code></pre>
 <p>Maybe start by searching for a reseracher by name. e.g. <a href="https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller">Daphne Koller</a></p>
-
-<pre><code>kolsGraph.search_for_disambiguated_author('Daphne Koller')</code></pre>
+<pre><code>kolsGraph.search_for_disambiguated_author('Daphne Koller')
+</code></pre>
 <p>Generating the following output:</p>
-<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;"><th></th>      <th>authorId</th>      <th>name</th>      <th>paperCount</th>      <th>hIndex</th>      <th>Top 10 Pubs</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1736370</td>      <td>D. Koller</td>      <td>351</td>      <td>130</td>      <td>Probabilistic Graphical Models - Principles and Techniques     |     The Genotype-Tissue Expression (GTEx) project     |     FastSLAM: a factored solution to the simultaneous localization and mapping problem     |     Support Vector Machine Active Learning with Applications to Text Classification     |     Max-Margin Markov Networks     |     SCAPE: shape completion and animation of people     |     Self-Paced Learning for Latent Variable Models     |     The Genotype-Tissue Expression (GTEx) pilot analysis: Multitissue gene regulation in humans     |     Decomposing a scene into geometric and semantically consistent regions     |     Toward Optimal Feature Selection</td>    </tr>    <tr>      <th>1</th>      <td>2081968396</td>      <td>D. Koller</td>      <td>5</td>      <td>1</td>      <td>Systematic Analysis of Breast Cancer Morphology Uncovers Stromal Features Associated with Survival     |     [Relevance of health geographic research for dermatology].     |     Convolutional neural networks of H&amp;E-stained biopsy images accurately quantify histologic features of non-alcoholic steatohepatitis     |     IDENTIFYING GENETIC DRIVERS OF CANCER MORPHOLOGY     |     Features Associated with Survival Systematic Analysis of Breast Cancer Morphology Uncovers Stromal</td>    </tr>    <tr>      <th>2</th>      <td>50678963</td>      <td>D. Koller</td>      <td>1</td>      <td>0</td>      <td>½º Äääöòòòò Èöóóóóóðð×øø Êêððøøóòòð Åóð×</td>    </tr>    <tr>      <th>3</th>      <td>2049948919</td>      <td>Daphne Koller</td>      <td>1</td>      <td>1</td>      <td>Team-Maxmin Equilibria☆</td>    </tr>    <tr>      <th>4</th>      <td>2081968988</td>      <td>Daphne Koller</td>      <td>1</td>      <td>0</td>      <td>Í××òò Øùöö Àààööö Blockin× Ò Ý×××ò Aeaeøûóöö Äääöòòòò´´üøøòòòò ×øöö Blockinøµ</td>    </tr>    <tr>      <th>5</th>      <td>2081968959</td>      <td>Daphne Koller</td>      <td>3</td>      <td>1</td>      <td>Abstract 1883: Large scale viability screening with PRISM underscores non-inhibitory properties of small molecules     |     Strategic and Tactical Decision-Making Under Uncertainty     |     2 . 1 Pursuit / Evader in the UAV / UGV domain</td>    </tr>    <tr>      <th>6</th>      <td>1753668669</td>      <td>Daphne Koller</td>      <td>4</td>      <td>1</td>      <td>A Data-Driven Lens to Understand Human Biology: An Interview with Daphne Koller     |     Conservation and divergence in modules of the transcriptional programs of the human and mouse immune systems [preprint]     |     ImmGen at 15     |     Speaker-specific terms and resources</td>    </tr>    <tr>      <th>7</th>      <td>46193831</td>      <td>D. Stanford</td>      <td>3</td>      <td>0</td>      <td>Unmanned Aircraft Systems     |     Inference : Exploiting Local Structure     |     Learning : Parameter Estimation</td>    </tr>  </tbody></table><p>Then generate an author+paper graph based on her ID:<code>1736370</code></p>
-
+<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;"><th></th>      <th>authorId</th>      <th>name</th>      <th>paperCount</th>      <th>hIndex</th>      <th>Top 10 Pubs</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1736370</td>      <td>D. Koller</td>      <td>351</td>      <td>130</td>      <td>Probabilistic Graphical Models - Principles and Techniques     |     The Genotype-Tissue Expression (GTEx) project     |     FastSLAM: a factored solution to the simultaneous localization and mapping problem     |     Support Vector Machine Active Learning with Applications to Text Classification     |     Max-Margin Markov Networks     |     SCAPE: shape completion and animation of people     |     Self-Paced Learning for Latent Variable Models     |     The Genotype-Tissue Expression (GTEx) pilot analysis: Multitissue gene regulation in humans     |     Decomposing a scene into geometric and semantically consistent regions     |     Toward Optimal Feature Selection</td>    </tr>    <tr>      <th>1</th>      <td>2081968396</td>      <td>D. Koller</td>      <td>5</td>      <td>1</td>      <td>Systematic Analysis of Breast Cancer Morphology Uncovers Stromal Features Associated with Survival     |     [Relevance of health geographic research for dermatology].     |     Convolutional neural networks of H&amp;E-stained biopsy images accurately quantify histologic features of non-alcoholic steatohepatitis     |     IDENTIFYING GENETIC DRIVERS OF CANCER MORPHOLOGY     |     Features Associated with Survival Systematic Analysis of Breast Cancer Morphology Uncovers Stromal</td>    </tr>    <tr>      <th>2</th>      <td>50678963</td>      <td>D. Koller</td>      <td>1</td>      <td>0</td>      <td>½º Äääöòòòò Èöóóóóóðð×øø Êêððøøóòòð Åóð×</td>    </tr>    <tr>      <th>3</th>      <td>2049948919</td>      <td>Daphne Koller</td>      <td>1</td>      <td>1</td>      <td>Team-Maxmin Equilibria☆</td>    </tr>    <tr>      <th>4</th>      <td>2081968988</td>      <td>Daphne Koller</td>      <td>1</td>      <td>0</td>      <td>Í××òò Øùöö Àààööö Blockin× Ò Ý×××ò Aeaeøûóöö Äääöòòòò´´üøøòòòò ×øöö Blockinøµ</td>    </tr>    <tr>      <th>5</th>      <td>2081968959</td>      <td>Daphne Koller</td>      <td>3</td>      <td>1</td>      <td>Abstract 1883: Large scale viability screening with PRISM underscores non-inhibitory properties of small molecules     |     Strategic and Tactical Decision-Making Under Uncertainty     |     2 . 1 Pursuit / Evader in the UAV / UGV domain</td>    </tr>    <tr>      <th>6</th>      <td>1753668669</td>      <td>Daphne Koller</td>      <td>4</td>      <td>1</td>      <td>A Data-Driven Lens to Understand Human Biology: An Interview with Daphne Koller     |     Conservation and divergence in modules of the transcriptional programs of the human and mouse immune systems [preprint]     |     ImmGen at 15     |     Speaker-specific terms and resources</td>    </tr>    <tr>      <th>7</th>      <td>46193831</td>      <td>D. Stanford</td>      <td>3</td>      <td>0</td>      <td>Unmanned Aircraft Systems     |     Inference : Exploiting Local Structure     |     Learning : Parameter Estimation</td>    </tr>  </tbody></table>
+<p>Then generate an author+paper graph based on her ID:<code>1736370</code></p>
 <pre><code>kolsGraph.build_author_citation_graph(1736370)
-kolsGraph.print_basic_stats()</code></pre>
+kolsGraph.print_basic_stats()
+</code></pre>
 <p>This command performs the following steps:</p>
 <ul>
 <li>Retrieve all her papers indexed in S2AG add those papers and all authors to the graph</li>
-<li>Iterate through those papers and add any papers that either she cites 'meaninfully' or that cite her 'meaningfully' (for a definition of what constitutes a 'meaningful' citation, see <a href="https://ai2-website.s3.amazonaws.com/publications/ValenzuelaHaMeaningfulCitations.pdf">Valenzuela et al 2015</a>). </li>
-<li>Add or link authors to these papers. </li>
+<li>Iterate through those papers and add any papers that either she cites 'meaninfully' or that cite her 'meaningfully' (for a definition of what constitutes a 'meaningful' citation, see <a href="https://ai2-website.s3.amazonaws.com/publications/ValenzuelaHaMeaningfulCitations.pdf">Valenzuela et al 2015</a>).</li>
+<li>Add or link authors to these papers.</li>
 <li>Iterate over all papers in this extended set and add all citations / references between them.</li>
 <li>Print out the results</li>
 </ul>
@@ -149,31 +150,31 @@ kolsGraph.print_basic_stats()</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase "Machine Learning": <code>'("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'</code>. This dataframe must also contain a numerical ID column to identify each query.</p>
+<p>This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase &quot;Machine Learning&quot;: <code>'(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; | &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'</code>. This dataframe must also contain a numerical ID column to identify each query.</p>
 <p>Load the class and instantiate it with dataframe:</p>
-
 <pre><code>from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
-df = pd.DataFrame({'ID':0, 'query':'("Neurodegeneration" | "Neurodegenerative disease" |
-    "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'})
-qt = QueryTranslator(df, 'query')</code></pre>
+df = pd.DataFrame({'ID':0, 'query':'(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; |
+    &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'})
+qt = QueryTranslator(df, 'query')
+</code></pre>
 <p>Generate a list of queries that work on Pubmed:</p>
-
 <pre><code>(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") &amp; "Machine Learning"'}]
+query = [{'ID':0, 'query': '(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; | &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'}]
 df = pd.DataFrame(query)
 qt = QueryTranslator(df, 'query')
-print(qt.generate_queries(QueryType.pubmed))</code></pre>
+print(qt.generate_queries(QueryType.pubmed))
+</code></pre>
 <p>This gives you the following output:</p>
-
 <pre><code>(t0 | t1 | t2 | t3) &amp; t4
-([0], ['(("Machine Learning")[tiab]) AND (("Neurodegeneration")[tiab]) OR ("Neurodegenerative disease")[tiab]) OR ("Alzheimers Disease")[tiab]) OR ("Parkinsons Disease")[tiab])))'])</code></pre>
+([0], ['((&quot;Machine Learning&quot;)[tiab]) AND ((&quot;Neurodegeneration&quot;)[tiab]) OR (&quot;Neurodegenerative disease&quot;)[tiab]) OR (&quot;Alzheimers Disease&quot;)[tiab]) OR (&quot;Parkinsons Disease&quot;)[tiab])))'])
+</code></pre>
 <p>Generate a list of queries that work on European PMC:</p>
-
-<pre><code>(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)</code></pre>
+<pre><code>(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
+</code></pre>
 <p>This will give you:</p>
-
 <pre><code>(t0 | t1 | t2 | t3) &amp; t4
-([0], ['((paper_title:"Machine Learning" OR ABSTRACT:"Machine Learning") AND ((paper_title:"Neurodegeneration" OR ABSTRACT:"Neurodegeneration") OR (paper_title:"Neurodegenerative disease" OR ABSTRACT:"Neurodegenerative disease") OR (paper_title:"Alzheimers Disease" OR ABSTRACT:"Alzheimers Disease") OR (paper_title:"Parkinsons Disease" OR ABSTRACT:"Parkinsons Disease")))'])</code></pre>
+([0], ['((paper_title:&quot;Machine Learning&quot; OR ABSTRACT:&quot;Machine Learning&quot;) AND ((paper_title:&quot;Neurodegeneration&quot; OR ABSTRACT:&quot;Neurodegeneration&quot;) OR (paper_title:&quot;Neurodegenerative disease&quot; OR ABSTRACT:&quot;Neurodegenerative disease&quot;) OR (paper_title:&quot;Alzheimers Disease&quot; OR ABSTRACT:&quot;Alzheimers Disease&quot;) OR (paper_title:&quot;Parkinsons Disease&quot; OR ABSTRACT:&quot;Parkinsons Disease&quot;)))'])
+</code></pre>
 <p>Thus the same query can be executed easily on different APIs.</p>
 
 </div>
@@ -187,22 +188,22 @@ print(qt.generate_queries(QueryType.pubmed))</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the <code>QueryTranslator</code> class.</p>
-
+<p>These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the <a href="/czLandscapingTk/query_translator.html#QueryTranslator"><code>QueryTranslator</code></a> class.</p>
 <pre><code>from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
 
 import urllib.parse 
 from time import time, sleep
 
 esq = ESearchQuery()
-pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
+pcd_search = urllib.parse.quote(&quot;Primary Ciliary Dyskinesia&quot;)
 print(esq.execute_count_query(pcd_search))
 sleep(3) # Sleep for 3 seconds
 esq.execute_query(pcd_search)
 
 efq = EFetchQuery()
 sleep(3) # Sleep for 3 seconds
-efq.execute_efetch(35777446)</code></pre>
+efq.execute_efetch(35777446)
+</code></pre>
 
 </div>
 </div>
@@ -215,16 +216,16 @@ efq.execute_efetch(35777446)</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the <code>QueryTranslator</code> class.</p>
-
+<p>These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the <a href="/czLandscapingTk/query_translator.html#QueryTranslator"><code>QueryTranslator</code></a> class.</p>
 <pre><code>from czLandscapingTk.searchEngineUtils import EuroPMCQuery
 
 import urllib.parse 
 from time import time, sleep
 
 epmcq = EuroPMCQuery()
-pcd_search = urllib.parse.quote("Primary Ciliary Dyskinesia")
-epmcq.run_empc_query(pcd_search)</code></pre>
+pcd_search = urllib.parse.quote(&quot;Primary Ciliary Dyskinesia&quot;)
+epmcq.run_empc_query(pcd_search)
+</code></pre>
 
 </div>
 </div>
@@ -238,7 +239,6 @@ epmcq.run_empc_query(pcd_search)</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This class permits contruction of a Snowflake database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use.</p>
-
 <pre><code>prefix = 'RARE_2022H2_'
 secret_scope = '&lt;SCOPE-FOR-DB-SECRETS&gt;'
 warehouse = '&lt;WAREHOUSE-NAME&gt;'
@@ -247,19 +247,20 @@ schema = '&lt;SCHEMA_NAME&gt;'
 role = '&lt;ROLE_NAME&gt;'
 loc = '/dbfs/FileStore/user/&lt;path&gt;/'
 
-user = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_USERNAME")
-pem = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PRIVATE_KEY")
-pwd = dbutils.secrets.get(scope=secret_scope, key="SNOWFLAKE_SERVICE_PASSPHRASE")
+user = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_USERNAME&quot;)
+pem = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PRIVATE_KEY&quot;)
+pwd = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PASSPHRASE&quot;)
 
-dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)</code></pre>
+dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
+</code></pre>
 <p>Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command:</p>
-<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1>
-<pre><code>queries_df = pd.read_csv('...', sep='\t')
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><pre><code>queries_df = pd.read_csv('...', sep='\t')
 ID_column = 'ID'
 query_column = 'Queries'  
 pubmed_api_key = 'ENTER YOUR KEY INFORMATION HERE'
 
-dashdb.build_database_from_queries(pubmed_api_key, queries_df, ID_column, query_column)</code></pre>
+dashdb.build_database_from_queries(pubmed_api_key, queries_df, ID_column, query_column)
+</code></pre>
 
 </div>
 </div>
