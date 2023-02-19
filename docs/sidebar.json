@@ -1,5 +1,10 @@
 {
   "czLandscapingTk": {
-    "Overview": "/"
+    "Overview": "/",
+    "Search Engine Utils": "/search_engine_eutils.html",
+    "Query Translator": "/query_translator.html",
+    "Dashboard Utils": "/airtable_utils.html",
+    "HuggingFace Document Classifier": "/hfDocClassify.html",
+    "S2AG + NetworkX": "/airtable_utils.html"
   }
 }
