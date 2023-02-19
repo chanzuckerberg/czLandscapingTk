@@ -25,7 +25,6 @@ import requests
 from scipy.spatial.distance import cdist
 import seaborn as sns
 from time import time,sleep
-from tslearn import metrics
 from tqdm import tqdm
 from urllib.request import urlopen
 from urllib.parse import quote_plus, quote, unquote
