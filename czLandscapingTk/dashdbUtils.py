@@ -387,6 +387,7 @@ class DashboardDb:
 
   def execute_epmc_queries_on_sections(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
     corpus_paper_list = []
+    epmc_errors = []
     (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc, sections=sections)
     if qt2:
       (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc, sections=sections)
