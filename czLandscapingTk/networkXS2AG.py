@@ -43,6 +43,7 @@ class NetworkxS2AG:
     self.author_search_url = 'https://api.semanticscholar.org/graph/v1/author/search'
     self.author_stem_url = 'https://api.semanticscholar.org/graph/v1/author/'
     self.paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
+    self.dataset_stem_url = 'https://api.semanticscholar.org/datasets/v1/release/'
     self.x_api_key = x_api_key
     self.features = None
     self.added_papers = set()
@@ -63,6 +64,24 @@ class NetworkxS2AG:
     print("SCC: %d"%(nx.number_strongly_connected_components(self.g)))
     print("WCC: %d"%(nx.number_weakly_connected_components(self.g)))
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+  # ~~~~~~~~~~ DATASETS API ~~~~~~~~~~
+  def list_dataset_releases(self):
+    list_url = self.dataset_stem_url
+    r = requests.get(search_url, headers={"x-api-key":self.x_api_key})
+    release_list = json.loads(r.content.decode(r.encoding))
+    df2 = pd.DataFrame(author_data.get('data'))
+    #df2 = df2[df2.paperCount > n_papers_threshold]
+    paper_titles = []
+    for row2 in df2.itertuples():
+      p_text_list = '     |     '.join([p.get('title') for p in sorted(row2.papers, key=lambda d: d['influentialCitationCount'], reverse=True)[:10]])
+      paper_titles.append(p_text_list)
+      #print(json.dumps(p, indent=4, sort_keys=True))
+      #  paperIds.add(p.get('paperId'))
+    #df2 = df2.drop(columns=['papers'])
+    df2['Top 10 Pubs'] = paper_titles
+    return df2
+
 
   # ~~~~~~~~~~ HIGH-LEVEL API ~~~~~~~~~~
   def search_for_disambiguated_author(self, author_name):
@@ -231,27 +250,27 @@ class NetworkxS2AG:
     else:
       raise Exception('error with citref: '+citref)
 
-    paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
-    fields = [
-        'paperId',
-        'authors',
-        'isInfluential',
-        'referenceCount',
-        'title',
-        'abstract',
-        'year'
-      ]
-    url = '%s%s/%s?fields=%s&limit=1000&offset=%d'%(paper_stem_url, paperId, citref, ','.join(fields), offset)
-    r = requests.get(url, headers={"x-api-key":self.x_api_key}, timeout=20)
-    paper_response = json.loads(r.content.decode(r.encoding))
-    rdata = paper_response.get('data')
-
-    if verbose:
-      print('\n'+str(paperId))
-      print(url)
-    #print(json.dumps(rdata, indent=4, sort_keys=True))
-
     try:
+
+      paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
+      fields = [
+          'paperId',
+          'authors',
+          'isInfluential',
+          'referenceCount',
+          'title',
+          'abstract',
+          'year'
+        ]
+      url = '%s%s/%s?fields=%s&limit=1000&offset=%d'%(paper_stem_url, paperId, citref, ','.join(fields), offset)
+      r = requests.get(url, headers={"x-api-key":self.x_api_key}, timeout=20)
+      paper_response = json.loads(r.content.decode(r.encoding))
+      rdata = paper_response.get('data')
+
+      if verbose:
+        print('\n'+str(paperId))
+        print(url)
+      #print(json.dumps(rdata, indent=4, sort_keys=True))
 
       if self.features is not None:
         paperTuples = list(set([(p_hash.get(citing_cited).get('paperId'),
@@ -299,7 +318,8 @@ class NetworkxS2AG:
                                     if p_hash.get(citing_cited).get('paperId') is not None]))
 
     except:
-      print('Error in adding citations from paper: '+paperId)
+      if paperId:
+        print('Error in adding paper: '+str(paperId))
       return []
 
     if verbose:
@@ -341,6 +361,72 @@ class NetworkxS2AG:
         if len(rdata) == 0:
           break
         offset += 1000
+
+    # Final save
+    if pklpath:
+      with open(pklpath, 'wb') as f:
+        pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+
+  def addPaper(self, paperId, isClosed, verbose=False):
+
+    try:
+
+      paper_stem_url = 'https://api.semanticscholar.org/graph/v1/paper/'
+      fields = [
+          'paperId',
+          'authors',
+          'referenceCount',
+          'title',
+          'abstract',
+          'year'
+        ]
+      url = '%s%s?fields=%s'%(paper_stem_url, paperId, ','.join(fields))
+      r = requests.get(url, headers={"x-api-key":self.x_api_key}, timeout=20)
+      p_hash = json.loads(r.content.decode(r.encoding))
+
+      #print(json.dumps(rdata, indent=4, sort_keys=True))
+
+      if self.features is not None:
+        tup = (p_hash.get('paperId'), len(p_hash.get('authors')), p_hash.get('referenceCount'), p_hash.get('year'),
+                      re.search(self.features, '%s. %s'%(p_hash.get('title'),p_hash.get('abstract'))) is not None)
+      else:
+        tup = (p_hash.get('paperId'), len(p_hash.get('authors')), p_hash.get('referenceCount'), p_hash.get('year'))
+
+      authorIds = list(set([a_hash.get('authorId')
+                            for a_hash in p_hash.get('authors')
+                            if a_hash.get('authorId') is not None]))
+
+      authorEdges1 = list(set([(a_hash.get('authorId'), p_hash.get('paperId'))
+                               for a_hash in p_hash.get('authors')
+                               if a_hash.get('authorId') is not None]))
+      authorEdges2 = [(e2,e1) for (e1,e2) in authorEdges1]
+
+    except:
+      if paperId:
+        print('Error in adding paper: '+str(paperId))
+      return
+
+    if self.features is not None:
+      self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3], features=tup[4])
+    else:
+      self.g.add_node(tup[0], label='paper', nAuthors=int(tup[1]), nRefs=int(tup[2]), year=tup[3])
+
+    self.g.add_nodes_from(authorIds, label='author' )
+    self.g.add_edges_from(authorEdges1, label='wrote')
+    self.g.add_edges_from(authorEdges2, label='was_written_by')
+
+  def addPapersToGraph(self, paperIds, isClosed, pklpath=None):
+
+    for i, paperId in tqdm(enumerate(paperIds), total=len(paperIds)):
+
+      if pklpath and i%1000==0: # checkpoint save
+        with open(pklpath, 'wb') as f:
+          pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+
+      if paperId in self.added_papers:
+        continue
+
+      self.addPaper(paperId, isClosed)
 
     # Final save
     if pklpath:

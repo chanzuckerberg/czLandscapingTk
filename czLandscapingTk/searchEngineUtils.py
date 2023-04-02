@@ -383,10 +383,10 @@ class EuroPMCQuery():
         """
         self.oa = oa
 
-    def run_empc_query(self, q, page_size=1000):
+    def run_empc_query(self, q, page_size=1000, timeout=60):
         EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
-        r = requests.get(url, timeout=10)
+        r = requests.get(url, timeout=timeout)
         data = json.loads(r.text)
         numFound = data['hitCount']
         print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
@@ -394,7 +394,7 @@ class EuroPMCQuery():
         cursorMark = '*'
         for i in tqdm(range(0, numFound, page_size)):
             url = EMPC_API_URL + '&cursorMark=' + cursorMark + '&query=' + q
-            r = requests.get(url)
+            r = requests.get(url, timeout=timeout)
             data = json.loads(r.text)
             #print(data)
             if data.get('nextCursorMark'):
