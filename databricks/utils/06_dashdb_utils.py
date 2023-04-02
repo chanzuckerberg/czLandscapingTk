@@ -158,7 +158,7 @@ class Snowflake():
     df = df.replace('\n', ' ', regex=True)
     return df
 
-  def run_query_in_spark(self, user, query):
+  def run_query_in_spark(self, query):
     string_private_key = f"{self.pem.strip()}"
 
     p_key = serialization.load_pem_private_key(
@@ -180,8 +180,8 @@ class Snowflake():
                    sfUser=self.user.strip(),
                    pem_private_key=pkb,
                    sfRole="ARST_TEAM",
-                   sfDatabase=g_database,
-                   sfSchema=g_schema,
+                   sfDatabase=self.database,
+                   sfSchema=self.schema,
                    sfWarehouse="DEV_WAREHOUSE")
 
     sdf = spark.read \
@@ -483,10 +483,13 @@ class DashboardDb:
         if len(sq) > 0:
           query = '(%s) AND (%s)'%(q, sq) 
         epmcq = EuroPMCQuery()
-        numFound, epmc_pmids = epmcq.run_empc_query(query)
-        for id, doi in tqdm(epmc_pmids):
-          corpus_paper_list.append((id, i, 'epmc', j, doi))
-    return corpus_paper_list
+        try:
+          numFound, epmc_pmids = epmcq.run_empc_query(query)
+          for id, doi in tqdm(epmc_pmids):
+            corpus_paper_list.append((id, i, 'epmc', j, doi))
+        except:
+          epmc_errors.append((id, i, j, query))
+    return corpus_paper_list, epmc_errors
 
   def execute_sf_queries(self, qt, qt2):
     corpus_paper_list = []

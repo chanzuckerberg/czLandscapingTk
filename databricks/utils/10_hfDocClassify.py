@@ -349,7 +349,8 @@ def run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, cate
                                          run_training=run_training,
                                          freeze_layers=freeze_layers)
     
-    os.makedirs(log_path)
+    if os.path(log_path).exists() is False:
+      os.makedirs(log_path)
     with open(log_path+'/fold'+str(i)+'/pdat.pkl', 'rb') as f:
       pdat = pickle.load(f)
     tuple = (pdat.metrics['test_accuracy'], pdat.metrics['test_f1'], pdat.metrics['test_precision'], pdat.metrics['test_recall'])
