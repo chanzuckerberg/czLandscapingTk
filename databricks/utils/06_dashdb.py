@@ -111,8 +111,7 @@ class DashboardDb:
     * loc: local disk location for files 
   """
 
-  def __init__(self, prefix, catalog, database, loc):
-    self.prefix = prefix
+  def __init__(self, catalog, database, loc):
     self.catalog = catalog
     self.database = database
     self.loc = loc
