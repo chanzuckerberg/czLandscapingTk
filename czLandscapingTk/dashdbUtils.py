@@ -440,7 +440,7 @@ class DashboardDb:
     return corpus_paper_list, sf_errors
 
 
-  def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
+  def build_db(self, query_df, corpus_paper_df, subquery_df=None, delete_db=True):
     cs = self.get_cursor()
     cs.execute("BEGIN")
     if delete_db:
