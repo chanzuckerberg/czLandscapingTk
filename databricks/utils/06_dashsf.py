@@ -208,7 +208,9 @@ show_doc(Snowflake.execute_query)
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery
 from czLandscapingTk.queryTranslator import QueryTranslator, QueryType
-import czLandscapingTk.dashdbQueries
+from czLandscapingTk.dashdbQueries import BUILD_DASHBOARD_PAPER_NOTES, BUILD_DASHBOARD_PAPER_OPEN_ACCESS, \
+        BUILD_DASHBOARD_COLLABORATIONS, BUILD_DASHBOARD_AUTHOR_LOCATION, BUILD_DASHBOARD_AUTHOR_LOCATION, \
+        BUILD_DASHBOARD_CITATION_COUNTS
 
 from datetime import datetime
 from time import time,sleep
@@ -315,19 +317,20 @@ class DashboardDb:
       cs = self.get_cursor()
     print('PAPER_NOTES')
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "PAPER_NOTES")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_PAPER_NOTES))
+    cs.execute(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_PAPER_NOTES))
     print('PAPER_OPEN_ACCESS')
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "PAPER_OPEN_ACCESS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_PAPER_OPEN_ACCESS))
+    cs.execute(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_PAPER_OPEN_ACCESS))
     print('COLLABORATIONS')
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "COLLABORATIONS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_COLLABORATIONS))
+    cs.execute(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_COLLABORATIONS))
     print('ALL KNOWN AUTHOR LOCATIONS')
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "AUTHOR_LOCATION")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_AUTHOR_LOCATION))
+    cs.execute(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_AUTHOR_LOCATION))
     print('CITATION COUNTS')
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CITATION_COUNTS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_CITATION_COUNTS))
+    print(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_CITATION_COUNTS))
+    cs.execute(re.sub('PREFIX_', self.prefix, BUILD_DASHBOARD_CITATION_COUNTS))
 
   def drop_database(self, cs=None):
     if cs is None: 
@@ -525,15 +528,29 @@ class DashboardDb:
   
   def build_db(self, query_df, corpus_paper_df, subquery_df=None, delete_db=True):
     cs = self.get_cursor()
-    cs.execute("BEGIN")
+    #cs.execute("BEGIN")
     if delete_db:
       self.drop_database(cs=cs)
     self.upload_wb(query_df, 'CORPUS', cs=cs)
-    self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
+    self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER_BASE', cs=cs)
+    fix_sql = '''create table PREFIX_CORPUS_TO_PAPER as 
+      SELECT DISTINCT cpp.ID_PAPER, cpp.ID_CORPUS, cpp.SOURCE, cpp.SUBSET_CODE, cpp.DOI
+      FROM (
+        SELECT DISTINCT p.ID as ID_PAPER, cp.ID_CORPUS, cp.SOURCE, cp.SUBSET_CODE, p.DOI   
+        FROM PREFIX_CORPUS_TO_PAPER_BASE as cp 
+          JOIN FIVETRAN.KG_RDS_CORE_DB.PAPER as p ON (cp.ID_PAPER=p.ID)
+        UNION 
+        SELECT DISTINCT p.ID as ID_PAPER, cp.ID_CORPUS, cp.SOURCE, cp.SUBSET_CODE, p.DOI   
+        FROM PREFIX_CORPUS_TO_PAPER_BASE as cp 
+          JOIN FIVETRAN.KG_RDS_CORE_DB.PAPER as p ON (cp.DOI=p.DOI)
+      ) as cpp 
+    '''
+    cs.execute(re.sub('PREFIX_', self.prefix, fix_sql))
+    cs.execute(re.sub('PREFIX_', self.prefix, "DROP TABLE PREFIX_CORPUS_TO_PAPER_BASE;"))
     if subquery_df is not None:
       self.upload_wb(subquery_df, 'SUB_CORPUS', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
-    cs.execute('COMMIT')
+    #cs.execute('COMMIT')
 
 # COMMAND ----------
 
