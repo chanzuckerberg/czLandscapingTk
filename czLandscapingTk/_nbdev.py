@@ -75,7 +75,11 @@ index = {"dump_data_to_disk": "00_databricks_utils.ipynb",
          "HF_trainer_wrapper": "10_hfDocClassify.ipynb",
          "run_HF_trainer_expt": "10_hfDocClassify.ipynb",
          "get_folds_from_dataframe": "10_hfDocClassify.ipynb",
-         "run_HF_trainer_kfold_crossvalidation": "10_hfDocClassify.ipynb"}
+         "run_HF_trainer_kfold_crossvalidation": "10_hfDocClassify.ipynb",
+         "DRSMCollection": "11_disease_research_state_model.ipynb",
+         "DRSM": "11_disease_research_state_model.ipynb",
+         "KnowledgeCorpusCollection": "12_knowledge_corpora.ipynb",
+         "KnowledgeCorpus": "12_knowledge_corpora.ipynb"}
 
 modules = ["generalUtils.py",
            "queryTranslator.py",
@@ -88,7 +92,9 @@ modules = ["generalUtils.py",
            "networkXS2AG.py",
            "bioLinkUtils.py",
            "centaurLabsUtils.py",
-           "docClassify.py"]
+           "docClassify.py",
+           "drsm.py",
+           "knowlege_corpora.py"]
 
 doc_url = "https://GullyBurns.github.io/czLandscapingTk/"
 
