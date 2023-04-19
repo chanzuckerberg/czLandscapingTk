@@ -10,6 +10,8 @@ from nbdev import *
 
 # COMMAND ----------
 
+#export
+
 import activesoup
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
 import datetime
