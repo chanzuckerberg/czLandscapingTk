@@ -459,7 +459,7 @@ class EuroPMCQuery():
                 if d.get('pubType','') == 'patent':
                     continue
                 if preprint and d.get('pubType','') != 'preprint':
-                    continue: 
+                    continue 
                 ids_from_q.add((d.get('id',-1),d.get('doi','')))
         ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
         return (numFound, ids_from_q)
