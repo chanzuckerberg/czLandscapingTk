@@ -221,7 +221,7 @@ class DashboardDb:
             corpus_paper_list.append((id, i, 'pubmed', j))
     return corpus_paper_list
 
-  def execute_epmc_queries_on_sections(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
+  def execute_epmc_queries_on_sections(self, qt, qt2, sections=['paper_title', 'ABSTRACT'], preprint=False):
     corpus_paper_list = []
     epmc_errors = []
     (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc, sections=sections)
@@ -238,7 +238,7 @@ class DashboardDb:
           query = '(%s) AND (%s)'%(q, sq)
         epmcq = EuroPMCQuery()
         try:
-          numFound, epmc_pmids = epmcq.run_empc_query(query)
+          numFound, epmc_pmids = epmcq.run_empc_query(query, preprint)
           for id, doi in tqdm(epmc_pmids):
             corpus_paper_list.append((id, i, 'epmc', j, doi))
         except:
