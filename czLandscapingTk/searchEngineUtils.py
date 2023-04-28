@@ -384,7 +384,7 @@ class EuroPMCQuery():
         self.oa = oa
 
     def run_empc_query(self, q, page_size=1000, timeout=60, preprint=False):
-        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize=' + str(page_size) + '&synonym=TRUE'
+        EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize='+str(page_size)+'&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=timeout)
         data = json.loads(r.text)
@@ -406,4 +406,5 @@ class EuroPMCQuery():
                     continue
                 ids_from_q.add((d.get('id',-1),d.get('doi','')))
         ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
+        print(' Returning '+str(len(ids_from_q)))
         return (numFound, ids_from_q)

@@ -6,8 +6,8 @@ title: Dashboard Database Utilities
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Simple query classes that allows contruction of a SQL database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use."
-description: "Simple query classes that allows contruction of a SQL database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use."
+
+
 nb_path: "nbdev/utils/06_dashdb.ipynb"
 ---
 <!--
@@ -32,7 +32,7 @@ nb_path: "nbdev/utils/06_dashdb.ipynb"
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="https://lucid.app/publicSegments/view/0388e058-e5f8-4914-9536-f718edf21d47/image.jpeg" alt="Schema for Dashboard Database" /></p>
-<p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/29f3e2c7-cd56-46fa-a6ce-0dda18d819e1/edit?viewport_loc=-2670%2C-1547%2C3099%2C1648%2CoxaLRZ4JBiatT&amp;invitationId=inv_64fde248-ce31-40b5-85d5-2f3317b5f876#">Link</a></p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/29f3e2c7-cd56-46fa-a6ce-0dda18d819e1/edit?viewport_loc=-2670%2C-1547%2C3099%2C1648%2CoxaLRZ4JBiatT&amp;invitationId=inv_64fde248-ce31-40b5-85d5-2f3317b5f876#">Link</a></p>
 
 </div>
 </div>
@@ -40,8 +40,8 @@ nb_path: "nbdev/utils/06_dashdb.ipynb"
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Use this class to run queries from a spreadsheet across various online academic graph systems and generate a database based on the data from those queries.</p>
-<p>If we had a dataframe <code>query_df</code> where one of the columns described a literature query expressed in Boolean Logic:</p>
-<table>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>If we had a dataframe <code>query_df</code> where one of the columns described a literature query expressed in Boolean Logic:</p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><table>
 <thead>
 <tr>
   <th>ID</th>
@@ -83,46 +83,46 @@ nb_path: "nbdev/utils/06_dashdb.ipynb"
 </tr>
 </tbody>
 </table>
-<p>It is straightforward to build a database of all corpora listed in the spreadsheet from the search queries expressed in the <code>QUERY</code> column:</p>
-<pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>It is straightforward to build a database of all corpora listed in the spreadsheet from the search queries expressed in the <code>QUERY</code> column:</p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
 from czLandscapingTk.dashdbUtils import DashboardDb
 from czLandscapingTk.generalUtils import dump_data_to_disk
 import re
-
+# MAGIC
 at_ID_column = 'ID'
 at_query_column = 'QUERY'
-
+# MAGIC
 # this will be substituted into the tables above instead of 'PREFIX_'
 prefix = 'MY_AMAZING_DATABASE_' 
-
+# MAGIC
 # Databricks secret management
 secret_scope = 'secret-scope' 
-
+# MAGIC
 # Location of data in SNOWFLAKE
 warehouse = 'DEV_WAREHOUSE'
 database = 'DEV_DB' 
 schema = 'SKE'
-
+# MAGIC
 # SNOWFLAKE role for permissions
 role = 'ARST_TEAM'
-
+# MAGIC
 # Location of temp files in Databricks file storage
 loc = '/dbfs/FileStore/user/gully/'
-
+# MAGIC
 # See https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/
 pubmed_api_key = 'blahblahblahblah' 
-
+# MAGIC
 # SNOWFLAKE Login credentials to be stored in secrets
 user = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_USERNAME&quot;)
 pem = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PRIVATE_KEY&quot;)
 pwd = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PASSPHRASE&quot;)
-
+# MAGIC
 # Execution of the query and generation of the dashboard database
 dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
 corpus_paper_df = dashdb.run_remote_paper_queries(pubmed_api_key, queries_df, at_ID_column, at_query_column, 
     sf_include=False, pm_include=True, epmc_include=False)
 </code></pre>
-<p>The parameters <code>sf_include</code>, <code>pm_include</code>, and <code>empc_include</code> denote whether the Boolean queries listed will be run on (A) our own internal SNOWFLAKE database; (B) Pubmed; and (C) European PMC. Records for each of these databases are differentiated based on the <code>CORPUS</code></p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>The parameters <code>sf_include</code>, <code>pm_include</code>, and <code>empc_include</code> denote whether the Boolean queries listed will be run on (A) our own internal SNOWFLAKE database; (B) Pubmed; and (C) European PMC. Records for each of these databases are differentiated based on the <code>CORPUS</code></p>
 
 </div>
 </div>

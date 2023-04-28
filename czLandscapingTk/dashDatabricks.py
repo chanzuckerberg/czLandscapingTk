@@ -238,7 +238,7 @@ class DashboardDb:
           query = '(%s) AND (%s)'%(q, sq)
         epmcq = EuroPMCQuery()
         try:
-          numFound, epmc_pmids = epmcq.run_empc_query(query, preprint)
+          numFound, epmc_pmids = epmcq.run_empc_query(query, preprint=preprint)
           for id, doi in tqdm(epmc_pmids):
             corpus_paper_list.append((id, i, 'epmc', j, doi))
         except:
