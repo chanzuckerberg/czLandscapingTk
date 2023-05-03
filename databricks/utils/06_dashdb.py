@@ -128,19 +128,18 @@ class DashboardDb:
     return sdf.toPandas()
 
   def upload_df(self, df2, table_name):
-    #spark.sql('USE CATALOG '+self.catalog+';')
-    spark.sql('USE '+self.database+';')
-    df = df2.replace({r'\s+$': '', r'^\s+': ''}, regex=True).replace(r'\n',  ' ', regex=True)
-    df.to_csv(self.loc+'/'+table_name+'.tsv', index=False, header=True, sep='\t')
+    spark.sql('USE '+self.catalog+'.'+self.database+';')
+    df3 = df2.replace({r'\s+$': '', r'^\s+': ''}, regex=True).replace(r'\n',  ' ', regex=True)
+    df3.to_csv(self.loc+'/'+table_name+'.tsv', index=False, header=True, sep='\t')
     spark.sql('DROP TABLE IF EXISTS '+table_name+';')
-    cols = [re.sub(' ','_',c).lower() for c in df.columns if c is not None]
+    cols = [re.sub(' ','_',c).lower() for c in df3.columns if c is not None]
     cols = [c+' INT AUTOINCREMENT' if c=='ID' else c+' STRING' for c in cols]
     spark.sql('CREATE TABLE '+table_name+'('+', '.join(cols)+');')
     print(self.loc +'/'+table_name+'.tsv')
     loc2 = re.sub('/dbfs/','/',self.loc)
     spark.sql("copy into "+table_name+" from \'"+loc2+"/"+table_name+".tsv\' FILEFORMAT=CSV FORMAT_OPTIONS ('sep'= '\t', 'header' = 'true')")
-    os.unlink(loc +'/'+table_name+'.tsv')
-    
+    os.unlink(self.loc +'/'+table_name+'.tsv')
+        
   def build_core_tables_from_pmids(self, cs=None):
     if cs is None: 
       cs = self.get_cursor()
