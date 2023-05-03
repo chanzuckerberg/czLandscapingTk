@@ -76,6 +76,20 @@ class Snowflake():
 
     return cs
 
+  def fetch_pandas(cur, sql, batch=50000):
+    cur.execute(sql)
+    rows = 0
+    df = pd.DataFrame()
+    while True:
+        dat = cur.fetchmany(batch)
+        if not dat:
+        break
+        cols = [desc[0] for desc in cur.description]
+        df = pd.concat([df,pd.DataFrame(dat, columns=cols)])
+        rows += df.shape[0]
+    print(rows)
+    return df
+
   def execute_query(self, cs, sql, columns):
     '''
     Executes an SQL query with a list of column names and returns a Pandas DataFrame
