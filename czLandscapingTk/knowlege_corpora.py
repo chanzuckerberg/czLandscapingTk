@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import numpy
 from owlready2 import *
 import pandas as pd
+from prophet import Prophet
+from prophet.plot import add_changepoints_to_plot
 from prophet.serialize import model_to_json, model_from_json
 import re
 import requests
@@ -201,6 +203,7 @@ class KnowledgeCorpus():
       fig = model.plot(forecast)
       add_changepoints_to_plot(fig.gca(), model, forecast)
       plt.title(c)
+      plt.figure(i)
       plt.figure(i)
       plt.show()
 
