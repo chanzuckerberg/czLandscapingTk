@@ -439,7 +439,7 @@ class EuroPMCQuery():
         """
         self.oa = oa
 
-    def run_empc_query(self, q, page_size=1000, timeout=60, preprint=False):
+    def run_empc_query(self, q, page_size=1000, timeout=60, extra_columns=[]):
         EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize='+str(page_size)+'&synonym=TRUE'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=timeout)
@@ -458,9 +458,10 @@ class EuroPMCQuery():
             for d in data['resultList']['result']:
                 if d.get('pubType','') == 'patent':
                     continue
-                if preprint and d.get('pubType','') != 'preprint':
-                    continue 
-                ids_from_q.add((d.get('id',-1),d.get('doi','')))
+                tup = [d.get('id',-1), d.get('doi','')]
+                for c in extra_columns:
+                    tup.append(d.get(c,'')) 
+                ids_from_q.add(tup)
         ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
         print(' Returning '+str(len(ids_from_q)))
         return (numFound, ids_from_q)
