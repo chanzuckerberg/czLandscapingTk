@@ -83,7 +83,7 @@ class Snowflake():
     while True:
         dat = cur.fetchmany(batch)
         if not dat:
-        break
+          break
         cols = [desc[0] for desc in cur.description]
         df = pd.concat([df,pd.DataFrame(dat, columns=cols)])
         rows += df.shape[0]
