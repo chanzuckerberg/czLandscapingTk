@@ -4,6 +4,7 @@ __all__ = ['QueryType', 'QueryTranslator']
 
 # Cell
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
+import os
 import re
 import pprint
 from pyeda.inter import *
