@@ -12,6 +12,7 @@ from nbdev import *
 
 #export
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
+import os
 import re
 import pprint
 from pyeda.inter import *
