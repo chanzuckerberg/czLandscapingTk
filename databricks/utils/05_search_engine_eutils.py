@@ -446,7 +446,7 @@ class EuroPMCQuery():
         data = json.loads(r.text)
         numFound = data['hitCount']
         print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
-        ids_from_q = set()
+        ids_from_q = []
         cursorMark = '*'
         for i in tqdm(range(0, numFound, page_size)):
             url = EMPC_API_URL + '&cursorMark=' + cursorMark + '&query=' + q
@@ -461,7 +461,7 @@ class EuroPMCQuery():
                 tup = [d.get('id',-1), d.get('doi','')]
                 for c in extra_columns:
                     tup.append(d.get(c,'')) 
-                ids_from_q.add(tup)
+                ids_from_q.append(tup)
         ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
         print(' Returning '+str(len(ids_from_q)))
         return (numFound, ids_from_q)
