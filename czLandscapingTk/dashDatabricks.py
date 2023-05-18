@@ -156,12 +156,33 @@ def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
         if len(sq) > 0:
           query = '(%s) AND (%s)'%(q, sq)
         epmcq = EuroPMCQuery()
-        try:
-          numFound, epmc_pmids = epmcq.run_empc_query(query, extra_columns=extra_columns)
-          for id, doi in tqdm(epmc_pmids):
-            corpus_paper_list.append((id, i, 'epmc', j, doi))
-        except Exception as e:
-          epmc_errors.append((i, j, query, e))
+        #try:
+        numFound, epmc_pmids = epmcq.run_empc_query(query, extra_columns=extra_columns)
+        for row in tqdm(epmc_pmids):
+            tup = [row[0], i, 'epmc', j, row[1]]
+            if len(row)>2:
+                tup.extend(row[2:])
+            corpus_paper_list.append(tup)
+        #except Exception as e:
+        #  epmc_errors.append((i, j, query, e))
     return corpus_paper_list, epmc_errors
+
+  def check_query_terms(self, qt, qt2=None, pubmed_api_key=''):
+    pmq = ESearchQuery(api_key=pubmed_api_key)
+    terms = set()
+    for t in qt.terms2id.keys():
+        terms.add(t)
+    if qt2 is not None:
+        for t2 in qt2.terms2id.keys():
+            terms.add(t2)
+    check_table = {}
+    for t in tqdm(terms):
+        (is_ok, t2, c) = pmq._check_query_phrase(t)
+        check_table[t] = (is_ok, c)
+    return check_table
+
+
+
+
 
 

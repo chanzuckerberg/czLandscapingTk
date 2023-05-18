@@ -66,12 +66,16 @@ class QueryTranslator():
       tt = row[1][query_col]
       row_id = row[1][id_col]
       redq = fix_errors(str(tt).strip())
+      #print(redq)
       for t in ordered_names:
         id = self.terms2id[t]
+        if '?' in t:
+            t = re.sub('\?', '\\?', t)
         if '"' in t:
           redq = re.sub(t, id, redq)
         else:
           redq = re.sub('\\b'+t+'\\b', id, redq)
+      #print(redq)
       self.redq_list.append((row_id, redq))
 
   def generate_queries(self, query_type:QueryType, skipErrors=False, **kwargs):
