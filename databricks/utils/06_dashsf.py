@@ -149,15 +149,16 @@ class Snowflake():
 
     return cs
 
-  def fetch_pandas(cur, sql, batch=50000):
-    cur.execute(sql)
+  def fetch_pandas(self, sql, batch=50000):
+    cs = self.get_cursor()
+    cs.execute(sql)
     rows = 0
     df = pd.DataFrame()
     while True:
-        dat = cur.fetchmany(batch)
+        dat = cs.fetchmany(batch)
         if not dat:
           break
-        cols = [desc[0] for desc in cur.description]
+        cols = [desc[0] for desc in cs.description]
         df = pd.concat([df,pd.DataFrame(dat, columns=cols)])
         rows += df.shape[0]
     print(rows)
