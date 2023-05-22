@@ -151,7 +151,7 @@ def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
     for (i, q) in zip(corpus_ids, epmc_queries):
       for (j, sq) in zip(subset_ids, epmc_subset_queries):
         query = q
-        if query=='nan' or len(query)==0:
+        if query is None or query=='nan' or len(query)==0:
           continue
         if len(sq) > 0:
           query = '(%s) AND (%s)'%(q, sq)
