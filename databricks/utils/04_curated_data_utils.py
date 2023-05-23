@@ -5,12 +5,13 @@ from nbdev import *
 # COMMAND ----------
 
 # MAGIC %md # Curated Dataframe Utilities
-# MAGIC 
+# MAGIC
 # MAGIC > Library to provide functions to compute statistics and summary information on a dataframe that has been curated by multiple people. This library provides tools for computing Krippendorf Alpha stats and computing merged dataframes across multiple curators. 
 
 # COMMAND ----------
 
 #export
+
 import pandas as pd
 import json
 from urllib.parse import quote
@@ -200,11 +201,3 @@ def no_maybe_yes_distance(label1, label2):
   print("error")
   print(label1,label2)
   return 1000.0
-
-# COMMAND ----------
-
-show_doc(ordinal_distance)
-
-# COMMAND ----------
-
-show_doc(no_maybe_yes_distance)
