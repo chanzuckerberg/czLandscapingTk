@@ -1,0 +1,5 @@
+{
+  "host": "https://czi-shared-infra-czi-sci-general-prod-databricks.cloud.databricks.com/",
+  "authType": "profile",
+  "profile": "DEFAULT"
+}
