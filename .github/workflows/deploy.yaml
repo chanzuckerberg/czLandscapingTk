@@ -20,7 +20,7 @@ jobs:
         run: |
             echo "Removing all existing *.ipynb files from top level directory."
             rm -rf nbdev/databricks/
-            mkdirs nbdev/databricks/
+            mkdir nbdev/databricks/
             python db2nb/convert_databricks_to_jupyter.py
       - name: Commit/push new jupyter notebooks to local git repo
         run: |
