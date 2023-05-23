@@ -19,8 +19,8 @@ jobs:
       - name: Databricks conversion to Jupyter
         run: |
             echo "Removing all existing *.ipynb files from top level directory."
-            rm -rf nbdev/databricks/
-            mkdir nbdev/databricks/
+            rm -rf nbdev
+            mkdir nbdev/
             python db2nb/convert_databricks_to_jupyter.py
       - name: Commit/push new jupyter notebooks to local git repo
         run: |
