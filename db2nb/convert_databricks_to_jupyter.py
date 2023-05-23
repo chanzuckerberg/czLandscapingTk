@@ -9,7 +9,7 @@ from os import path
 
 header_comment = '# COMMAND ----------'
 markdown_comment = "# MAGIC %md"
-magic_code = "# MAGIC "
+magic_code = "# MAGIC[ ]+"
 databricks_nb_start = "# Databricks notebook source\n"
 
 def nb2py(notebook):
@@ -61,7 +61,7 @@ def py2nb(py_str):
       if chunk.startswith(markdown_comment):
          chunk = chunk[len(markdown_comment):]
          chunk = chunk.strip("'\n")
-         chunk = chunk.replace(magic_code, '')
+         chunk = re.sub(magic_code, '', chunk)
          cell_type = 'markdown'
 
       cell = {
