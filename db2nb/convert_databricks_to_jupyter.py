@@ -1,5 +1,4 @@
 import os
-import nbformat as nbf
 import re
 
 # from https://github.com/Yoyodyne-Data-Science/ipynb-py-convert-databricks
