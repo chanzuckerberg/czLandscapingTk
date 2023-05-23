@@ -143,3 +143,5 @@ checklink/cookies.txt
 
 # local files
 .history
+_docs/
+_proc/
