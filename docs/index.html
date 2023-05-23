@@ -6,8 +6,8 @@ title: Chan Zuckerberg Landscaping Toolkit
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. "
-description: "This project is under development and not yet stable. This is a library of components designed to support and facilitate 'scientific knowledge landscaping' within the Chan Zuckerberg Initiative's Science Program. It consists of several utility libraries to help build and analyze corpora of scientific knowledge expressed both as natural language and structured data. This system is built on the excellent <a href='https://nbdev.fast.ai/'>`nbdev`</a> package that uses notebooks as a vehicle for development. "
+
+
 nb_path: "nbdev/index.ipynb"
 ---
 <!--
@@ -32,15 +32,15 @@ nb_path: "nbdev/index.ipynb"
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="https://lucid.app/publicSegments/view/fff0cc6d-c52d-447d-80ce-2f99f8ac0d29/image.png" alt="General proposed workflow for Landscaping systems" /></p>
-<p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/a49ee803-ac2d-47ac-a628-492f95dd9346/edit?viewport_loc=2%2C-253%2C2225%2C1488%2C0_0&amp;invitationId=inv_d95f59bf-a965-4f07-a30e-4da281aab979">Link</a></p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>Image source on LucidDraw: <a href="https://lucid.app/lucidchart/a49ee803-ac2d-47ac-a628-492f95dd9346/edit?viewport_loc=2%2C-253%2C2225%2C1488%2C0_0&amp;invitationId=inv_d95f59bf-a965-4f07-a30e-4da281aab979">Link</a></p>
 
 </div>
 </div>
 </div>
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>CZI adheres to the Contributor Covenant <a href="https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. By participating, you are expected to uphold this code. Please report unacceptable behavior to <a href="mailto:opensource@chanzuckerberg.com">opensource@chanzuckerberg.com</a>.</p>
-<p>Please note: If you believe you have found a security issue, please responsibly disclose by contacting us at <a href="mailto:security@chanzuckerberg.com">security@chanzuckerberg.com</a>.</p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>CZI adheres to the Contributor Covenant <a href="https://github.com/chanzuckerberg/.github/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. By participating, you are expected to uphold this code. Please report unacceptable behavior to <a href="mailto:opensource@chanzuckerberg.com">opensource@chanzuckerberg.com</a>.</p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>Please note: If you believe you have found a security issue, please responsibly disclose by contacting us at <a href="mailto:security@chanzuckerberg.com">security@chanzuckerberg.com</a>.</p>
 
 </div>
 </div>
@@ -67,7 +67,7 @@ nb_path: "nbdev/index.ipynb"
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This libray is built on <a href="https://github.com/GullyBurns/databricks_to_nbdev_template">databricks_to_nbdev_template</a>, which is modified version of <a href="https://github.com/fastai/nbdev_template">nbdev_template</a> tailored to work with databricks notebooks.</p>
-<p>The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team:</p>
+<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>The steps to contributing to the development of this library are based on a development pipeline that uses databricks. This means that this work will mainly be driven internally from with the CZI tech team:</p>
 <ol>
 <li>Clone this library from within databricks.</li>
 <li>Place your scripts and utility notebooks in subdirectories of the <code>databricks</code> folder in the file hierarchy.</li>
@@ -80,191 +80,99 @@ nb_path: "nbdev/index.ipynb"
 </div>
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Instructions-for-how-to-use-Toolkit-Classes:">Instructions for how to use Toolkit Classes:<a class="anchor-link" href="#Instructions-for-how-to-use-Toolkit-Classes:"> </a></h2>
+<h2 id="High-level-Design:-The-Surveying-Knowledge-Task">High-level Design: The Surveying Knowledge Task<a class="anchor-link" href="#High-level-Design:-The-Surveying-Knowledge-Task"> </a></h2>
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div  class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># MAGIC %md This project is focussed on provide a suite of generalizable tools that can be used by knowledge analysts to implement solutions for surveying tasks. The basic structure of this class of data analysis can be described in the following way:</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 <div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="AirtableUtils-Class">AirtableUtils Class<a class="anchor-link" href="#AirtableUtils-Class"> </a></h3>
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Load the class and instantiate it with the API-KEY from Airtable:</p>
-<pre><code>from czLandscapingTk.airtableUtils import AirtableUtils
-atu = AirtableUtils('keyXYZXYZXYZYXZY')
-</code></pre>
-<p>Read a complete table into a pandas dataframe:</p>
-<pre><code># atu.read_airtable(&lt;notebook id&gt;, &lt;table id&gt;)
-df = atu.read_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ')
-</code></pre>
-<p>Write a dataframe to an Airtable (note, column names of Airtable must match the columns of the dataframe and must be instantiated manually ahead of time):</p>
-<pre><code># atu.send_df_to_airtable(&lt;notebook id&gt;, &lt;table id&gt;, df):
-df = &lt;YOUR DATA&gt;
-atu.send_df_to_airtable('appXYZXYZXYZXYZ', 'tblXYZXYZXYZXYZ', df)
-</code></pre>
+<h3 id="Goal">Goal<a class="anchor-link" href="#Goal"> </a></h3><h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><p>An analytic task, where we attempt to <em>answer a question</em> by (A) surveying existing data sources, (B) compiling an intermedical knowledge corpus drawn from those sources, (C) analysing that corpus to yield an answer to the question.</p>
 
 </div>
 </div>
 </div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="NetworkxS2AG-Class">NetworkxS2AG Class<a class="anchor-link" href="#NetworkxS2AG-Class"> </a></h3>
+    {% raw %}
+    
+<div  class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="mf">1.</span> <span class="n">Identifying</span> <span class="n">a</span> <span class="nb">set</span> <span class="n">of</span> <span class="n">Key</span> <span class="n">Opinion</span> <span class="n">Leaders</span> <span class="p">(</span><span class="n">KOLs</span><span class="p">)</span> <span class="k">with</span> <span class="n">specialized</span> <span class="n">expertise</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">understudied</span> <span class="n">area</span><span class="o">.</span> 
+<span class="mf">2.</span> <span class="n">Performing</span> <span class="n">a</span> <span class="n">systematic</span> <span class="n">review</span> <span class="n">of</span> <span class="n">available</span> <span class="n">treatments</span> <span class="k">for</span> <span class="n">a</span> <span class="n">specific</span> <span class="n">rare</span> <span class="n">disease</span>
+<span class="mf">3.</span> <span class="n">Developing</span> <span class="p">(</span><span class="ow">and</span> <span class="n">using</span><span class="p">)</span> <span class="n">reproducible</span> <span class="n">impact</span> <span class="n">metrics</span> <span class="k">for</span> <span class="n">a</span> <span class="n">funded</span> <span class="n">scientific</span> <span class="n">program</span> <span class="n">to</span> <span class="n">study</span> <span class="n">what</span> <span class="ow">is</span> <span class="n">working</span> <span class="ow">and</span> <span class="n">what</span> <span class="ow">is</span> <span class="ow">not</span><span class="o">.</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Instantiate the class using an api key you should obtain from the S2AG team to permit more than 100 request calls per 5 minutes. This script will burn through that limit immediately. Obtain API keys here: <a href="https://www.semanticscholar.org/product/api#Partner-Form">https://www.semanticscholar.org/product/api#Partner-Form</a></p>
-<pre><code>from czLandscapingTk.networkxS2AG import NetworkxS2AG
-kolsGraph = NetworkxS2AG('&lt;API-KEY-FROM-S2AG-TEAM&gt;')
-</code></pre>
-<p>Maybe start by searching for a reseracher by name. e.g. <a href="https://api.semanticscholar.org/graph/v1/author/search?query=Daphne+Koller">Daphne Koller</a></p>
-<pre><code>kolsGraph.search_for_disambiguated_author('Daphne Koller')
-</code></pre>
-<p>Generating the following output:</p>
-<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;"><th></th>      <th>authorId</th>      <th>name</th>      <th>paperCount</th>      <th>hIndex</th>      <th>Top 10 Pubs</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1736370</td>      <td>D. Koller</td>      <td>351</td>      <td>130</td>      <td>Probabilistic Graphical Models - Principles and Techniques     |     The Genotype-Tissue Expression (GTEx) project     |     FastSLAM: a factored solution to the simultaneous localization and mapping problem     |     Support Vector Machine Active Learning with Applications to Text Classification     |     Max-Margin Markov Networks     |     SCAPE: shape completion and animation of people     |     Self-Paced Learning for Latent Variable Models     |     The Genotype-Tissue Expression (GTEx) pilot analysis: Multitissue gene regulation in humans     |     Decomposing a scene into geometric and semantically consistent regions     |     Toward Optimal Feature Selection</td>    </tr>    <tr>      <th>1</th>      <td>2081968396</td>      <td>D. Koller</td>      <td>5</td>      <td>1</td>      <td>Systematic Analysis of Breast Cancer Morphology Uncovers Stromal Features Associated with Survival     |     [Relevance of health geographic research for dermatology].     |     Convolutional neural networks of H&amp;E-stained biopsy images accurately quantify histologic features of non-alcoholic steatohepatitis     |     IDENTIFYING GENETIC DRIVERS OF CANCER MORPHOLOGY     |     Features Associated with Survival Systematic Analysis of Breast Cancer Morphology Uncovers Stromal</td>    </tr>    <tr>      <th>2</th>      <td>50678963</td>      <td>D. Koller</td>      <td>1</td>      <td>0</td>      <td>½º Äääöòòòò Èöóóóóóðð×øø Êêððøøóòòð Åóð×</td>    </tr>    <tr>      <th>3</th>      <td>2049948919</td>      <td>Daphne Koller</td>      <td>1</td>      <td>1</td>      <td>Team-Maxmin Equilibria☆</td>    </tr>    <tr>      <th>4</th>      <td>2081968988</td>      <td>Daphne Koller</td>      <td>1</td>      <td>0</td>      <td>Í××òò Øùöö Àààööö Blockin× Ò Ý×××ò Aeaeøûóöö Äääöòòòò´´üøøòòòò ×øöö Blockinøµ</td>    </tr>    <tr>      <th>5</th>      <td>2081968959</td>      <td>Daphne Koller</td>      <td>3</td>      <td>1</td>      <td>Abstract 1883: Large scale viability screening with PRISM underscores non-inhibitory properties of small molecules     |     Strategic and Tactical Decision-Making Under Uncertainty     |     2 . 1 Pursuit / Evader in the UAV / UGV domain</td>    </tr>    <tr>      <th>6</th>      <td>1753668669</td>      <td>Daphne Koller</td>      <td>4</td>      <td>1</td>      <td>A Data-Driven Lens to Understand Human Biology: An Interview with Daphne Koller     |     Conservation and divergence in modules of the transcriptional programs of the human and mouse immune systems [preprint]     |     ImmGen at 15     |     Speaker-specific terms and resources</td>    </tr>    <tr>      <th>7</th>      <td>46193831</td>      <td>D. Stanford</td>      <td>3</td>      <td>0</td>      <td>Unmanned Aircraft Systems     |     Inference : Exploiting Local Structure     |     Learning : Parameter Estimation</td>    </tr>  </tbody></table>
-<p>Then generate an author+paper graph based on her ID:<code>1736370</code></p>
-<pre><code>kolsGraph.build_author_citation_graph(1736370)
-kolsGraph.print_basic_stats()
-</code></pre>
-<p>This command performs the following steps:</p>
-<ul>
-<li>Retrieve all her papers indexed in S2AG add those papers and all authors to the graph</li>
-<li>Iterate through those papers and add any papers that either she cites 'meaninfully' or that cite her 'meaningfully' (for a definition of what constitutes a 'meaningful' citation, see <a href="https://ai2-website.s3.amazonaws.com/publications/ValenzuelaHaMeaningfulCitations.pdf">Valenzuela et al 2015</a>).</li>
-<li>Add or link authors to these papers.</li>
-<li>Iterate over all papers in this extended set and add all citations / references between them.</li>
-<li>Print out the results</li>
-</ul>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div  class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Question</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">A</span> <span class="n">natural</span> <span class="n">language</span> <span class="n">expression</span> <span class="n">of</span> <span class="n">the</span> <span class="n">research</span> <span class="n">question</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">objective</span> <span class="n">of</span> <span class="n">the</span> <span class="n">task</span>
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Study</span> <span class="n">Data</span> <span class="n">Sources</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">List</span> <span class="n">of</span> <span class="n">avaiable</span> <span class="n">information</span> <span class="n">sources</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">interrogated</span> <span class="n">by</span> <span class="n">executors</span> <span class="n">of</span> <span class="n">the</span> <span class="n">task</span>
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Information</span> <span class="n">Retrieval</span> <span class="n">Query</span><span class="err">`</span><span class="o">**</span> <span class="p">(</span><span class="err">`</span><span class="n">IR</span> <span class="n">Query</span><span class="err">`</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">logically</span><span class="o">-</span><span class="n">defined</span> <span class="n">queries</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">run</span> <span class="n">over</span> <span class="n">the</span> <span class="n">data</span> <span class="n">sources</span> 
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Inclusion</span> <span class="o">/</span> <span class="n">Exclusion</span> <span class="n">Criteria</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">Logical</span> <span class="n">operators</span> <span class="n">to</span> <span class="n">determine</span> <span class="k">if</span> <span class="n">retrieved</span> <span class="n">data</span> <span class="n">should</span> <span class="n">be</span> <span class="n">included</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">study</span>
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Intermediate</span> <span class="n">Corpus</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">Schema</span> <span class="ow">and</span> <span class="n">Data</span> <span class="n">of</span> <span class="n">the</span> <span class="n">collection</span> <span class="n">of</span> <span class="n">documents</span> <span class="n">gathered</span> <span class="kn">from</span> <span class="nn">external</span> <span class="n">information</span> <span class="n">sources</span>
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Analysis</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">Workflow</span> <span class="n">specification</span> <span class="n">of</span> <span class="n">analyses</span> <span class="n">to</span> <span class="n">be</span> <span class="n">performed</span> <span class="n">over</span> <span class="n">the</span> <span class="n">intermediate</span> <span class="n">corpus</span> <span class="n">to</span> <span class="n">generate</span> <span class="n">an</span> <span class="err">`</span><span class="n">Answer</span><span class="err">`</span>
+<span class="o">*</span> <span class="o">**</span><span class="err">`</span><span class="n">Answer</span><span class="err">`</span><span class="o">**</span> <span class="o">-</span> <span class="n">The</span> <span class="n">answer</span> <span class="n">to</span> <span class="n">the</span> <span class="err">`</span><span class="n">question</span><span class="err">`</span> <span class="n">expressed</span> <span class="ow">in</span> <span class="n">natural</span> <span class="n">language</span> <span class="k">with</span> <span class="n">a</span> <span class="n">full</span> <span class="n">explanation</span> <span class="n">of</span> <span class="n">the</span> <span class="n">provenance</span> <span class="n">of</span> <span class="n">how</span> <span class="n">the</span> <span class="n">answer</span> <span class="n">was</span> <span class="n">computed</span><span class="o">.</span> 
+</pre></div>
+
+    </div>
 </div>
 </div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="QueryTranslator-class">QueryTranslator class<a class="anchor-link" href="#QueryTranslator-class"> </a></h3>
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This class processes a Pandas Dataframe where one of the columns describes a Boolean Query that could be issued on an online scientific database written as a string (e.g., this query searches for various terms denoting neurodegenerative diseases and then links them to the phrase &quot;Machine Learning&quot;: <code>'(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; | &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'</code>. This dataframe must also contain a numerical ID column to identify each query.</p>
-<p>Load the class and instantiate it with dataframe:</p>
-<pre><code>from czLandscapingTk.queryTranslator import QueryType, QueryTranslator
-df = pd.DataFrame({'ID':0, 'query':'(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; |
-    &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'})
-qt = QueryTranslator(df, 'query')
-</code></pre>
-<p>Generate a list of queries that work on Pubmed:</p>
-<pre><code>(corpus_ids, pubmed_queries) = qt.generate_queries(QueryType.pubmed)
-query = [{'ID':0, 'query': '(&quot;Neurodegeneration&quot; | &quot;Neurodegenerative disease&quot; | &quot;Alzheimers Disease&quot; | &quot;Parkinsons Disease&quot;) &amp; &quot;Machine Learning&quot;'}]
-df = pd.DataFrame(query)
-qt = QueryTranslator(df, 'query')
-print(qt.generate_queries(QueryType.pubmed))
-</code></pre>
-<p>This gives you the following output:</p>
-<pre><code>(t0 | t1 | t2 | t3) &amp; t4
-([0], ['((&quot;Machine Learning&quot;)[tiab]) AND ((&quot;Neurodegeneration&quot;)[tiab]) OR (&quot;Neurodegenerative disease&quot;)[tiab]) OR (&quot;Alzheimers Disease&quot;)[tiab]) OR (&quot;Parkinsons Disease&quot;)[tiab])))'])
-</code></pre>
-<p>Generate a list of queries that work on European PMC:</p>
-<pre><code>(corpus_ids, epmcs_queries) = qt.generate_queries(QueryType.epmc)
-</code></pre>
-<p>This will give you:</p>
-<pre><code>(t0 | t1 | t2 | t3) &amp; t4
-([0], ['((paper_title:&quot;Machine Learning&quot; OR ABSTRACT:&quot;Machine Learning&quot;) AND ((paper_title:&quot;Neurodegeneration&quot; OR ABSTRACT:&quot;Neurodegeneration&quot;) OR (paper_title:&quot;Neurodegenerative disease&quot; OR ABSTRACT:&quot;Neurodegenerative disease&quot;) OR (paper_title:&quot;Alzheimers Disease&quot; OR ABSTRACT:&quot;Alzheimers Disease&quot;) OR (paper_title:&quot;Parkinsons Disease&quot; OR ABSTRACT:&quot;Parkinsons Disease&quot;)))'])
-</code></pre>
-<p>Thus the same query can be executed easily on different APIs.</p>
 
 </div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="ESearchQuery-/-EFetchQuery">ESearchQuery / EFetchQuery<a class="anchor-link" href="#ESearchQuery-/-EFetchQuery"> </a></h3>
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>These classes provides an interface for performing queries on NCBI Etuils. This is designed to work in conjunction with the <a href="/czLandscapingTk/query_translator.html#QueryTranslator"><code>QueryTranslator</code></a> class.</p>
-<pre><code>from czLandscapingTk.searchEngineUtils import ESearchQuery, EFetchQuery
+    {% endraw %}
 
-import urllib.parse 
-from time import time, sleep
+    {% raw %}
+    
+<div  class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-esq = ESearchQuery()
-pcd_search = urllib.parse.quote(&quot;Primary Ciliary Dyskinesia&quot;)
-print(esq.execute_count_query(pcd_search))
-sleep(3) # Sleep for 3 seconds
-esq.execute_query(pcd_search)
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">![</span>General<span class="w"> </span>proposed<span class="w"> </span>workflow<span class="w"> </span><span class="k">for</span><span class="w"> </span>Landscaping<span class="w"> </span>systems<span class="o">](</span>https://lucid.app/publicSegments/view/fea24e0a-61c7-4807-8ea2-e4859753c31b/image.png<span class="o">)</span>
 
-efq = EFetchQuery()
-sleep(3) # Sleep for 3 seconds
-efq.execute_efetch(35777446)
-</code></pre>
+<span class="n">Image</span> <span class="n">source</span> <span class="n">on</span> <span class="n">LucidDraw</span><span class="p">:</span> <span class="p">[</span><span class="n">Link</span><span class="p">](</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">lucid</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">lucidchart</span><span class="o">/</span><span class="mi">68</span><span class="n">ab2fbd</span><span class="o">-</span><span class="n">bbad</span><span class="o">-</span><span class="mi">4573</span><span class="o">-</span><span class="mi">92</span><span class="n">a2</span><span class="o">-</span><span class="mi">10</span><span class="n">d5bc5f207b</span><span class="o">/</span><span class="n">edit</span><span class="err">?</span><span class="n">viewport_loc</span><span class="o">=-</span><span class="mi">324</span><span class="o">%</span><span class="k">2C</span>-503%2C3077%2C2403%2C0_0&amp;invitationId=inv_ea8ab8dd-4284-4fb3-93b7-2eb530ce1ccb)
+
+<span class="n">Adopting</span> <span class="n">the</span> <span class="n">CommonKADS</span> <span class="n">knowledge</span> <span class="n">engineering</span> <span class="n">design</span> <span class="n">process</span><span class="p">,</span> <span class="n">we</span> <span class="n">consider</span> <span class="n">the</span> <span class="n">interplay</span> <span class="n">between</span> <span class="n">agents</span> <span class="p">(</span><span class="n">swimlanes</span><span class="p">),</span> <span class="n">processes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">items</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">figure</span><span class="o">.</span> <span class="n">In</span> <span class="n">particular</span><span class="p">,</span> <span class="n">we</span> <span class="n">seek</span> <span class="n">to</span> <span class="n">characterize</span> <span class="n">how</span> <span class="n">knowledge</span> <span class="ow">is</span> <span class="n">needed</span><span class="p">,</span> <span class="n">used</span><span class="p">,</span> <span class="ow">or</span> <span class="n">derived</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">workflow</span><span class="o">.</span>
+
+<span class="n">The</span> <span class="n">goal</span> <span class="n">of</span> <span class="n">this</span> <span class="n">project</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">provide</span> <span class="n">code</span> <span class="n">to</span> <span class="n">execute</span> <span class="n">the</span> <span class="n">processes</span> <span class="n">described</span> <span class="n">above</span> <span class="n">to</span> <span class="n">provide</span> <span class="n">an</span> <span class="n">extensible</span> <span class="nb">set</span> <span class="n">of</span> <span class="n">executable</span> <span class="n">computational</span> <span class="n">tools</span> <span class="n">to</span> <span class="n">automate</span> <span class="n">the</span> <span class="n">process</span> <span class="n">shown</span><span class="o">.</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 </div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="EuroPMCQuery">EuroPMCQuery<a class="anchor-link" href="#EuroPMCQuery"> </a></h3>
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>These classes provides an interface for performing queries on European PMC. This is designed to work in conjunction with the <a href="/czLandscapingTk/query_translator.html#QueryTranslator"><code>QueryTranslator</code></a> class.</p>
-<pre><code>from czLandscapingTk.searchEngineUtils import EuroPMCQuery
+    {% endraw %}
 
-import urllib.parse 
-from time import time, sleep
-
-epmcq = EuroPMCQuery()
-pcd_search = urllib.parse.quote(&quot;Primary Ciliary Dyskinesia&quot;)
-epmcq.run_empc_query(pcd_search)
-</code></pre>
-
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="DashboardDb-Class">DashboardDb Class<a class="anchor-link" href="#DashboardDb-Class"> </a></h3>
-</div>
-</div>
-</div>
-<div  class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This class permits contruction of a Snowflake database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use.</p>
-<pre><code>prefix = 'RARE_2022H2_'
-secret_scope = '&lt;SCOPE-FOR-DB-SECRETS&gt;'
-warehouse = '&lt;WAREHOUSE-NAME&gt;'
-database = '&lt;DATABASE_NAME&gt;' 
-schema = '&lt;SCHEMA_NAME&gt;'
-role = '&lt;ROLE_NAME&gt;'
-loc = '/dbfs/FileStore/user/&lt;path&gt;/'
-
-user = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_USERNAME&quot;)
-pem = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PRIVATE_KEY&quot;)
-pwd = dbutils.secrets.get(scope=secret_scope, key=&quot;SNOWFLAKE_SERVICE_PASSPHRASE&quot;)
-
-dashdb = DashboardDb(prefix, user, pem, pwd, warehouse, database, schema, role, loc)
-</code></pre>
-<p>Thus if you have a local TSV file with one column that specifies Pubmed searches as logical boolean queries (named 'Queries'), you can generate a database of those papers with the following command:</p>
-<h1 id="MAGIC">MAGIC<a class="anchor-link" href="#MAGIC"> </a></h1><pre><code>queries_df = pd.read_csv('...', sep='\t')
-ID_column = 'ID'
-query_column = 'Queries'  
-pubmed_api_key = 'ENTER YOUR KEY INFORMATION HERE'
-
-dashdb.build_database_from_queries(pubmed_api_key, queries_df, ID_column, query_column)
-</code></pre>
-
-</div>
-</div>
-</div>
 </div>
 
 
