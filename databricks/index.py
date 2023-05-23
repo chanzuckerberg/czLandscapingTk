@@ -62,32 +62,32 @@ from nbdev import *
 
 # COMMAND ----------
 
-### Typical Example 
-
-1. Identifying a set of Key Opinion Leaders (KOLs) with specialized expertise in an understudied area. 
-2. Performing a systematic review of available treatments for a specific rare disease
-3. Developing (and using) reproducible impact metrics for a funded scientific program to study what is working and what is not.
-
-# COMMAND ----------
-
-### Terminology + Implementation Design
-
-* **`Question`** - A natural language expression of the research question that is the objective of the task
-* **`Study Data Sources`** - List of avaiable information sources that can be interrogated by executors of the task
-* **`Information Retrieval Query`** (`IR Query`) - A list of logically-defined queries that can be run over the data sources 
-* **`Inclusion / Exclusion Criteria`** - Logical operators to determine if retrieved data should be included in the study
-* **`Intermediate Corpus`** - Schema and Data of the collection of documents gathered from external information sources
-* **`Analysis`** - Workflow specification of analyses to be performed over the intermediate corpus to generate an `Answer`
-* **`Answer`** - The answer to the `question` expressed in natural language with a full explanation of the provenance of how the answer was computed. 
+# MAGIC %md ### Typical Example 
+# MAGIC
+# MAGIC 1. Identifying a set of Key Opinion Leaders (KOLs) with specialized expertise in an understudied area. 
+# MAGIC 2. Performing a systematic review of available treatments for a specific rare disease
+# MAGIC 3. Developing (and using) reproducible impact metrics for a funded scientific program to study what is working and what is not.
 
 # COMMAND ----------
 
-### Organizational Model
+# MAGIC %md ### Terminology + Implementation Design
+# MAGIC
+# MAGIC * **`Question`** - A natural language expression of the research question that is the objective of the task
+# MAGIC * **`Study Data Sources`** - List of avaiable information sources that can be interrogated by executors of the task
+# MAGIC * **`Information Retrieval Query`** (`IR Query`) - A list of logically-defined queries that can be run over the data sources 
+# MAGIC * **`Inclusion / Exclusion Criteria`** - Logical operators to determine if retrieved data should be included in the study
+# MAGIC * **`Intermediate Corpus`** - Schema and Data of the collection of documents gathered from external information sources
+# MAGIC * **`Analysis`** - Workflow specification of analyses to be performed over the intermediate corpus to generate an `Answer`
+# MAGIC * **`Answer`** - The answer to the `question` expressed in natural language with a full explanation of the provenance of how the answer was computed. 
 
-![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/fea24e0a-61c7-4807-8ea2-e4859753c31b/image.png)
+# COMMAND ----------
 
-Image source on LucidDraw: [Link](https://lucid.app/lucidchart/68ab2fbd-bbad-4573-92a2-10d5bc5f207b/edit?viewport_loc=-324%2C-503%2C3077%2C2403%2C0_0&invitationId=inv_ea8ab8dd-4284-4fb3-93b7-2eb530ce1ccb)
-
-Adopting the CommonKADS knowledge engineering design process, we consider the interplay between agents (swimlanes), processes, and items in the figure. In particular, we seek to characterize how knowledge is needed, used, or derived in the workflow.
-
-The goal of this project is to provide code to execute the processes described above to provide an extensible set of executable computational tools to automate the process shown. 
+# MAGIC %md ### Organizational Model
+# MAGIC
+# MAGIC ![General proposed workflow for Landscaping systems](https://lucid.app/publicSegments/view/fea24e0a-61c7-4807-8ea2-e4859753c31b/image.png)
+# MAGIC
+# MAGIC Image source on LucidDraw: [Link](https://lucid.app/lucidchart/68ab2fbd-bbad-4573-92a2-10d5bc5f207b/edit?viewport_loc=-324%2C-503%2C3077%2C2403%2C0_0&invitationId=inv_ea8ab8dd-4284-4fb3-93b7-2eb530ce1ccb)
+# MAGIC
+# MAGIC Adopting the CommonKADS knowledge engineering design process, we consider the interplay between agents (swimlanes), processes, and items in the figure. In particular, we seek to characterize how knowledge is needed, used, or derived in the workflow.
+# MAGIC
+# MAGIC The goal of this project is to provide code to execute the processes described above to provide an extensible set of executable computational tools to automate the process shown. 
