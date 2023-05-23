@@ -11,4 +11,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps: [uses: fastai/workflows/quarto-ghp@master]
+    steps: 
+    - name: Convert databricks notebooks to Jupyter
+      run: |
+        echo "Removing all existing *.ipynb files from top level directory."
+        rm -rf nbdev
+        mkdir nbdev
+        echo "Convert from Databricks to Jupyter"
+        python db2nb/convert_databricks_to_jupyter.py
+    - uses: fastai/workflows/quarto-ghp@master
