@@ -9,7 +9,7 @@ from os import path
 
 header_comment = '# COMMAND ----------'
 markdown_comment = "# MAGIC %md"
-magic_code = "# MAGIC[ ]+"
+magic_code = "# MAGIC[ ]*"
 databricks_nb_start = "# Databricks notebook source\n"
 
 def nb2py(notebook):
