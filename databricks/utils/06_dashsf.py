@@ -218,8 +218,7 @@ class Snowflake():
 
 # COMMAND ----------
 
-# DBTITLE 1,Dashboard Creation Tools
-#|export
+#| export
 
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery
@@ -234,6 +233,10 @@ from time import time,sleep
 import requests
 import json
 from tqdm import tqdm
+
+# COMMAND ----------
+
+#| export
 
 class DashboardDb:
   """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>
