@@ -363,6 +363,7 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
     cs.execute("COMMIT")
 
+
   def run_remote_paper_queries(self, pubmed_api_key, query_df, id_col, q_col, 
                                   subquery_df=None, subq_col=None, 
                                   delete_db=True, pm_include=True, 
