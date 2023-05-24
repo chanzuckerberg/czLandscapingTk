@@ -1,16 +1,20 @@
 # Databricks notebook source
-#|default_exp generalUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # General Utilities  
 # MAGIC
 # MAGIC > Utility classes for the Landscaping Platform
 
 # COMMAND ----------
 
-#export
+#| default_exp generalUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 from enum import Enum  
 

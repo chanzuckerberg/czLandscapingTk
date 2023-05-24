@@ -1,16 +1,16 @@
 # Databricks notebook source
-#|default_exp queryTranslator
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Query Translation Tools  
 # MAGIC
 # MAGIC > A library permits translation of complex boolean AND/OR queries between online APIs. 
 
 # COMMAND ----------
 
-#|export
+#| default_exp queryTranslator
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
 import os
@@ -24,7 +24,7 @@ from tqdm import tqdm
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class QueryType(Enum):
   """

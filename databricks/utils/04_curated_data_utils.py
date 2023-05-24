@@ -1,16 +1,20 @@
 # Databricks notebook source
-#|default_exp curatedDataUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Curated Dataframe Utilities
 # MAGIC
 # MAGIC > Library to provide functions to compute statistics and summary information on a dataframe that has been curated by multiple people. This library provides tools for computing Krippendorf Alpha stats and computing merged dataframes across multiple curators. 
 
 # COMMAND ----------
 
-#|export
+#| default_exp curatedDataUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 import pandas as pd
 import json
@@ -25,7 +29,7 @@ from nltk.metrics import masi_distance, binary_distance
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class CuratedDataUtils:
   """This class permits generation of curation statistics and merged, consensus dataframes. 
@@ -156,7 +160,8 @@ class CuratedDataUtils:
 
 # COMMAND ----------
 
-#|export
+#| export
+
 # Some additional distance functions 
 def ordinal_distance(label1, label2):
   """Krippendorff's ordinal distance metric

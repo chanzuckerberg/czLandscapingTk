@@ -1,9 +1,4 @@
 # Databricks notebook source
-#|default_exp airtableUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Airtable Utilities
 # MAGIC
 # MAGIC > Simple library to provide lightweight input/output functions for Airtable. Airtable is an excellent vehicle for interacting with users.
@@ -12,7 +7,16 @@ from nbdev import *
 
 # COMMAND ----------
 
-#|export
+#| default_exp airtableUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 import pandas as pd
 import json
 from urllib.parse import quote
@@ -25,7 +29,7 @@ from nltk.metrics import masi_distance, binary_distance
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class AirtableUtils:
   """This class permits simple input / output from airtable
