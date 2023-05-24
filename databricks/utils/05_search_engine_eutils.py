@@ -15,9 +15,6 @@ from nbdev import *
 # COMMAND ----------
 
 #export
-"""
-A package designed for interactions with the EUtils tools from the National Library of Medicine
-"""
 import requests
 import json
 import datetime
