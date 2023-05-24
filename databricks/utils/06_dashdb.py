@@ -167,6 +167,7 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CITATION_COUNTS")
     cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_CITATION_COUNTS))
 
+    
   def drop_database(self, cs=None):
     if cs is None: 
       cs = self.get_cursor()
