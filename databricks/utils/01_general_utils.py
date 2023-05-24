@@ -26,7 +26,6 @@ class ID_Type(Enum):
     """
     Types of universal IDs / Accession numbers used in this library
     """
-    
     pmid = 0
     doi = 1
     s2ag = 2
