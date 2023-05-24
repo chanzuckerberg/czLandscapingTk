@@ -99,6 +99,7 @@ import os
 #| export
 
 class DashboardDb:
+
   """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>
   Functionality includes:
     * Define a spreadsheet with a column of queries expressed in boolean logic
