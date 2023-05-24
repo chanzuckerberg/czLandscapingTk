@@ -88,6 +88,11 @@ import pandas as pd
 from enum import Enum
 import re
 
+
+# COMMAND ----------
+
+#export
+
 class Snowflake():
   '''
   Class to provide simple access to Snowflake from within CZI

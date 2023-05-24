@@ -5,7 +5,7 @@ from nbdev import *
 # COMMAND ----------
 
 # MAGIC %md # NetworkX S2AG Tools 
-# MAGIC 
+# MAGIC
 # MAGIC > Tools to create and analyze Semantic Scholar Academic Graph (S2AG) data. The initial focus is on analysis of the authors in order to key opinion leaders / prominent researchers based on centrality measures within a network of papers. 
 
 # COMMAND ----------
@@ -29,6 +29,10 @@ from collections import deque
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy import linalg
+
+# COMMAND ----------
+
+#export
 
 class NetworkxS2AG:
   """This class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.<BR>

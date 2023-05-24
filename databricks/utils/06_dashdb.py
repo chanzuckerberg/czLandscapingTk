@@ -75,7 +75,6 @@ from nbdev import *
 
 # COMMAND ----------
 
-# DBTITLE 1,Dashboard Creation Tools
 #export
 
 from pathlib import Path
@@ -90,6 +89,11 @@ import requests
 import json
 from tqdm import tqdm
 import os
+
+# COMMAND ----------
+
+# DBTITLE 1,Dashboard Creation Tools
+#export
 
 class DashboardDb:
   """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>
@@ -253,9 +257,3 @@ def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
         (is_ok, t2, c) = pmq._check_query_phrase(t)
         check_table[t] = (is_ok, c)
     return check_table
-    
-        
-            
-
-
-

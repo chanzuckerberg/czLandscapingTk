@@ -5,22 +5,22 @@
 # COMMAND ----------
 
 # MAGIC %md # HuggingFace Document Classification Utils 
-# MAGIC 
+# MAGIC
 # MAGIC > Classes and functions to train and run document classification pipelines using baseline HuggingFace functionality.
 
 # COMMAND ----------
 
 # MAGIC %md 
-# MAGIC 
+# MAGIC
 # MAGIC This library contains a single utility class and several functions to make it easy to run a simple document classifier for scientific papers. 
-# MAGIC 
+# MAGIC
 # MAGIC An example code run through is as follows: 
-# MAGIC 
-# MAGIC 
+# MAGIC
+# MAGIC
 # MAGIC ```
 # MAGIC # DRSM BASIC TRAINING ANALYSIS  
 # MAGIC import datasets
-# MAGIC 
+# MAGIC
 # MAGIC column_names =['ID_PAPER', 'Labeling_State', 'Comments', 'Explanation', 'Correct_Label', 'Agreement', 'TRIMMED_TEXT']
 # MAGIC text_columns = ['TRIMMED_TEXT']
 # MAGIC label_column = 'Correct_Label'
@@ -30,7 +30,7 @@
 # MAGIC               'patient-based therapeutics', 
 # MAGIC               'other',
 # MAGIC               'irrelevant']
-# MAGIC 
+# MAGIC
 # MAGIC ds_temp = datasets.load_dataset('csv', delimiter="\t", data_files='/dbfs/FileStore/user/gully/drsm_curated_data/labeled_data_2022_01_03.tsv')
 # MAGIC train_test_valid = ds_temp['train'].train_test_split(0.1)
 # MAGIC test_valid = train_test_valid['test'].train_test_split(0.5)
@@ -63,6 +63,16 @@ from sklearn.metrics import (f1_score, precision_score, recall_score, accuracy_s
                              classification_report, confusion_matrix, multilabel_confusion_matrix)
 
 import pickle
+
+import mlflow
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from datasets import Dataset, concatenate_datasets
+import mlflow
+import os
+
+# COMMAND ----------
+
+#export 
 
 print(f"Running on transformers v{transformers.__version__} and datasets v{datasets.__version__}")
 
@@ -247,9 +257,6 @@ class HF_trainer_wrapper():
 
 #export 
 
-import mlflow
-import pickle
-
 def run_HF_trainer_expt(ds, text_columns, label_column, categories, run_name, 
                                    model_input, model_path, log_path, epochs, 
                                    batch_size=8,
@@ -295,8 +302,6 @@ def run_HF_trainer_expt(ds, text_columns, label_column, categories, run_name,
 
 #export 
 
-from sklearn.model_selection import StratifiedKFold, train_test_split
-from datasets import Dataset
 
 def get_folds_from_dataframe(df, id_col, category_col, n_splits):
   folded_ds = []
@@ -325,10 +330,6 @@ def get_folds_from_dataframe(df, id_col, category_col, n_splits):
 # COMMAND ----------
 
 #export 
-
-import mlflow
-import os
-from datasets import concatenate_datasets
 
 def run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, categories, run_name, 
                                                     model_input, model_path, log_path, epochs, 

@@ -34,6 +34,10 @@ from urllib.request import urlopen
 from urllib.parse import quote_plus, quote, unquote
 from urllib.error import URLError
 
+# COMMAND ----------
+
+#export 
+
 class KnowledgeCorpusCollection():
   """This class generates and supports analysis the research landscape over a collection of knowledge corpora. 
   """

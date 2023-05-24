@@ -5,12 +5,18 @@ from nbdev import *
 # COMMAND ----------
 
 # MAGIC %md # General Utilities  
-# MAGIC 
+# MAGIC
 # MAGIC > Utility classes for the Landscaping Platform
 
 # COMMAND ----------
 
+#export
+
 from enum import Enum  
+
+# COMMAND ----------
+
+#export
 
 class ID_Type(Enum):
     """

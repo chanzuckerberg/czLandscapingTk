@@ -5,9 +5,9 @@ from nbdev import *
 # COMMAND ----------
 
 # MAGIC %md # Airtable Utilities
-# MAGIC 
+# MAGIC
 # MAGIC > Simple library to provide lightweight input/output functions for Airtable. Airtable is an excellent vehicle for interacting with users.
-# MAGIC 
+# MAGIC
 # MAGIC Note - this approach requires manual construction of Airtable notebooks to match the existing format of notebooks so some overhead is needed to check formatting. 
 
 # COMMAND ----------
@@ -22,6 +22,10 @@ import nltk
 from nltk.metrics import agreement
 from nltk.metrics.agreement import AnnotationTask
 from nltk.metrics import masi_distance, binary_distance
+
+# COMMAND ----------
+
+#export
 
 class AirtableUtils:
   """This class permits simple input / output from airtable

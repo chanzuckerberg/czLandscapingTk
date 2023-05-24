@@ -1,16 +1,24 @@
 # Databricks notebook source
-
-
-# COMMAND ----------
-
 # default_exp bioLinkUtils
 from nbdev import *
 
 # COMMAND ----------
 
 # MAGIC %md # BioLink Query Tools 
-# MAGIC 
+# MAGIC
 # MAGIC > Tools to query and analyze data from the Monarch Initiative's BioLink interface and from their MONDO ontology. This provides a live queryable interface for disease-based knowledge derived from Monarch's KG. Latest version of MONDO is from Github. Access to the service is through [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/). 
+
+# COMMAND ----------
+
+#export
+
+import json
+import requests
+import pandas as pd
+from owlready2 import *
+from tqdm import tqdm
+import os
+import urllib.request 
 
 # COMMAND ----------
 
@@ -115,15 +123,7 @@ WHERE {
 
 # COMMAND ----------
 
-""#export
-
-import json
-import requests
-import pandas as pd
-from owlready2 import *
-from tqdm import tqdm
-import os
-import urllib.request 
+#export
 
 MONDO_LATEST_URL = 'https://github.com/monarch-initiative/mondo/releases/download/v2022-09-06/mondo.owl'
 

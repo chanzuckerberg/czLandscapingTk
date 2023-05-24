@@ -5,7 +5,7 @@ from nbdev import *
 # COMMAND ----------
 
 # MAGIC %md # CentaurLab Utility Tools 
-# MAGIC 
+# MAGIC
 # MAGIC > Tools to upload, download, and analyze data from CentaurLabs using their curation interface. 
 
 # COMMAND ----------
@@ -20,6 +20,10 @@ import os
 import urllib.request 
 import spacy
 from unidecode import unidecode
+
+# COMMAND ----------
+
+#export
 
 class CentaurLabsUploadUtils: 
   '''

@@ -31,6 +31,10 @@ from tqdm import tqdm
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
 import pandas as pd
 
+# COMMAND ----------
+
+#export
+
 PAGE_SIZE = 10000
 TIME_THRESHOLD = 0.3333334
 
@@ -473,38 +477,3 @@ show_doc(EuroPMCQuery.__init__)
 # COMMAND ----------
 
 show_doc(EuroPMCQuery.run_empc_query)
-
-# COMMAND ----------
-
-# MAGIC %md ## Tests
-
-# COMMAND ----------
-
-#query = [{'ID':0, 'query': '("Neurodegeneration" | "Neurodegenerative disease" | "Alzheimers Disease" | "Parkinsons Disease") & "Machine Learning"'}]
-#df_test = pd.DataFrame(query)
-#qt_test = QueryTranslator(df_test, 'ID', 'query')
-#print(qt_test.generate_queries(QueryType.pubmed))
-
-# COMMAND ----------
-
-# tests
-# uncomment if needed.
-import urllib.parse 
-from time import time, sleep
-
-#esq = ESearchQuery()
-#print(esq.execute_count_query("Primary Ciliary Dyskinesia"))
-#sleep(3) # Sleep for 3 seconds
-#esq.execute_query("Primary Ciliary Dyskinesia")
-
-#efq = EFetchQuery()
-#sleep(3) # Sleep for 3 seconds
-#efq.execute_efetch(35777446)
-
-# COMMAND ----------
-
-# Tests for European PMC
-#epmcq = EuroPMCQuery()
-#id_list, q_list = qt_test.generate_queries(QueryType.epmc)
-#print(q_list)
-#epmcq.run_empc_query(q_list[0])
