@@ -25,12 +25,16 @@ jobs:
         run: |
           pip install nbdev jupyter
           pip install -e '.[dev]'      
+      - name: Install the library
+        run: |
+            pip install nbdev jupyter
+            pip install -e '.[dev]'
       - name: Databricks conversion to Jupyter
         run: |
-            echo "Removing all existing *.ipynb files from top level directory."
-            rm -rf nbdev
-            mkdir nbdev/
-            python db2nb/convert_databricks_to_jupyter.py
+          echo "Removing all existing *.ipynb files from top level directory."
+          rm -rf nbdev
+          mkdir nbdev/
+          python db2nb/convert_databricks_to_jupyter.py
       - name: Commit/push new jupyter notebooks to local git repo
         run: |
           git config --local user.name $github.event.pusher.name
@@ -43,6 +47,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force: true            
+      - name: Install Quarto
+        run: |
+          nbdev_install_quarto
       - name: Build library
         run: |
           rm -rf ./build/lib/czLandscapingTk
