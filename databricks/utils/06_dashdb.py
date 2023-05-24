@@ -179,7 +179,6 @@ class DashboardDb:
     cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
     cs.execute("COMMIT")
 
-
 def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
     cs = self.get_cursor()
     cs.execute("BEGIN")
