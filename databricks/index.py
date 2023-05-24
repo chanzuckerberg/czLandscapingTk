@@ -1,7 +1,6 @@
 # Databricks notebook source
-#hide
+#| hide
 from nbdev import *
-#from your_lib.core import *
 
 # COMMAND ----------
 
