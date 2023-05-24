@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp searchEngineUtils
+#|default_exp searchEngineUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -14,7 +14,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 import requests
 import json
 import datetime
@@ -30,7 +30,7 @@ import pandas as pd
 
 # COMMAND ----------
 
-#export
+#|export
 
 PAGE_SIZE = 10000
 TIME_THRESHOLD = 0.3333334
@@ -202,7 +202,7 @@ class ESearchQuery:
 
 # COMMAND ----------
 
-#export
+#|export
 class EFetchQuery:
     """
     Class to provide query interface for EFetch (i.e., query based on a list of ids)
@@ -392,7 +392,7 @@ class EFetchQuery:
 
 # COMMAND ----------
 
-#export
+#|export
 class EuroPMCQuery():
     """
     A class that executes search queries on the European PMC API 

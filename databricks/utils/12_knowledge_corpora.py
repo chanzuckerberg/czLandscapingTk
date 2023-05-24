@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp knowlege_corpora
+#|default_exp knowlege_corpora
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 import activesoup
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
@@ -36,7 +36,7 @@ from urllib.error import URLError
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 class KnowledgeCorpusCollection():
   """This class generates and supports analysis the research landscape over a collection of knowledge corpora. 

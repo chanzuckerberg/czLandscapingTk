@@ -1,16 +1,16 @@
 # Databricks notebook source
-# default_exp dashdbQueries
+#|default_exp dashdbQueries
 from nbdev import *
 
 # COMMAND ----------
 
 # MAGIC %md # Dashboard Database Queries
-# MAGIC 
+# MAGIC
 # MAGIC > Simple queries in SQL provided for use by `czLandscapingTk.dashdbUtils.DashboardDb` class.
 
 # COMMAND ----------
 
-#export
+#|export
 
 DASHBOARD_CORPUS = """
 SELECT d.* 

@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp bioLinkUtils
+#|default_exp bioLinkUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 import json
 import requests
@@ -22,7 +22,7 @@ import urllib.request
 
 # COMMAND ----------
 
-#export
+#|export
 
 rare_sparql = '''
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -123,7 +123,7 @@ WHERE {
 
 # COMMAND ----------
 
-#export
+#|export
 
 MONDO_LATEST_URL = 'https://github.com/monarch-initiative/mondo/releases/download/v2022-09-06/mondo.owl'
 

@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp docClassify
+#|default_exp docClassify
 #from nbdev import *
 
 # COMMAND ----------
@@ -42,7 +42,7 @@
 
 # COMMAND ----------
 
-# export 
+#|export 
 
 from functools import partial 
 from tqdm import tqdm 
@@ -72,13 +72,13 @@ import os
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 print(f"Running on transformers v{transformers.__version__} and datasets v{datasets.__version__}")
 
 # COMMAND ----------
 
-#export
+#|export
 
 class HF_trainer_wrapper():
   '''
@@ -255,7 +255,7 @@ class HF_trainer_wrapper():
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 def run_HF_trainer_expt(ds, text_columns, label_column, categories, run_name, 
                                    model_input, model_path, log_path, epochs, 
@@ -300,7 +300,7 @@ def run_HF_trainer_expt(ds, text_columns, label_column, categories, run_name,
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 
 def get_folds_from_dataframe(df, id_col, category_col, n_splits):
@@ -329,7 +329,7 @@ def get_folds_from_dataframe(df, id_col, category_col, n_splits):
 
 # COMMAND ----------
 
-#export 
+#|export 
 
 def run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, categories, run_name, 
                                                     model_input, model_path, log_path, epochs, 

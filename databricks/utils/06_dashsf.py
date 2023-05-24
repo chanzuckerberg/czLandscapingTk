@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp dashdbUtils
+#|default_exp dashdbUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -75,7 +75,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -91,7 +91,7 @@ import re
 
 # COMMAND ----------
 
-#export
+#|export
 
 class Snowflake():
   '''
@@ -215,7 +215,7 @@ class Snowflake():
 # COMMAND ----------
 
 # DBTITLE 1,Dashboard Creation Tools
-#export
+#|export
 
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery

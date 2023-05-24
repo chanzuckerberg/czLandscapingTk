@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp generalUtils
+#|default_exp generalUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -9,7 +9,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 import pytz
 from datetime import datetime
@@ -17,7 +17,7 @@ import re
 
 # COMMAND ----------
 
-#export
+#|export
 
 def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databricks-workspace.cloud.databricks.com', sep='\t'):
   ''' 

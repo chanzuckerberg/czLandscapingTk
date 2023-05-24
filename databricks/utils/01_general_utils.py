@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp generalUtils
+#|default_exp generalUtils
 from nbdev import *
 
 # COMMAND ----------

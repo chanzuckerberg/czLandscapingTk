@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp dashDatabricks
+#|default_exp dashDatabricks
 from nbdev import *
 
 # COMMAND ----------
@@ -75,7 +75,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery
@@ -93,7 +93,7 @@ import os
 # COMMAND ----------
 
 # DBTITLE 1,Dashboard Creation Tools
-#export
+#|export
 
 class DashboardDb:
   """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>

@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp curatedDataUtils
+#|default_exp curatedDataUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 import pandas as pd
 import json
@@ -25,7 +25,7 @@ from nltk.metrics import masi_distance, binary_distance
 
 # COMMAND ----------
 
-#export
+#|export
 
 class CuratedDataUtils:
   """This class permits generation of curation statistics and merged, consensus dataframes. 
@@ -156,7 +156,7 @@ class CuratedDataUtils:
 
 # COMMAND ----------
 
-#export
+#|export
 # Some additional distance functions 
 def ordinal_distance(label1, label2):
   """Krippendorff's ordinal distance metric

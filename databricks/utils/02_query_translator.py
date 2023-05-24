@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp queryTranslator
+#|default_exp queryTranslator
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 # USE PYEDA TO PROCESS AND REPURPOSE QUERIES AS LOGICAL EXPRESSIONS FOR SEARCHING.
 import os
@@ -24,7 +24,7 @@ from tqdm import tqdm
 
 # COMMAND ----------
 
-#export
+#|export
 
 class QueryType(Enum):
   """

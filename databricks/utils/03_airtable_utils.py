@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp airtableUtils
+#|default_exp airtableUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -12,7 +12,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 import pandas as pd
 import json
 from urllib.parse import quote
@@ -25,7 +25,7 @@ from nltk.metrics import masi_distance, binary_distance
 
 # COMMAND ----------
 
-#export
+#|export
 
 class AirtableUtils:
   """This class permits simple input / output from airtable

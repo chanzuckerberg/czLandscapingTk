@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp networkXS2AG
+#|default_exp networkXS2AG
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 import pandas as pd
 from datetime import datetime
@@ -32,7 +32,7 @@ from scipy import linalg
 
 # COMMAND ----------
 
-#export
+#|export
 
 class NetworkxS2AG:
   """This class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.<BR>

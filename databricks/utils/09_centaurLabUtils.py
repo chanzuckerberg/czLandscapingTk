@@ -1,5 +1,5 @@
 # Databricks notebook source
-# default_exp centaurLabsUtils
+#|default_exp centaurLabsUtils
 from nbdev import *
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#export
+#|export
 
 import json
 import requests
@@ -23,7 +23,7 @@ from unidecode import unidecode
 
 # COMMAND ----------
 
-#export
+#|export
 
 class CentaurLabsUploadUtils: 
   '''
