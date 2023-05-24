@@ -24,6 +24,7 @@ jobs:
       - name: Install the library
         run: |
           pip install nbdev jupyter
+          pip install -e '.[dev]      
       - name: Databricks conversion to Jupyter
         run: |
             echo "Removing all existing *.ipynb files from top level directory."
