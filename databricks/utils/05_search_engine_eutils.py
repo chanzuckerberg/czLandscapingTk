@@ -1,12 +1,16 @@
 # Databricks notebook source
-#|default_exp searchEngineUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Search Engine Tools  
 # MAGIC
 # MAGIC > A library of classes that provide query access to a number of online academic search services including (Pubmed, PMC, and European PMC). 
+
+# COMMAND ----------
+
+#| default_exp searchEngineUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
 
 # COMMAND ----------
 

@@ -1,15 +1,19 @@
 # Databricks notebook source
-#|default_exp generalUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Databricks Utilities 
 # MAGIC > Tools for use within databricks notebooks. 
 
 # COMMAND ----------
 
-#|export
+#| default_exp generalUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 import pytz
 from datetime import datetime
@@ -17,7 +21,7 @@ import re
 
 # COMMAND ----------
 
-#|export
+#| export
 
 def dump_data_to_disk(df, file_stem, databricks_url='https://ie-meta-prod-databricks-workspace.cloud.databricks.com', sep='\t'):
   ''' 

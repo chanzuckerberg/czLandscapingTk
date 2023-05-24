@@ -1,12 +1,16 @@
 # Databricks notebook source
-#|default_exp dashDatabricks
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Dashboard Database Utilities
 # MAGIC
 # MAGIC > Simple query classes that allows contruction of a SQL database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use.
+
+# COMMAND ----------
+
+#| default_exp dashDatabricks
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
 
 # COMMAND ----------
 
@@ -75,7 +79,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#|export
+#| export
 
 from pathlib import Path
 from czLandscapingTk.searchEngineUtils import ESearchQuery, EuroPMCQuery
@@ -92,8 +96,7 @@ import os
 
 # COMMAND ----------
 
-# DBTITLE 1,Dashboard Creation Tools
-#|export
+#| export
 
 class DashboardDb:
   """This class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.<BR>

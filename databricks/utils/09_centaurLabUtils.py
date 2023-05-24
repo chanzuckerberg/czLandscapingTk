@@ -1,16 +1,20 @@
 # Databricks notebook source
-#|default_exp centaurLabsUtils
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # CentaurLab Utility Tools 
 # MAGIC
 # MAGIC > Tools to upload, download, and analyze data from CentaurLabs using their curation interface. 
 
 # COMMAND ----------
 
-#|export
+#| default_exp centaurLabsUtils
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 import json
 import requests
@@ -23,7 +27,7 @@ from unidecode import unidecode
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class CentaurLabsUploadUtils: 
   '''

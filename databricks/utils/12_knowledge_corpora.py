@@ -1,12 +1,16 @@
 # Databricks notebook source
-#|default_exp knowlege_corpora
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Knowledge Corpora  
 # MAGIC
 # MAGIC > Classes and functions to execute knowledge landscaping analysis over a collection of documents ('expressions') of scientific knowledge 
+
+# COMMAND ----------
+
+#| default_exp knowlege_corpora
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
 
 # COMMAND ----------
 

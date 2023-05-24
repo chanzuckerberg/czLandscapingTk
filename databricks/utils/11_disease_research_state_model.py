@@ -1,16 +1,20 @@
 # Databricks notebook source
-#|default_exp drsm
-from nbdev import *
-
-# COMMAND ----------
-
 # MAGIC %md # Disease Research State Model  
 # MAGIC
 # MAGIC > Classes and functions to execute functionality for generating and analyzing the state of research into one or many identified diseases
 
 # COMMAND ----------
 
-#|export
+#| default_exp drsm
+
+# COMMAND ----------
+
+#| hide
+from nbdev import *
+
+# COMMAND ----------
+
+#| export
 
 import activesoup
 from bs4 import BeautifulSoup,Tag,Comment,NavigableString
@@ -34,7 +38,7 @@ from urllib.error import URLError
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class DRSMCollection():
   """This class generates and supports analysis the research landscape over a collection of diseases. 
