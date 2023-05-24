@@ -94,6 +94,7 @@ class AirtableUtils:
     #df = df.replace(to_replace=[r"\\t|\\n|\\r", "\t|\n|\r"], value=[" "," "], regex=True, inplace=True)
     print('|')
     return df
+    
   
   def build_curated_dataframe(self, files, tables):
     curated_df = pd.DataFrame()
