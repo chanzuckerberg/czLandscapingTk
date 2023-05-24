@@ -16,9 +16,7 @@ from nbdev import *
 #| export
 
 import pytz
-
 from datetime import datetime
-
 import re
 
 # COMMAND ----------
