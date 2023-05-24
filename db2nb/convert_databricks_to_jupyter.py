@@ -7,6 +7,7 @@ import json
 import sys
 from os import path
 
+# Updating core method
 header_comment = '# COMMAND ----------'
 markdown_comment = "# MAGIC %md"
 magic_code = "# MAGIC[ ]*"
