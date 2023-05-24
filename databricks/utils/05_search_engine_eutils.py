@@ -202,26 +202,6 @@ class ESearchQuery:
 
 # COMMAND ----------
 
-show_doc(ESearchQuery.__init__)
-
-# COMMAND ----------
-
-show_doc(ESearchQuery.execute_count_query)
-
-# COMMAND ----------
-
-show_doc(ESearchQuery.execute_query_on_website)
-
-# COMMAND ----------
-
-show_doc(ESearchQuery.execute_query)
-
-# COMMAND ----------
-
-show_doc(ESearchQuery._check_query_phrase)
-
-# COMMAND ----------
-
 #export
 class EFetchQuery:
     """
@@ -408,22 +388,6 @@ class EFetchQuery:
 
 # COMMAND ----------
 
-show_doc(EFetchQuery.__init__)
-
-# COMMAND ----------
-
-show_doc(EFetchQuery.execute_efetch)
-
-# COMMAND ----------
-
-show_doc(EFetchQuery.generate_data_frame_from_id_list)
-
-# COMMAND ----------
-
-show_doc(EFetchQuery.generate_mesh_data_frame_from_id_list)
-
-# COMMAND ----------
-
 # MAGIC %md ## EuroPMCQuery
 
 # COMMAND ----------
@@ -466,11 +430,3 @@ class EuroPMCQuery():
         ids_from_q = sorted(list(ids_from_q), key = lambda x: x[0])
         print(' Returning '+str(len(ids_from_q)))
         return (numFound, ids_from_q)
-
-# COMMAND ----------
-
-show_doc(EuroPMCQuery.__init__)
-
-# COMMAND ----------
-
-show_doc(EuroPMCQuery.run_empc_query)

@@ -214,14 +214,6 @@ class Snowflake():
 
 # COMMAND ----------
 
-show_doc(Snowflake.get_cursor)
-
-# COMMAND ----------
-
-show_doc(Snowflake.execute_query)
-
-# COMMAND ----------
-
 # DBTITLE 1,Dashboard Creation Tools
 #export
 
@@ -571,7 +563,3 @@ class DashboardDb:
       self.upload_wb(subquery_df, 'SUB_CORPUS', cs=cs)
     self.build_core_tables_from_pmids(cs=cs)
     #cs.execute('COMMIT')
-
-# COMMAND ----------
-
-show_doc(DashboardDb.run_remote_paper_queries)

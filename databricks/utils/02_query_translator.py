@@ -233,11 +233,3 @@ class QueryTranslator():
       return '('+' AND '.join([self._snowflake(x) for x in ex.xs])+')'
     elif isinstance(ex, OrOp):
       return '('+' OR '.join([self._snowflake(x) for x in ex.xs])+')'
-
-# COMMAND ----------
-
-show_doc(QueryTranslator.__init__)
-
-# COMMAND ----------
-
-show_doc(QueryTranslator.generate_queries)

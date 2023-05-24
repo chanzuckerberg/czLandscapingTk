@@ -244,19 +244,3 @@ class AirtableUtils:
 
     return sdf
 
-
-# COMMAND ----------
-
-show_doc(AirtableUtils.__init__)
-
-# COMMAND ----------
-
-show_doc(AirtableUtils.read_airtable)
-
-# COMMAND ----------
-
-show_doc(AirtableUtils.send_df_to_airtable)
-
-# COMMAND ----------
-
-show_doc(AirtableUtils.send_records_to_airtable)

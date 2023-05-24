@@ -156,18 +156,6 @@ class CuratedDataUtils:
 
 # COMMAND ----------
 
-show_doc(CuratedDataUtils.__init__)
-
-# COMMAND ----------
-
-show_doc(CuratedDataUtils.get_cross_curator_comparison)
-
-# COMMAND ----------
-
-show_doc(CuratedDataUtils.get_consensus_per_doc)
-
-# COMMAND ----------
-
 #export
 # Some additional distance functions 
 def ordinal_distance(label1, label2):

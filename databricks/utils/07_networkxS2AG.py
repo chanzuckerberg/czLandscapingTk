@@ -731,23 +731,3 @@ class NetworkxS2AG:
     if len(checked_edge_list) > 0: 
       print('adding %d new edges'%(len(checked_edge_list)))
       self.g.add_edges_from(checked_edge_list, label=label)
-
-# COMMAND ----------
-
-show_doc(NetworkxS2AG.print_basic_stats)
-
-# COMMAND ----------
-
-show_doc(NetworkxS2AG.search_for_disambiguated_author)
-
-# COMMAND ----------
-
-show_doc(NetworkxS2AG.build_author_citation_graph)
-
-# COMMAND ----------
-
-show_doc(NetworkxS2AG.run_thresholded_centrality_analysis)
-
-# COMMAND ----------
-
-show_doc(NetworkxS2AG.generate_author_df_for_corpus)
