@@ -4,7 +4,7 @@
 
 # COMMAND ----------
 
-#| default_exp generalUtils
+#| default_exp databricksUtils
 
 # COMMAND ----------
 

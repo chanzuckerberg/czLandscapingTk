@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %md # Dashboard Database Utilities
+# MAGIC %md # Dashboard Database Utilities Using DataBricks SQL
 # MAGIC
 # MAGIC > Simple query classes that allows contruction of a SQL database in Snowflake for science literature dashboard applications. Note that this implementation is intended primarily for internal CZI use.
 
