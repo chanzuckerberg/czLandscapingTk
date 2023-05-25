@@ -63,7 +63,7 @@ def py2nb(py_str):
          chunk = re.sub(markdown_comment, '', chunk)
          chunk = chunk.strip("'\n")
          chunk = re.sub(magic_code, '', chunk)
-         print(chunk)
+         #print(chunk)
          cell_type = 'markdown'
 
       cell = {
