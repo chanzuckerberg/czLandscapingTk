@@ -1,0 +1,320 @@
+id: https://chanzuckerberg.github.io/czLandscapingTk/linkml/czLandscaping
+name: czLandscaping
+description: LinkML Schema for scientific landscaping analysis performed at CZI.
+prefixes:     
+  czlsa: https://chanzuckerberg.github.io/czLandscaping/
+  dct: 'http://purl.org/dc/terms/'
+  linkml: https://w3id.org/linkml/
+  schema: http://schema.org/
+  ORCID: https://orcid.org/
+  biolink: 'https://w3id.org/biolink/vocab/'
+  fabio: 'http://purl.org/spar/fabio/'
+  MESH: 'http://id.nlm.nih.gov/mesh/'
+  iao: 'http://purl.obolibrary.org/obo/IAO_'
+  WIKIDATA: 'https://www.wikidata.org/entity/'            
+  WIKIDATA_PROPERTY: 'https://www.wikidata.org/prop/'
+
+imports:
+  - linkml:types
+default_curi_maps:
+  - semweb_context
+default_prefix: czlsa
+default_range: string
+  
+slots:
+
+  id:
+    identifier: true
+    domain: Entity
+    description: >-
+      A unique identifier for an entity.
+    required: true
+
+  orcid:
+    description: >-
+      An ORCID for an entity. This is determined by the id using expansion rules.
+    id_prefixes:
+      - ORCID
+
+  iri:
+    description: >-
+      An IRI for an entity. This is determined by the id using expansion rules.
+
+  type:
+    slot_uri: rdf:type
+    domain: Entity
+    multivalued: true
+
+  name:
+    aliases: ['label', 'display name', 'title']
+    description: >-
+      A human-readable name for an attribute or entity.
+    domain: Entity
+    slot_uri: rdfs:label
+
+  xref:
+    aliases: ['dbxref', 'Dbxref', 'DbXref', 'record_url', 'source_record_urls']
+    domain: NamedThing
+    range: uriorcurie
+    description: >-
+      A database cross reference or alternative identifier for a NamedThing or edge between two 
+      NamedThings.  This property should point to a database record or webpage that supports the existence of the edge, or 
+      gives more detail about the edge. This property can be used on a node or edge to provide multiple
+      URIs or CURIE cross references.
+    multivalued: true
+
+  license:
+    domain: InformationContentEntity
+    description: >-
+      A license under which an information content entity is provided.
+    exact_mappings:
+      - dct:license
+  
+  rights:
+    domain: InformationContentEntity
+    exact_mappings:
+      - dct:rights
+
+  format:
+    domain: InformationContentEntity
+    exact_mappings:
+      - dct:format
+
+  creation date:
+    aliases: ['publication date']
+    range: date
+    description: >-
+      date on which an entity was created. This can be applied to nodes or edges
+    exact_mappings:
+      - dct:createdOn
+      - WIKIDATA_PROPERTY:P577
+
+  has part:
+    inverse: part of
+    description: >-
+      holds between wholes and their parts (material entities or processes)
+
+  part of:
+    description: >-
+      holds between parts and wholes (material entities or processes)
+    inverse: has part
+
+  logical query:
+    description: >-
+      A logical query that can be used to retrieve a set of entities from a 
+      knowledgebase. Typically expressed as a boolean logic expression over 
+      terms to be searched for.
+    domain: WorkCollection
+    range: string
+
+  authors:
+    description: >-
+      The authors of a work. This can be applied to nodes or edges.
+    domain: Work
+    range: Author
+    multivalued: true
+    inlined_as_list: true
+    exact_mappings:
+      - schema:author 
+
+  title:
+    description: >-
+      The Title of a work.
+    domain: Work
+    range: string
+
+  abstract:
+    description: >-
+      The written abstract of a work. This is typically a paragraph of text providing 
+      a summary of the main findings of the work.
+    domain: Work
+    range: string
+
+  full text:
+    description: >-
+      The full text of a  abstract of a work. This is typically a paragraph of text providing 
+      a summary of the main findings of the work.
+    domain: Work
+    range: string
+
+  cites:
+    description: >-
+      The works that are cited by this work. 
+    domain: Work
+    range: Work
+    multivalued: true
+
+  information sources:
+    description: >-
+      The InformationResources that are queried to build a WorkCollection.
+    domain: WorkCollection
+    range: InformationResource
+    multivalued: true
+
+  selector: 
+    description: >-
+      A way of specifying a location within a Work that describes where a WorkFragment comes from
+    domain: WorkFragment
+    range: Selector
+
+  affiliations:
+    description: >-
+      The affiliations of an author. 
+    domain: Author
+    range: Organization
+    multivalued: true
+
+classes:
+  Entity:
+    description: >-
+      Root Model class for all things and informational relationships, real or imagined.
+    abstract: true
+    slots:
+      - id
+      - iri
+      - type    # rdf:type
+    exact_mappings:
+      - biolink:entity
+
+  NamedThing:
+    is_a: Entity
+    abstract: true
+    description: "an entity or concept/class described by a name"
+    slots:
+      - name
+      - xref
+    exact_mappings:
+      - biolink:named thing
+      
+  InformationContentEntity:
+    aliases: ['information', 'information artefact', 'information entity']
+    abstract: true
+    is_a: NamedThing
+    description: >-
+      a piece of information that typically describes
+      some topic of discourse or is used as support.
+    slots:
+      - license
+      - rights
+      - format
+      - creation date
+    id_prefixes:
+      - doi
+    exact_mappings:
+      - biolink:information content entity
+
+  Work:
+    description:
+      A published  
+    is_a: InformationContentEntity
+    slots:
+      - id
+      - has part
+      - authors
+      - title
+      - abstract
+      - full text
+    slot_usage:
+      has part:
+        multivalued: true
+        range: WorkFragment
+        description: 
+          Fragments that have been highlighted as as part of this work.
+    exact_mappings:
+      - fabio:work
+
+  InformationResource:
+    is_a: InformationContentEntity
+    aliases: ['knowledgebase']
+    description: >-
+      A database or knowledgebase and its supporting ecosystem of interfaces 
+      and services that deliver content to consumers (e.g. web portals, APIs, 
+      query endpoints, streaming services, data downloads, etc.).
+      A single Information Resource by this definition may span many different datasets or
+      databases, and include many access endpoints and user
+      interfaces. Information Resources include project-specific resources
+      such as a Translator Knowledge Provider, and community knowledgebases like ChemBL, OMIM, or DGIdb.
+
+  WorkCollection:
+    description:
+      A collection of works. 
+    is_a: InformationContentEntity 
+    slots:
+      - id
+      - name
+      - logical query
+      - creation date
+      - information sources
+      - has part
+    slot_usage:
+      has part:
+        multivalued: true
+        description: 
+          The works that are part of the collection.
+        range: Work
+    exact_mappings:
+      - fabio:work collection
+
+  WorkFragment:
+    description:
+      A selected subportion of the contents of a Work, described by an selector. 
+    is_a: InformationContentEntity 
+    slots:
+      - part of
+      - selector
+    slot_usage:
+      part of:
+        multivalued: false
+        description: 
+          The work that this fragment is a part of
+        range: Work
+
+  Selector: 
+    description:
+      A way of localizing and describing a WorkFragment within a Work.  
+    is_a: InformationContentEntity 
+    abstract: true
+    
+  OffsetTextSelector: 
+    description:
+      A way of localizing and describing a fragment of text within a larger 
+      body of text using offsets and lengths.  
+    is_a: Selector 
+    attributes:
+      offset:
+        description: >-
+          The offset of the start of the fragment from the start of the text.
+        range: integer
+      length:
+        description: >-
+          The length of the fragment.
+        range: integer
+      text:
+        description: >-
+          The text of the fragment.
+        range: string     
+
+  Person:
+    is_a: NamedThing 
+
+  Author:
+    is_a: Person
+    slots:
+      - orcid
+      - affiliations
+
+  Organization:
+    is_a: NamedThing
+    attributes:  
+      city:
+        multivalued: true
+        range: City
+      country:
+        multivalued: true
+        range: Country
+
+  City: 
+    is_a: NamedThing
+
+  Country: 
+    is_a: NamedThing

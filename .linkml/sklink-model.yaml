@@ -1,0 +1,3900 @@
+---
+id: https://chanzuckerberg.github.io/skLink/linkml
+name: SKLink-Model
+description: Entity and association taxonomy and datamodel for scientific knowledge based on a base Body/Expression/Fragment approach. The core modeling approach is based on Biolink.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+
+# Version should be kept in sync with primary Git repository release tag
+
+version: 3.3.1
+
+## ------------
+##
+## PREFIXES
+## ------------
+# CURIE namespaces (prefixes/base URI's) mappings of prefixes used in the body of the Biolink Model specification
+# are resolved using a specific precedence order, for use in the generation of the Biolink Model context.jsonld
+# mappings to namespaces. Any prefixes encountered in the Biolink Model but not resolved by the following
+# precedence sources, are anonymously declared by linkml as http://example.org/UNKNOWN/ rooted base URI's
+# which should ideally be repaired in one of the precedence lists.
+#
+# 1. The following 'prefixes:' delimited list has first precedence in resolution.
+#
+prefixes:
+  sklink: 'https://chanzuckerberg.github.io/sklink/linkml/'
+  biolink: 'https://w3id.org/biolink/vocab/'
+  bioschemas: 'https://bioschemas.org/'
+  linkml: 'https://w3id.org/linkml/'
+  doi: 'https://doi.org/'
+  DOID-PROPERTY: 'http://purl.obolibrary.org/obo/doid#'
+  EDAM-DATA: 'http://edamontology.org/data_'
+  EDAM-FORMAT: 'http://edamontology.org/format_'
+  EDAM-OPERATION: 'http://edamontology.org/operation_'
+  EDAM-TOPIC: 'http://edamontology.org/topic_'
+  EFO: 'http://www.ebi.ac.uk/efo/EFO_'
+  fabio: 'http://purl.org/spar/fabio/'
+  foaf: 'http://xmlns.com/foaf/0.1/'
+  MESH: 'http://id.nlm.nih.gov/mesh/'
+  ORCID: 'https://orcid.org/'
+  prov: 'http://www.w3.org/ns/prov#'
+  ResearchID: 'https://publons.com/researcher/'
+  RO: 'http://purl.obolibrary.org/obo/RO_'
+  schema: 'http://schema.org/'
+  ScopusID: 'https://www.scopus.com/authid/detail.uri?authorId='
+  SIO: 'http://semanticscience.org/resource/SIO_'
+  WIKIDATA: 'https://www.wikidata.org/entity/'             #  Wikidata Entity
+  PMC: 'http://europepmc.org/articles/PMC'
+
+default_prefix: sklink
+default_range: string
+
+default_curi_maps:
+  - obo_context
+  - idot_context
+  - monarch_context
+  - semweb_context
+
+emit_prefixes:
+  - rdf
+  - rdfs
+  - xsd
+  - skos
+  - oboInOwl
+  - BIOGRID
+  - SO
+
+## ------------
+## SUBSETS
+## ------------
+
+subsets:
+
+  model_organism_database:
+    description: >-
+      Subset that is relevant for a typical Model Organism Database (MOD)
+
+  translator_minimal:
+    description: >-
+      Minimum subset of translator work
+
+  samples:
+    description: >-
+      Sample/biosample datamodel
+
+  testing:
+    description: >-
+      TBD
+
+
+## ------------
+## TYPES
+## ------------
+
+imports:
+  - linkml:types
+
+types:
+
+  category type:
+    typeof: uriorcurie
+    description: >-
+      A primitive type in which the value denotes a class within the biolink model.
+      The value must be a URI or a CURIE. In a Neo4j representation, the value should
+      be the CURIE for the biolink class, for example biolink:Gene. For an RDF representation,
+      the value should be a URI such as https://w3id.org/biolink/vocab/Gene
+
+  iri type:
+    typeof: uriorcurie
+    description: >-
+      An IRI
+
+  label type:
+    typeof: string
+    description: >-
+      A string that provides a human-readable name for an entity
+
+  predicate type:
+    typeof: uriorcurie
+    description: >-
+      A CURIE from the biolink related_to hierarchy.
+      For example, biolink:related_to, biolink:causes, biolink:treats.
+
+  narrative text:
+    typeof: string
+    description: >-
+      A string that provides a human-readable description of something
+
+  symbol type:
+    typeof: string
+
+  frequency value:
+    typeof: string
+    uri: UO:0000105
+
+  percentage frequency value:
+    typeof: double
+    uri: UO:0000187
+
+  quotient:
+    aliases: ['ratio']
+    typeof: double
+    uri: UO:0010006
+
+  unit:
+    typeof: string
+    uri: UO:0000000
+    id_prefixes:
+      - UO
+    exact_mappings:
+      - qud:Unit
+
+  time type:
+    typeof: time
+
+
+## ------------
+## SLOTS
+## ------------
+
+slots:
+
+   ## ---------------
+   ## ATTRIBUTE SLOTS
+   ## ---------------
+
+  has attribute:
+    description: >-
+      connects any entity to an attribute
+    domain: entity
+    range: attribute
+    multivalued: true
+    in_subset:
+      - samples
+    close_mappings:
+       # RTX term meaning 'specifies value of' tagged as inverse of 'biolink:has attribute'
+      - OBI:0001927
+    exact_mappings:
+      - SIO:000008
+    narrow_mappings:
+       # if 'has attribute' annotates a NamedThing as subject or
+       # object of an association, these OBAN mappings may apply
+      - OBAN:association_has_subject_property
+      - OBAN:association_has_object_property
+      - CPT:has_possibly_included_panel_element
+      - DRUGBANK:category
+       # RTX contributed terms. Could perhaps review for more semantically precise mappings?
+      - EFO:is_executed_in
+      - HANCESTRO:0301
+      - LOINC:has_action_guidance
+      - LOINC:has_adjustment
+      - LOINC:has_aggregation_view
+      - LOINC:has_approach_guidance
+      - LOINC:has_divisor
+      - LOINC:has_exam
+      - LOINC:has_method
+      - LOINC:has_modality_subtype
+      - LOINC:has_object_guidance
+      - LOINC:has_scale
+      - LOINC:has_suffix
+      - LOINC:has_time_aspect
+      - LOINC:has_time_modifier
+      - LOINC:has_timing_of
+       # disease is stage
+      - NCIT:R88
+      - NCIT:eo_disease_has_property_or_attribute
+      - NCIT:has_data_element
+      - NCIT:has_pharmaceutical_administration_method
+      - NCIT:has_pharmaceutical_basic_dose_form
+      - NCIT:has_pharmaceutical_intended_site
+      - NCIT:has_pharmaceutical_release_characteristics
+      - NCIT:has_pharmaceutical_state_of_matter
+      - NCIT:has_pharmaceutical_transformation
+      - NCIT:is_qualified_by
+      - NCIT:qualifier_applies_to
+      - NCIT:role_has_domain
+      - NCIT:role_has_range
+      - INO:0000154
+      - HANCESTRO:0308
+      - OMIM:has_inheritance_type
+      - orphanet:C016
+      - orphanet:C017
+      - RO:0000053
+       # RTX tagged a few RO terms as 'biolink:related_to' but semantics suggest a better mapping here
+      - RO:0000086
+      - RO:0000087
+      - SNOMED:has_access
+      - SNOMED:has_clinical_course
+      - SNOMED:has_count_of_base_of_active_ingredient
+      - SNOMED:has_dose_form_administration_method
+      - SNOMED:has_dose_form_release_characteristic
+      - SNOMED:has_dose_form_transformation
+      - SNOMED:has_finding_context
+      - SNOMED:has_finding_informer
+      - SNOMED:has_inherent_attribute
+      - SNOMED:has_intent
+      - SNOMED:has_interpretation
+      - SNOMED:has_laterality
+      - SNOMED:has_measurement_method
+      - SNOMED:has_method
+      - SNOMED:has_priority
+      - SNOMED:has_procedure_context
+      - SNOMED:has_process_duration
+      - SNOMED:has_property
+      - SNOMED:has_revision_status
+      - SNOMED:has_scale_type
+      - SNOMED:has_severity
+      - SNOMED:has_specimen
+      - SNOMED:has_state_of_matter
+      - SNOMED:has_subject_relationship_context
+      - SNOMED:has_surgical_approach
+      - SNOMED:has_technique
+      - SNOMED:has_temporal_context
+      - SNOMED:has_time_aspect
+      - SNOMED:has_units
+      - UMLS:has_structural_class
+      - UMLS:has_supported_concept_property
+      - UMLS:has_supported_concept_relationship
+      - UMLS:may_be_qualified_by
+
+  has attribute type:
+    description: >-
+      connects an attribute to a class that describes it
+    domain: attribute
+    range: ontology class
+    multivalued: false
+    required: true
+    in_subset:
+      - samples
+    narrow_mappings:
+      - LOINC:has_modality_type
+      - LOINC:has_view_type
+
+   # TRAPI Attribute schema alignment:
+   # value: NamedThing.name
+   # value_type: NamedThing.category
+   # value_type_name: quantity_value.NamedThing.name
+  has qualitative value:
+    description: >-
+      connects an attribute to a value
+    domain: attribute
+    range: named thing
+    multivalued: false
+    in_subset:
+      - samples
+
+   # TRAPI Attribute schema alignment:
+   # value: quantity_value.has_numeric_value[double] - may be a vector?
+   # value_type: quantity_value.has_unit.unit.uri
+   # value_type_name: quantity_value.has_unit.unit.name[string]
+  has quantitative value:
+    description: >-
+      connects an attribute to a value
+    domain: attribute
+    range: quantity value
+    multivalued: true
+    exact_mappings:
+      - qud:quantityValue
+    narrow_mappings:
+      - SNOMED:has_concentration_strength_numerator_value
+      - SNOMED:has_presentation_strength_denominator_value
+      - SNOMED:has_presentation_strength_numerator_value
+    in_subset:
+      - samples
+
+  has numeric value:
+    description: >-
+      connects a quantity value to a number
+    domain: quantity value
+    range: double
+    multivalued: false
+    exact_mappings:
+      - qud:quantityValue
+    in_subset:
+      - samples
+
+  has unit:
+    description: >-
+      connects a quantity value to a unit
+    domain: quantity value
+    range: unit
+    multivalued: false
+    close_mappings:
+       # These RTX contributed terms mean "is unit of" which is the semantic inverse of this biolink:has_unit term
+      - EFO:0001697
+      - UO-PROPERTY:is_unit_of
+    exact_mappings:
+      - qud:unit
+      - IAO:0000039
+    narrow_mappings:
+      - SNOMED:has_concentration_strength_denominator_unit
+      - SNOMED:has_concentration_strength_numerator_unit
+      - SNOMED:has_presentation_strength_denominator_unit
+      - SNOMED:has_presentation_strength_numerator_unit
+      - SNOMED:has_unit_of_presentation
+    in_subset:
+      - samples
+
+
+   ## --------------------
+   ## NODE PROPERTY SLOTS
+   ## --------------------
+
+  node property:
+    description: >-
+      A grouping for any property that holds between a node and a value
+    domain: named thing
+
+  id:
+    identifier: true
+    domain: entity
+    description: >-
+      A unique identifier for an entity.
+      Must be either a CURIE shorthand for a URI or a complete URI
+    in_subset:
+      - translator_minimal
+    required: true
+    exact_mappings:
+      - AGRKB:primaryId
+      - gff3:ID
+      - gpi:DB_Object_ID
+
+  iri:
+    description: >-
+      An IRI for an entity. This is determined by the id using expansion rules.
+    range: iri type
+    in_subset:
+      - translator_minimal
+      - samples
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P854
+
+  type:
+    slot_uri: rdf:type
+    domain: entity
+    exact_mappings:
+      - AGRKB:soTermId
+      - gff3:type
+      - gpi:DB_Object_Type
+    multivalued: true
+
+  category:
+    is_a: type
+    domain: entity
+    range: category type
+    designates_type: true
+    description: >-
+      Name of the high level ontology class in which this entity is categorized. Corresponds to the label for the
+      biolink entity type class.
+       * In a neo4j database this MAY correspond to the neo4j label tag.
+       * In an RDF database it should be a biolink model class URI.
+      This field is multi-valued. It should include values for ancestors of the biolink class; for example,
+      a protein such as Shh would have category values `biolink:Protein`, `biolink:GeneProduct`, `biolink:MolecularEntity`, ...
+
+      In an RDF database, nodes will typically have an rdf:type triples. This can be to the most specific biolink
+      class, or potentially to a class more specific than something in biolink. For example, a sequence feature `f`
+      may have a rdf:type assertion to a SO class such as TF_binding_site,
+      which is more specific than anything in biolink. Here we would have categories {biolink:GenomicEntity,
+      biolink:MolecularEntity, biolink:NamedThing}
+    is_class_field: true
+    multivalued: true
+    in_subset:
+      - translator_minimal
+
+  publication type:
+    slot_uri: dct:type
+    description: >-
+      Ontology term for publication type may be drawn from
+      Dublin Core types (https://www.dublincore.org/specifications/dublin-core/dcmi-type-vocabulary/),
+      FRBR-aligned Bibliographic Ontology (https://sparontologies.github.io/fabio/current/fabio.html),
+      the MESH publication types (https://www.nlm.nih.gov/mesh/pubtypes.html),
+      the Confederation of Open Access Repositories (COAR) Controlled Vocabulary for Resource Type Genres
+      (http://vocabularies.coar-repositories.org/documentation/resource_types/),
+      Wikidata (https://www.wikidata.org/wiki/Wikidata:Publication_types), or
+      equivalent publication type ontology. When a given publication type ontology term
+      is used within a given knowledge graph, then the CURIE identified term must be
+      documented in the graph as a concept node of biolink:category biolink:OntologyClass.
+    values_from:  # Not sure which takes precedence, if any...
+      - dctypes
+      - fabio
+      - MESH_PUB
+      - COAR_RESOURCE
+      - WIKIDATA
+
+  name:
+    aliases: ['label', 'display name', 'title']
+    description: >-
+      A human-readable name for an attribute or entity.
+    domain: entity
+    range: label type
+    in_subset:
+      - translator_minimal
+      - samples
+    slot_uri: rdfs:label
+    exact_mappings:
+      - gff3:Name
+      - gpi:DB_Object_Name
+    narrow_mappings:
+      - dct:title
+      - WIKIDATA_PROPERTY:P1476
+
+  symbol:
+    is_a: node property
+    domain: named thing
+    description: >-
+      Symbol for a particular thing
+    exact_mappings:
+      - AGRKB:symbol
+      - gpi:DB_Object_Symbol
+
+  synonym:
+    is_a: node property
+    aliases: ['alias']
+    domain: named thing
+    range: label type
+    description: >-
+      Alternate human-readable names for a thing
+    multivalued: true
+    in_subset:
+      - translator_minimal
+    narrow_mappings:
+       # there is an interesting debate here: are these terms "narrower" a.k.a. more specialized instances of
+       # 'biolink:synonym' or should they be binned into their respective namesake class of mappings?
+       # namely, is 'oboInOwl:hasExactSynonym' an instance 'exact_mappings', etc.
+      - skos:altLabel
+      - gff3:Alias
+      - AGRKB:synonyms
+      - gpi:DB_Object_Synonyms
+       # TODO: RTX contributed terms mapped here... May need review?
+      - HANCESTRO:0330
+      - IAO:0000136
+      - RXNORM:has_tradename
+
+  exact synonym:
+    is_a: synonym
+    exact_mappings:
+      - oboInOwl:hasExactSynonym
+
+  broad synonym:
+    is_a: synonym
+    exact_mappings:
+      - oboInOwl:hasBroadSynonym
+
+  narrow synonym:
+    is_a: synonym
+    exact_mappings:
+      - oboInOwl:hasNarrowSynonym
+
+  related synonym:
+    is_a: synonym
+    exact_mappings:
+      - oboInOwl:hasRelatedSynonym
+
+  has topic:
+    aliases: ['topic', 'descriptors']
+    is_a: node property
+    range: ontology class
+    exact_mappings:
+      - foaf:topic
+    description: >-
+      Connects a node to a vocabulary term or ontology class that describes some aspect of the entity. In general specific characterization is preferred.
+      See https://github.com/biolink/biolink-model/issues/238
+
+  xref:
+    aliases: ['dbxref', 'Dbxref', 'DbXref', 'record_url', 'source_record_urls']
+    domain: named thing
+    range: uriorcurie
+    description: >-
+      A database cross reference or alternative identifier for a NamedThing or edge between two 
+      NamedThings.  This property should point to a database record or webpage that supports the existence of the edge, or 
+      gives more detail about the edge. This property can be used on a node or edge to provide multiple
+      URIs or CURIE cross references.
+    multivalued: true
+    in_subset:
+      - translator_minimal
+    narrow_mappings:
+      - gff3:Dbxref
+      - gpi:DB_Xrefs
+
+  support graphs:
+    description: >-
+      A list of knowledge graphs that support the existence of this node.
+    multivalued: true
+    in_subset:
+      - translator_minimal
+  
+  resource id:
+    is_a: node property
+    description: >-
+      The CURIE for an Information Resource that served as a source
+      of knowledge expressed in an Edge, or a source of data used to
+      generate this knowledge.
+    domain: retrieval source
+    range: uriorcurie
+    in_subset:
+      - translator_minimal
+  
+  resource role:
+    is_a: node property
+    description: >-
+      The role played by the InformationResource in serving as a
+      source for an Edge. Note that a given Edge should have one
+      and only one 'primary' source, and may have any number of
+      'aggregator' or 'supporting data' sources.
+    domain: retrieval source
+    range: ResourceRoleEnum
+    in_subset:
+      - translator_minimal
+
+  retrieval source ids:
+    description: >-
+        A list of retrieval sources that served as a source of knowledge
+        expressed in an Edge, or a source of data used to generate this
+        knowledge.
+    multivalued: true
+    range: retrieval source
+    in_subset:
+      - translator_minimal
+
+  full name:
+    is_a: node property
+    domain: named thing
+    range: label type
+    description: >-
+      a long-form human readable name for a thing
+
+  upstream resource ids:
+    is_a: node property
+    description: >-
+      An upstream InformationResource from which the resource
+      being described directly retrieved a record of the knowledge
+      expressed in the Edge, or data used to generate this knowledge.
+      This is an array because there are cases where a merged Edge
+      holds knowledge that was retrieved from multiple sources. e.g.
+      an Edge provided by the ARAGORN ARA can expressing knowledge it
+      retrieved from both the automat-mychem-info and molepro KPs,
+      which both provided it with records of this single fact.
+    domain: retrieval source
+    range: uriorcurie
+
+  description:
+    aliases: ['definition']
+    range: narrative text
+    description: >-
+      a human-readable description of an entity
+    in_subset:
+      - translator_minimal
+    slot_uri: dct:description
+    exact_mappings:
+      - IAO:0000115
+      - skos:definitions
+    narrow_mappings:
+      - gff3:Description
+
+  systematic synonym:
+    is_a: node property
+    domain: named thing
+    range: label type
+    multivalued: true
+    slot_uri: GOP:systematic_synonym
+    description: >-
+      more commonly used for gene symbols in yeast
+
+  affiliation:
+    is_a: node property
+    description: >-
+      a professional relationship between one provider (often a person) within another provider (often an organization).
+      Target provider identity should be specified by a CURIE. Providers may have multiple affiliations.
+    domain: agent
+    range: uriorcurie
+    multivalued: true
+
+  address:
+    is_a: node property
+    description: >-
+      the particulars of the place where someone or an organization is situated.  For now, this slot is a
+      simple text "blob" containing all relevant details of the given location for fitness of purpose.
+      For the moment, this "address" can include other contact details such as email and phone number(?).
+
+   ## Space
+
+  latitude:
+    is_a: node property
+    range: float
+    description: >-
+      latitude
+    exact_mappings:
+      - wgs:lat
+
+  longitude:
+    is_a: node property
+    range: float
+    description: >-
+      longitude
+    exact_mappings:
+      - wgs:long
+
+   ## Time
+
+  timepoint:
+    aliases: ['duration']
+    range: time type
+    description: >-
+      a point in time
+
+  creation date:
+    is_a: node property
+    aliases: ['publication date']
+    range: date
+    description: >-
+      date on which an entity was created. This can be applied to nodes or edges
+    exact_mappings:
+      - dct:createdOn
+      - WIKIDATA_PROPERTY:P577
+
+  update date:
+    is_a: node property
+    range: date
+    description: >-
+      date on which an entity was updated. This can be applied to nodes or edges
+
+   ## Statistics
+
+  aggregate statistic:
+    is_a: node property
+    abstract: true
+
+  has count:
+    description: >-
+      number of things with a particular property
+    is_a: aggregate statistic
+    range: integer
+    exact_mappings:
+      - LOINC:has_count
+
+  has total:
+    description: >-
+      total number of things in a particular reference set
+    is_a: aggregate statistic
+    range: integer
+
+  has quotient:
+    is_a: aggregate statistic
+    range: double
+
+  has percentage:
+    description: >-
+      equivalent to has quotient multiplied by 100
+    is_a: aggregate statistic
+    range: double
+
+   ## Properties for Information Content Entity and Publication Nodes
+
+  has taxonomic rank:
+    is_a: node property
+    range: taxonomic rank
+    multivalued: false
+    mappings:
+      - WIKIDATA:P105
+
+  has dataset:
+    is_a: node property
+    domain: dataset version
+    range: dataset
+    slot_uri: dct:source
+
+  source web page:
+    is_a: node property
+    domain: dataset summary
+    broad_mappings:
+      - dct:source
+
+  source logo:
+    is_a: node property
+    domain: dataset summary
+    slot_uri: schema:logo
+
+  retrieved on:
+    is_a: node property
+    domain: dataset
+    range: date
+    exact_mappings:
+      - pav:retrievedOn
+
+  version of:
+    is_a: node property
+    domain: dataset version
+    range: dataset summary
+    exact_mappings:
+      - dct:isVersionOf
+
+  version:
+    is_a: node property
+    domain: dataset
+    broad_mappings:
+      - pav:version
+      - owl:versionInfo
+
+  license:
+    is_a: node property
+    domain: information content entity
+    exact_mappings:
+      - dct:license
+    narrow_mappings:
+      - WIKIDATA_PROPERTY:P275
+
+  rights:
+    is_a: node property
+    domain: information content entity
+    exact_mappings:
+      - dct:rights
+
+  format:
+    is_a: node property
+    domain: information content entity
+    exact_mappings:
+      - dct:format
+      - WIKIDATA_PROPERTY:P2701
+
+  created with:
+    is_a: node property
+    domain: dataset
+    exact_mappings:
+      - pav:createdWith
+
+  download url:
+    is_a: node property
+    domain: information content entity
+    slot_uri: dcat:downloadURL
+
+  dataset download url:
+    is_a: node property
+    domain: dataset
+    slot_uri: dcat:downloadURL
+
+  distribution download url:
+    is_a: node property
+    domain: dataset distribution
+    exact_mappings:
+      - dcat:downloadURL
+
+  ingest date:
+    is_a: node property
+    domain: dataset version
+    slot_uri: pav:version
+
+  has distribution:
+    is_a: node property
+    domain: dataset version
+    range: dataset distribution
+    slot_uri: dct:distribution
+
+  published in:
+    is_a: node property
+    description: >-
+      CURIE identifier of a broader publication context within which the publication may be placed,
+      e.g. a specified book or journal.
+    domain: publication
+    range: uriorcurie
+    values_from:
+      - NLMID
+      - issn
+      - isbn
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P1433
+
+  iso abbreviation:
+    is_a: node property
+    description: >-
+      Standard abbreviation for periodicals in the International Organization for Standardization (ISO) 4 system
+      See https://www.issn.org/services/online-services/access-to-the-ltwa/. If the 'published in' property is set,
+      then the iso abbreviation pertains to the broader publication context (the journal) within which the given
+      publication node is embedded, not the publication itself.
+    domain: publication
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P1160
+
+  authors:
+    is_a: node property
+    description: >-
+      connects an publication to the list of authors who contributed to the publication.
+      This property should be a comma-delimited list of author names. It is recommended that an author's name
+      be formatted as "surname, firstname initial.".   Note that this property is a node annotation expressing
+      the citation list of authorship which might typically otherwise be more completely documented in
+      biolink:PublicationToProviderAssociation defined edges which point to full details about an author
+      and possibly, some qualifiers which clarify the specific status of a given author in the publication.
+    multivalued: true
+    domain: publication
+    range: agent
+
+  volume:
+    is_a: node property
+    description: >-
+      volume of a book or music release in a collection/series or a published collection of journal issues in a serial publication
+    domain: publication
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P478
+
+  chapter:
+    is_a: node property
+    description: >-
+      chapter of a book
+    domain: book chapter
+    exact_mappings:
+      - WIKIDATA:Q1980247
+
+  issue:
+    is_a: node property
+    description: >-
+      issue of a newspaper, a scientific journal or magazine for reference purpose
+    domain: publication
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P433
+
+  pages:
+    is_a: node property
+    description: >-
+      page number of source referenced for statement or publication
+    domain: publication
+    multivalued: true
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P304
+
+  summary:
+    is_a: node property
+     # since 'abstract' is a linkML keyword denoting a non-instantiable class or slot,
+     # it is generally recommended that knowledge graphs use 'summary' instead to tag a Publication 'abstract'
+    aliases: ['abstract']
+    description: >-
+      executive  summary of a publication
+    domain: publication
+    exact_mappings:
+      - dct:abstract
+      - WIKIDATA:Q333291
+
+  keywords:
+    is_a: node property
+    description: >-
+      keywords tagging a publication
+    domain: publication
+    multivalued: true
+
+  mesh terms:
+    is_a: node property
+    description: >-
+      mesh terms tagging a publication
+    domain: publication
+    range: uriorcurie
+    values_from:
+      - MESH
+    multivalued: true
+    exact_mappings:
+      - dcid:MeSHTerm
+
+
+   ## -------------------
+   ## QUALIFIERS
+   ## -------------------
+
+  form or variant qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      A qualifier that composes with a core subject/object concept to define a specific type, variant,
+      alternative version of this concept. The composed concept remains a subtype or instance of the core concept.
+      For example, the qualifier ‘mutation’ combines with the core concept ‘Gene X’ to express the compose concept
+      ‘a mutation of Gene X’.
+    examples:
+      - value: mutation
+      - value: late stage
+      - value: severe
+      - value: transplant
+      - value: chemical analog
+    notes: >-
+      please see the ChemicalOrGeneOrGeneProductFormOrVariantEnum (below) for examples of 'form or variant qualifier'
+      terms in the gene->chemical association space. 
+      the qualifier ‘mutation’ combines with the core concept ‘Gene X’ to express the compose concept ‘Mutated forms of Gene X’.
+      the qualifier ‘late stage’ combines with a core concept of ‘Disease X’ to express the  more specific concept ‘Late Stage forms of Disease X’
+      the qualifier ‘recombinant’ combines with a core concept of ‘FLT1 Gene’ to express the composed concept ‘Recombinant forms of the FLT1 gene’
+      the qualifier ‘chemical analog’ combines with a core concept of ‘Ditiocarb’ to express the composed concept ‘analog forms of Ditiocarb’
+    in_subset:
+      - translator_minimal
+
+  aspect qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      Composes with the core concept to describe new concepts of a different ontological type. e.g. a process in which
+      the core concept participates, a function/activity/role held by the core concept, or a characteristic/quality that
+      inheres in the core concept.  The purpose of the aspect slot is to indicate what aspect is being affected in an 
+      'affects' association.
+    examples:
+      - value: stability
+      - value: abundance
+      - value: expression
+      - value: exposure
+    notes: >-
+      for good examples of aspects in the gene-> chemical space, please see the 
+      GeneOrGeneProductOrChemicalEntityAspectEnum (below) which lists many aspects that can be used to qualify 
+      the gene making the full subject a different ontological type.  
+      the qualifier ‘expression’ combines with a core concept of ‘Gene X’ to express the composed concept ‘expression of Gene X’ (Gene → Biological Process)
+      the qualifier ‘exposure’ combines with a core concept of ‘Chemical X’ to express the composed concept ‘exposure to Chemical X’ (Chemical → Exposure Process)
+      the qualifier ‘activity’ combines with a core concept of ‘PPARG’ to express the concept ‘activity of PPARG’ (Gene → function/activity)
+      the qualifier ‘emergency Department Visit’ combines with a core concept of ‘Disease X’ to express the concept ‘Emergency Department visits for Disease X’ (Disease → Clinical Event)
+      the qualifier ‘infection’ combines with a core concept of ‘Giardia’ to express the concept ‘Infection with Giardia’ (Taxon → Biological / Pathological Process)
+      the qualifier ‘severity’ combines with a core concept of ‘DILI’ to express the concept ‘the severity level of DILI’ (Disease → (intrinsic) Characteristic/Quality)
+      the qualifier ‘abundance’ combines with a core concept of ‘BRCA2’ to express the concept ‘abundance of BRCA2’ (Gene → (extrinsic) characteristic/quality)
+    in_subset:
+      - translator_minimal
+
+  derivative qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      A qualifier that composes with a core subject/object  concept to describe something that is derived from the
+      core concept.  For example, the qualifier ‘metabolite’ combines with a ‘Chemical X’ core concept to express
+      the composed concept ‘a metabolite of Chemical X’.
+    examples:
+      - value: metabolite
+    in_subset:
+      - translator_minimal
+
+  part qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      defines a specific part/component of the core concept (used in cases there this specific part has no IRI we can
+      use to directly represent it, e.g. 'ESR1 transcript' q: polyA tail).
+    examples:
+      - value: polyA tail
+      - value: upstream control region
+    in_subset:
+      - translator_minimal
+
+  context qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      Restricts the setting/context/location where the core concept (or qualified core concept) resides or occurs.
+    examples:
+      - value: cohort x (e.g. a specific population, referenced by an identifier)
+      - value: gut microbiome  # OHMI:0000020
+    in_subset:
+      - translator_minimal
+
+  direction qualifier:
+    is_a: qualifier
+    abstract: true
+    description: >-
+      Composes with the core concept (+ aspect if provided) to describe a change in its direction or degree.
+    notes: >-
+      the qualifier ‘increased’ combines with a core concept of ‘Gene X’ and an aspect of ‘expression’ to express the composed concept ‘increased expression of Gene X’   
+      the qualifier ‘decreased’ combines with a core concept of ‘Protein X’ and an aspect of ‘abundance’ to express the composed concept ‘decreased abundance of Protein X’
+    in_subset:
+      - translator_minimal
+
+  mapped predicate:
+    description: >-
+      The predicate that is being replaced by the fully qualified representation of predicate + subject and object 
+      qualifiers.  Only to be used in test data and mapping data to help with the transition to the fully qualified
+      predicate model. Not to be used in knowledge graphs.
+
+  predicate mappings:
+    description: >- 
+      A collection of relationships that are not used in biolink, but have biolink patterns that can 
+      be used to replace them.  This is a temporary slot to help with the transition to the fully qualified predicate
+      model in Biolink3.
+    multivalued: true
+    range: predicate mapping
+    inlined_as_list: true
+
+  exact matches:
+    description: >-
+      A list of terms from different schemas or terminology systems that have
+      an identical meaning. Such terms often describe the same concept from
+      different ontological perspectives.
+    multivalued: true
+
+  narrow matches:
+    description: >-
+      A list of terms from different schemas or terminology systems that have
+      a narrower meaning. Such terms often describe a more specific concept
+      from different ontological perspectives.
+    multivalued: true
+
+  broad matches:
+    description: >-
+      A list of terms from different schemas or terminology systems that have
+      a broader meaning. Such terms often describe a more general concept
+      from different ontological perspectives.
+    multivalued: true
+
+  subject aspect qualifier:
+    is_a: aspect qualifier
+    in_subset:
+      - translator_minimal
+
+  subject form or variant qualifier:
+    is_a: form or variant qualifier
+    in_subset:
+      - translator_minimal
+
+  subject part qualifier:
+    is_a: part qualifier
+    in_subset:
+      - translator_minimal
+
+  subject derivative qualifier:
+    is_a: derivative qualifier
+    in_subset:
+      - translator_minimal
+
+  subject context qualifier:
+    is_a: context qualifier
+    in_subset:
+      - translator_minimal
+
+  subject direction qualifier:
+    is_a: direction qualifier
+    range: DirectionQualifierEnum
+    in_subset:
+      - translator_minimal
+
+  object aspect qualifier:
+    is_a: aspect qualifier
+    in_subset:
+      - translator_minimal
+
+  object form or variant qualifier:
+    is_a: form or variant qualifier
+    in_subset:
+      - translator_minimal
+
+  object part qualifier:
+    is_a: part qualifier
+    in_subset:
+      - translator_minimal
+
+  object derivative qualifier:
+    is_a: derivative qualifier
+    in_subset:
+      - translator_minimal
+
+  object context qualifier:
+    is_a: context qualifier
+    in_subset:
+      - translator_minimal
+
+  object direction qualifier:
+    is_a: direction qualifier
+    range: DirectionQualifierEnum
+    in_subset:
+      - translator_minimal
+
+  qualified predicate:
+    is_a: qualifier
+    description: >-
+      Predicate to be used in an association when subject and object qualifiers are present and the full
+      reading of the statement requires a qualification to the predicate in use in order to refine or 
+      increase the specificity of the full statement reading.  This qualifier holds a relationship to be used instead of that 
+      expressed by the primary predicate, in a ‘full statement’ reading of the association, where qualifier-based 
+      semantics are included.  This is necessary only in cases where the primary predicate does not work in a 
+      full statement reading.
+    notes: >-
+      to express the statement that “Chemical X causes increased expression of Gene Y”, the core triple is read 
+      using the fields subject:ChemX, predicate:affects, object:GeneY . . . and the full statement is read using 
+      the fields subject:ChemX, qualified_predicate:causes, object:GeneY, object_aspect: expression, 
+      object_direction:increased. The predicate ‘affects’ is needed for the core triple reading, but does not make 
+      sense in the full statement reading  (because “Chemical X affects increased expression of Gene Y'' is not 
+      what we mean to say here: it causes increased expression of Gene Y)
+
+  qualifier:
+    is_a: association slot
+    description: >- 
+      grouping slot for all qualifiers on an edge.  useful for testing compliance with association classes
+    in_subset:
+      - translator_minimal
+
+  statement qualifier:
+    is_a: qualifier
+    description: >-
+    in_subset:
+      - translator_minimal
+
+  qualifiers:
+    deprecated: true
+    description: >-
+      connects an association to qualifiers that modify or
+      qualify the meaning of that association
+    local_names:
+      ga4gh: annotation qualifier
+    is_a: association slot
+    multivalued: true
+    range: ontology class
+
+  quantifier qualifier:
+    is_a: association slot
+    range: ontology class
+    description: >-
+      A measurable quantity for the object of the association
+    narrow_mappings:
+       # TODO: RTX contributed terms mapped here... May need review?
+      - LOINC:analyzes
+      - LOINC:measured_by
+      - LOINC:property_of
+      - SEMMEDDB:MEASURES
+      - UMLS:measures
+
+
+   ## --------------------
+   ## PREDICATES/RELATIONS
+   ## --------------------
+
+  related to:
+    description: >-
+      A relationship that is asserted between two named things
+    domain: named thing
+    range: named thing
+    multivalued: true
+    inherited: true
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - skos:relatedMatch
+      - UMLS:related_to
+    broad_mappings:
+      - owl:topObjectProperty
+    narrow_mappings:
+      - SEMMEDDB:ASSOCIATED_WITH
+      - SEMMEDDB:compared_with
+      - SEMMEDDB:higher_than
+      - SEMMEDDB:lower_than
+      - BFO:0000054
+      - UBERON_CORE:protects
+      - GOREL:0002005
+      - GOREL:0012006
+       # several of the following terms mapped here by RTX could merit upgrade to new Biolink terms
+      - BTO:related_to
+      - CHEBI:is_conjugate_acid_of
+      - CHEBI:is_conjugate_base_of
+      - CPT:has_add_on_code
+      - CPT:mapped_to
+      - EFO:0006351
+      - FMA:connected_to
+      - FMA:continuous_with
+      - FMA:homonym_of
+      - FMA:related_developmental_entity_of
+      - RO:0002093
+      - RO:0002092
+      - RO:0002084
+      - HCPCS:mapped_to
+       # RTX contributed terms, perhaps belong somewhere else with more precise semantics?
+      - HMDB:disease
+      - HMDB:has_protein_association
+      - IAO:0000136
+      - LOINC:has_answer
+      - LOINC:has_challenge
+      - LOINC:has_evaluation
+      - LOINC:mapped_to
+      - LOINC:mth_has_expanded_form
+      - MESH:RO
+      - MESH:has_mapping_qualifier
+      - MESH:mapped_to
+      - MONDO:disease_shares_features_of
+      - NCIT:disease_may_have_associated_disease
+      - NCIT:human_disease_maps_to_eo_disease
+      - NCIT:is_abnormal_cell_of_disease
+      - NCIT:is_related_to_endogenous_product
+      - UBERON_NONAMESPACE:connected_to
+      - UBERON_NONAMESPACE:innervated_by
+      - NBO-PROPERTY:is_about
+      - RO:0000053  # bearer_of
+      - PATO:reciprocal_of
+      - RO:0000052
+      - RO:0002001
+      - RO:0002002
+      - RO:0002003
+      - RO:0002008
+      - RO:0002134
+      - RO:0002150
+      - RO:0002159
+      - RO:0002176
+      - RO:0002177
+      - RO:0002178
+      - RO:0002179
+      - RO:0002314
+      - RO:0002322
+       # functionally related to
+      - RO:0002328
+      - RO:0002332
+      - RO:0002338
+      - RO:0002339
+      - RO:0002341
+      - RO:0002342
+      - RO:0002344
+      - RO:0002348
+      - RO:0002349
+      - RO:0002356
+      - RO:0002371
+      - RO:0002372
+      - RO:0002373
+      - RO:0002374
+      - RO:0002385
+      - RO:0002387
+      - RO:0002451
+      - RO:0002494
+      - RO:0002495
+      - RO:0002568
+      - RO:0002573
+      - RO:0004026
+      - RO:0004027
+      - RO:0009001
+      - RO:0009004
+      - RXNORM:has_form
+      - RXNORM:reformulated_to
+      - SNOMED:has_associated_morphology
+      - SNOMED:has_associated_procedure
+      - SNOMED:has_direct_morphology
+      - SNOMED:has_disposition
+      - SNOMED:has_indirect_morphology
+      - SNOMED:has_modification
+      - SNOMED:has_procedure_morphology
+      - SNOMED:has_specimen_source_morphology
+      - SNOMED:inheres_in
+      - SNOMED:is_interpreted_by
+      - SNOMED:relative_to_part_of
+      - UBERON:synapsed_by
+      - UMLS:RO
+      - UMLS:RQ
+      - UMLS:class_code_classified_by
+      - UMLS:exhibited_by
+      - UMLS:has_context_binding
+      - UMLS:has_form
+      - UMLS:has_mapping_qualifier
+      - UMLS:larger_than
+      - UMLS:mapped_to
+      - UMLS:owning_section_of
+
+  related to at concept level:
+    is_a: related to
+    description: >-
+      Represents a relationship held between terminology components that describe the conceptual model of a domain.
+    annotations:
+      canonical_predicate: true
+    symmetric: true
+
+  related to at instance level:
+    is_a: related to
+    description: >-
+      Represents a relationship held between two instances of a data classes.  Much like an assertion component,
+      in an ABox, these represent facts associated with the conceptual model.
+    annotations:
+      canonical_predicate: true
+    symmetric: true
+
+  associated with:
+    is_a: related to at instance level
+    description: >-
+      Expresses a relationship between two named things where the relationship is typically generated statistically
+      (though not in all cases), and is weaker than its child, 'correlated with', but stronger than its parent,
+      'related to'. This relationship holds between two concepts represented by variables for which a statistical 
+      dependence is demonstrated.  E.g. the statement “Atrial Fibrillation (Afib) is associated with Myocardial 
+      Infraction (MI)” asserts that having Afib is not statistically independent from whether a patient 
+      will also have MI. Note that in Translator associations, the subject and object concepts may map exactly to 
+      the statistical variables, or represent related entities for which the variables serve as proxies in an 
+      Association (e.g. diseases, chemical entities or processes).
+    annotations:
+      canonical_predicate: true
+    symmetric: true
+    domain: named thing
+    range: named thing
+    narrow_mappings:
+      - RO:0004029
+      - SNOMEDCT:47429007
+
+  
+
+  superclass of:
+    is_a: related to at concept level
+    description: >-
+      holds between two classes where the domain class is a super class of the range class
+    domain: ontology class
+    range: ontology class
+    multivalued: true
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - WIKIDATA:Q66088480
+      - CHEMBL.MECHANISM:superset_of
+      - GO:inverse_isa
+      - RXNORM:inverse_isa
+      - MESH:inverse_isa
+      - VANDF:inverse_isa
+    narrow_mappings:
+      - NCIT:cdrh_parent_of
+      - NCIT:ctcae_5_parent_of
+      - NCIT:subset_includes_concept
+      - OMIM:has_manifestation
+      - SNOMED:has_basic_dose_form
+      - UMLS:RB
+
+  subclass of:
+    is_a: related to at concept level
+    description: >-
+      holds between two classes where the domain class is a specialization of the range class
+    domain: ontology class
+    range: ontology class
+    multivalued: true
+    in_subset:
+      - translator_minimal
+    annotations:
+      canonical_predicate: true
+    close_mappings:
+       # RTX
+      - LOINC:class_of
+      - LOINC:has_class
+    exact_mappings:
+      - rdfs:subClassOf
+      - SEMMEDDB:ISA
+      - WIKIDATA_PROPERTY:P279
+      - CHEMBL.MECHANISM:subset_of
+      - GO:isa
+      - MESH:isa
+      - RXNORM:isa
+      - VANDF:isa
+    narrow_mappings:
+      - CHEBI:has_parent_hydride
+      - LOINC:has_archetype
+      - LOINC:has_parent_group
+      - LOINC:is_presence_guidance_for
+      - NCIT:gene_product_has_chemical_classification
+       # RTX mapped terms classes for biomarkers
+      - NCIT:R36
+      - NCIT:R42
+      - NCIT:A16
+      - NCIT:A11
+      - NCIT:A14
+      - NCIT:A3
+      - NDDF:has_dose_form
+      - RXNORM:has_dose_form
+      - RXNORM:has_doseformgroup
+      - SNOMED:entire_anatomy_structure_of
+      - SNOMED:has_dose_form
+       # RTX mapping
+      - rdfs:subPropertyOf
+
+  same as:
+    is_a: exact match
+    description: >-
+      holds between two entities that are considered equivalent to each other
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    close_mappings:
+       # identical class extension with identical sets of individuals
+      - owl:equivalentClass
+    exact_mappings:
+       # identical individual, or identical class concept/meaning
+      - owl:sameAs
+      - skos:exactMatch
+       # Semantic Medline definition: "comparative predicate" where the equivalence could simply be functional
+       # RTX suggests mapping this to proposed new "biolink:close_match" predicate instead
+       # - SEMMEDDB:same_as
+      - WIKIDATA_PROPERTY:P2888
+      - CHEMBL.MECHANISM:equivalent_to
+      - MONDO:equivalentTo
+    narrow_mappings:
+      - DRUGBANK:external-identifier
+
+  close match:
+    is_a: related to at concept level
+    description: >-
+      a list of terms from different schemas or terminology systems that have
+      a semantically similar but not strictly equivalent, broader, or narrower
+      meaning. Such terms often describe the same general concept from
+      different ontological perspectives (e.g. drug as a type of chemical
+      entity versus drug as a type of role borne by a chemical entity).
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - skos:closeMatch
+       # Semantic Medline definition: "comparative predicate" where the equivalence could simply be functional
+      - SEMMEDDB:same_as
+    narrow_mappings:
+      - CHEBI:is_enantiomer_of
+      - CHEBI:is_tautomer_of
+      - MEDDRA:classified_as
+      - oboInOwl:hasDbXref
+      - RXNORM:has_quantified_form
+      - UMLS:SY
+
+  exact match:
+    is_a: close match
+    description: >-
+      holds between two entities that have strictly equivalent
+      meanings, with a high degree of confidence
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - skos:exactMatch
+      - WIKIDATA:Q39893449
+      - WIKIDATA:P2888
+
+  broad match:
+    description: >-
+      a list of terms from different schemas or terminology systems
+      that have a broader, more general meaning. Broader terms are
+      typically shown as parents in a hierarchy or tree.
+    is_a: related to at concept level
+    in_subset:
+      - translator_minimal
+    annotations:
+      canonical_predicate: true
+      opposite_of: narrow match
+    exact_mappings:
+      - skos:broadMatch
+      - WIKIDATA:Q39894595
+
+  narrow match:
+    description: >-
+      a list of terms from different schemas or terminology systems
+      that have a narrower, more specific meaning. Narrower terms are
+      typically shown as children in a hierarchy or tree.
+    is_a: related to at concept level
+    inverse: broad match
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - skos:narrowMatch
+      - WIKIDATA:Q39893967
+    annotations:
+      opposite_of: broad match
+
+  member of:
+    description: >-
+      Defines a mereological relation between a item and a collection.
+    is_a: related to at concept level
+    inverse: has member
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - RO:0002350
+    close_mappings:
+      - skos:member
+
+  has member:
+    description: >-
+      Defines a mereological relation between a collection and an item.
+    is_a: related to at concept level
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - RO:0002351
+      - skos:member
+
+  opposite of:
+    description: >-
+      x is the opposite of y if there exists some distance metric M, and there exists
+      no z such as M(x,z) <= M(x,y) or M(y,z) <= M(y,x). (This description is from RO. Needs to be rephrased).
+    is_a: related to at instance level
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - RO:0002604
+    see_also:
+      - https://doi.org/10.1101/108977
+      - https://github.com/biolink/biolink-model/issues/657
+
+
+  associated with likelihood of:
+    is_a: associated with
+    description: >-
+      A a relationship that holds between two concepts represented by variables for which a statistical 
+      dependence is demonstrated, wherein the state or value of one variable predicts the future state 
+      or value of the other.  E.g. the statement “An Atrial Fibrillation (Afib) diagnosis is associated 
+      with likelihood of a Myocardial Infraction (MI) diagnosis” asserts that the state of having Afib 
+      is associated with an increased or decreased likelihood that a patient will later exhibit MI.
+    annotations:
+      canonical_predicate: true
+
+  likelihood associated with:
+    is_a: associated with
+    description: >-
+    inverse: associated with likelihood of
+
+  associated with increased likelihood of:
+    is_a: associated with likelihood of
+    description: >-
+      Expresses a relationship between two named things where the relationship is typically generated statistically
+      and the state or fact of something is more probable.
+    annotations:
+      canonical_predicate: true
+
+  increased likelihood associated with:
+    is_a: likelihood associated with
+    description: >-
+    inverse: associated with increased likelihood of
+
+  associated with decreased likelihood of:
+    is_a: associated with likelihood of
+    description: >-
+      Expresses a relationship between two named things where the relationship is typically generated statistically
+      and the state or fact of something is less probable.
+    annotations:
+      canonical_predicate: true
+
+  decreased likelihood associated with:
+    is_a: likelihood associated with
+    description: >-
+    inverse: associated with decreased likelihood of
+
+
+     ## Publication related predicates
+  mentions:
+    description: >-
+      refers to is a relation between one information content entity and the named thing
+      that it makes reference to.
+    is_a: related to at instance level
+    exact_mappings:
+      - IAO:0000142
+    narrow_mappings:
+      - SIO:000628
+
+  mentioned by:
+    description: >-
+      refers to is a relation between one named thing and the information content entity
+      that it makes reference to.
+    is_a: related to at instance level
+    inverse: mentions
+
+   ## Publication related predicates
+
+  contributor:
+    is_a: related to at instance level
+    domain: agent
+    range: information content entity
+    comments:
+      - This is a grouping for predicates relating entities to their associated contributors realizing them
+    abstract: true
+    exact_mappings:
+      - dct:contributor
+
+  has contributor:
+    inverse: contributor
+    is_a: related to at instance level
+    domain: information content entity
+    range: agent
+
+  provider:
+    is_a: contributor
+    description: >-
+      person, group, organization or project that provides a piece of information (e.g. a knowledge association).
+
+  has provider:
+    inverse: provider
+    is_a: has contributor
+    domain: information content entity
+    range: agent
+
+  publisher:
+    is_a: contributor
+    domain: agent
+    range: publication
+    description: >-
+      organization or person responsible for publishing books, periodicals, podcasts, games or software.
+      Note that in the case of publications which have a containing "published in" node property, the publisher
+      association may not be attached directly to the embedded child publication, but only made in between the
+      parent's publication node and the publisher agent of the encompassing publication
+      (e.g. only from the Journal referenced by the 'published_in' property of an journal article Publication node).
+    exact_mappings:
+      - dct:publisher
+      - WIKIDATA_PROPERTY:P123
+
+  has publisher:
+    is_a: has contributor
+    inverse: publisher
+    domain: publication
+    range: agent
+
+  editor:
+    is_a: contributor
+    domain: agent
+    range: publication
+    description: >-
+      editor of a compiled work such as a book or a periodical (newspaper or an academic journal).
+      Note that in the case of publications which have a containing "published in" node property, the editor
+      association may not be attached directly to the embedded child publication, but only made in between the
+      parent's publication node and the editorial agent of the encompassing publication
+      (e.g. only from the Book referenced by the 'published_in' property of a book chapter Publication node).
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P98
+
+  has editor:
+    inverse: editor
+    is_a: has contributor
+    domain: publication
+    range: agent
+
+  author:
+    is_a: contributor
+    domain: agent
+    range: publication
+    description: >-
+      an instance of one (co-)creator primarily responsible for a written work
+    exact_mappings:
+      - dct:creator
+      - WIKIDATA_PROPERTY:P50
+
+  has author:
+    inverse: author
+    is_a: has contributor
+    domain: publication
+    range: agent
+
+   ## end of Publication related predicates
+
+  contributes to:
+    is_a: related to at instance level
+    description: >-
+      holds between two entities where the occurrence, existence, or activity of one causes or contributes to the
+      occurrence or generation of the other
+    in_subset:
+      - translator_minimal
+    annotations:
+      canonical_predicate: true
+    close_mappings:
+       # RTX contributed mapping tagged as 'inverse' of this Biolink predicate
+      - IDO:0000664
+    exact_mappings:
+      - RO:0002326
+    narrow_mappings:
+      - CTD:marker_mechanism
+      - MONDO:predisposes_towards
+       # RTX mapped this to 'biolink:related_to' but this term seems a more precise mapping
+      - RO:0002255
+       # RTX term 'contributes to condition' mapped to 'biolink:causes' seems more suitable here
+      - RO:0003304
+
+  contribution from:
+    is_a: related to at instance level
+    in_subset:
+      - translator_minimal
+    inverse: contributes to
+
+  correlated with:
+    is_a: associated with
+    description: >-
+      A relationship that holds between two concepts represented by variables for which a statistical dependence is 
+      demonstrated using a correlation analysis method.
+    notes: >-
+      These concepts may map exactly to the statistical variables, or represent related entities for which the 
+      variables serve as proxies in an Association (e.g. diseases, chemical entities or processes).
+    domain: named thing
+    range: named thing
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - RO:0002610
+      - PATO:correlates_with
+
+  occurs together in literature with:
+    is_a: correlated with
+    description: >-
+      holds between two entities where their co-occurrence is correlated by counts of publications
+      in which both occur, using some threshold of occurrence as defined by the edge provider.
+    domain: named thing
+    range: named thing
+    in_subset: translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+
+  similar to:
+    is_a: related to at instance level
+    description: >-
+      holds between an entity and some other entity with similar features.
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - RO:HOM0000000
+      - SO:similar_to
+
+
+
+  model of:
+    is_a: related to at instance level
+    description: >-
+      holds between a thing and some other thing it approximates
+      for purposes of scientific study, in virtue of its exhibiting
+      similar features of the studied entity.
+    annotations:
+      canonical_predicate: true
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - RO:0003301
+    narrow_mappings:
+      - FOODON:00001301
+
+  models:
+    is_a: related to at instance level
+    inverse: model of
+
+  overlaps:
+    is_a: related to at instance level
+    description: >-
+      holds between entities that overlap in their extents (materials or processes)
+    in_subset:
+      - translator_minimal
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - RO:0002131
+    narrow_mappings:
+      - BSPO:0005001
+      - CHEMBL.MECHANISM:overlaps_with
+      - RO:0002100
+      - RO:0002102
+      - RO:0002433
+
+  has part:
+    is_a: overlaps
+    annotations:
+      canonical_predicate: true
+      opposite_of: lacks part
+    description: >-
+      holds between wholes and their parts (material entities or processes)
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - BFO:0000051
+       # term name seems to be 'realizes' but RTX maps this term here
+      - BFO:0000055
+      - WIKIDATA_PROPERTY:P527
+      - RO:0001019
+      - RXNORM:consists_of
+      - RXNORM:has_part
+    broad_mappings:
+       # To 'contain' is 'to have something inside or include something as a part'; slightly broader?
+      - RO:0001019
+      - FMA:contains
+      - RXNORM:contains
+    narrow_mappings:
+      - BFO:0000117
+       # RTX term originally mapped to 'biolink:coexists_with'?
+      - FMA:has_constitutional_part
+      - FMA:has_part
+       # Several of the following RTX terms were originally mapped as inverses to 'biolink:part_of'?
+      - FMA:has_member
+      - FOODON:00001563
+      - FOODON:00002420
+      - LOINC:has_component
+      - LOINC:has_member
+      - MEDDRA:has_member
+      - MONDO:disease_has_major_feature
+      - NCIT:complex_has_physical_part
+      - NDDF:has_ingredient
+      - PathWhiz:has_element_in_bound
+       # This RTX contributed term was tagged as 'biolink:has_gene_product' but seems more compositional in nature
+      - NCIT:R50
+      - PathWhiz:has_protein_in_complex
+      - RO:0002104
+      - RO:0002180
+      - RO:0002351
+      - RO:0002473
+      - RO:0002524
+      - RO:0002551
+      - RXNORM:has_ingredient
+      - SNOMED:has_component
+      - UMLS:has_component
+
+  part of:
+    is_a: overlaps
+    description: >-
+      holds between parts and wholes (material entities or processes)
+    in_subset:
+      - translator_minimal
+    inverse: has part
+    exact_mappings:
+      - BFO:0000050
+      - SEMMEDDB:PART_OF
+      - WIKIDATA_PROPERTY:P361
+      - FMA:part_of
+      - RXNORM:constitutes
+      - RXNORM:part_of
+    broad_mappings:
+       # To 'contain' is 'to have something inside or include something as a part'
+      - RO:0001018
+      - FMA:contained_in
+      - RXNORM:contained_in
+    narrow_mappings:
+      - BSPO:0001106
+      - BSPO:0001108
+      - BSPO:0001113
+      - BSPO:0001115
+      - UBERON_CORE:layer_part_of
+      - UBERON_CORE:subdivision_of
+      - UBERON_CORE:trunk_part_of
+      - CHEBI:is_substituent_group_from
+      - CPT:panel_element_of
+      - CPT:panel_element_of_possibly_included
+      - DRUGBANK:component_of
+      - FMA:constitutional_part_of
+      - FMA:member_of
+      - FMA:regional_part_of
+      - FMA:related_developmental_entity_of
+      - LOINC:component_of
+      - LOINC:has_supersystem
+      - LOINC:member_of
+      - LOINC:multipart_of
+      - MEDDRA:member_of
+      - MONDO:part_of_progression_of_disease
+      - NCIT:R82
+      - NCIT:R27
+      - NCIT:is_component_of_chemotherapy_regimen
+      - NDDF:ingredient_of
+      - RO:0002007
+      - RO:0002350
+      - RO:0002376
+      - RO:0002380
+      - RO:0002571
+      - RO:0002572
+      - RO:0002576
+      - RXNORM:ingredient_of
+      - RXNORM:ingredients_of
+      - RXNORM:precise_ingredient_of
+      - SNOMED:active_ingredient_of
+      - SNOMED:basis_of_strength_substance_of
+      - SNOMED:component_of
+      - SNOMED:direct_substance_of
+      - SNOMED:during
+      - SNOMED:focus_of
+      - SNOMED:has_dependent
+      - SNOMED:part_anatomy_structure_of
+      - SNOMED:precise_active_ingredient_of
+      - UBERON:subdivision_of
+      - UMLS:component_of
+      - UMLS:has_owning_affiliate
+      - UMLS:owning_subsection_of
+      - VANDF:ingredient_of
+
+  temporally related to:
+    is_a: related to at instance level
+    description: >-
+      holds between two entities with a temporal relationship
+    domain: occurrent
+    range: occurrent
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - SNOMED:temporally_related_to
+    narrow_mappings:
+       # The These RTX mappings are temporal in nature, but not with precedes ordering, so mapped here
+      - RO:0002082
+      - RO:0002083
+      - RO:0002092
+      - RO:0002093
+      - RO:0002223
+      - RO:0002224
+      - RO:0002229
+      - RO:0002230
+      - RO:0002488
+      - RO:0002489
+      - RO:0002492
+      - RO:0002493
+      - RO:0002496
+      - RO:0002497
+
+  precedes:
+    is_a: temporally related to
+    description: >-
+      holds between two processes, where one completes before the other begins
+    domain: occurrent
+    range: occurrent
+    annotations:
+      canonical_predicate: true
+    inverse: preceded by
+    in_subset:
+      - translator_minimal
+    close_mappings:
+       # the subject of these terms is a material entity, not a process,
+       # but affects a process which causes a second process to occur
+      - RO:0002263
+      - RO:0002264
+    exact_mappings:
+      - BFO:0000063
+      - SEMMEDDB:PRECEDES
+      - SNOMED:occurs_before
+    broad_mappings:
+       # the Wikidata definition is subtly broader, focusing on a series not strictly temporal in nature
+      - WIKIDATA_PROPERTY:P156
+    narrow_mappings:
+      - FMA:transforms_into
+      - RO:0002090
+      - RO:0002411
+      - RO:0002412
+
+  preceded by:
+    is_a: temporally related to
+    description: >-
+      holds between two processes, where the other is completed before the one begins
+    domain: occurrent
+    range: occurrent
+    inverse: precedes
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - BFO:0000062
+    broad_mappings:
+       # Contributed by RTX as inverse of 'precedes'. Seems more generic to just processes, so we tag it as 'broad'?
+      - GENEPIO:0001739
+    narrow_mappings:
+       # RTX contributed mapping was given as the inverse of 'biolink:precedes'
+      - FMA:transforms_from
+      - RO:0002087
+      - RO:0002285
+
+  related condition:
+    is_a: related to at instance level
+    symmetric: true
+    annotations:
+      canonical_predicate: true
+    exact_mappings:
+      - GENO:0000790
+
+  in taxon:
+    aliases: ['instance of', 'is organism source of gene product', 'organism has gene', 'gene found in organism', 'gene product has organism source']
+    is_a: related to at instance level
+    domain: thing with taxon
+    range: organism taxon
+    annotations:
+      canonical_predicate: true
+    description: >-
+      connects an entity to its taxonomic classification. Only certain kinds
+      of entities can be taxonomically classified; see 'thing with taxon'
+    in_subset:
+      - translator_minimal
+    exact_mappings:
+      - RO:0002162
+      - WIKIDATA_PROPERTY:P703
+    narrow_mappings:
+      - RO:0002160
+
+  in_taxon_label:
+    is_a: node property
+    domain: thing with taxon
+    range: label type
+    description: >-
+      The human readable scientific name for the taxon of the entity.
+    in_subset:
+      - translator_minimal
+    slot_uri: rdfs:label
+    exact_mappings:
+      - WIKIDATA_PROPERTY:P225
+    annotations:
+      denormalized: true
+
+  taxon of:
+    is_a: related to at instance level
+    inverse: in taxon
+    domain: organism taxon
+    range: thing with taxon
+
+
+   ## --------------------
+   ## ASSOCIATION SLOTS
+   ## --------------------
+
+  association slot:
+    abstract: true
+    domain: association
+    aliases: ['edge property', 'statement property', 'node qualifier', 'edge qualifier', 'statement qualifier']
+    description: >-
+      any slot that relates an association to another entity
+
+  original subject:
+    is_a: association slot
+    description: >-
+      used to hold the original subject of a relation (or predicate) that an external knowledge
+      source uses before transformation to match the biolink-model specification.
+
+  original object:
+    is_a: association slot
+    description: >-
+      used to hold the original object of a relation (or predicate) that an external knowledge
+      source uses before transformation to match the biolink-model specification.
+
+  original predicate:
+    aliases: ['original relation', 'relation']
+    is_a: association slot
+    description: >-
+      used to hold the original relation/predicate that an external knowledge
+      source uses before transformation to match the biolink-model specification.
+    id_prefixes:
+      - RO
+      - BSPO
+      - SIO
+    domain: association
+    range: uriorcurie
+
+  subject closure:
+    is_a: association slot
+    description: >-
+      Used to hold the subject closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    annotations:
+      denormalized: true
+     
+  object closure:
+    is_a: association slot
+    description: >-
+      Used to hold the object closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    examples:
+      - value: ["MONDO:0000167", "MONDO:0005395"]
+        description: >-
+          The object closure of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is the set of all
+          diseases that are ancestors of 'breast cancer' in the
+          MONDO ontology.  Note: typically the "subclass of" and "part of" 
+          relations are used to construct the closure, but other relations
+          may be used as well.
+    annotations:
+      denormalized: true
+
+  subject category:
+    is_a: association slot
+    description: >-
+      Used to hold the biolink class/category of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: false
+    domain: association
+    range: ontology class
+    examples:
+      - value: "biolink:Gene"
+        description: >-
+          The subject category of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is 'biolink:Gene'.
+    annotations:
+      denormalized: true
+
+  object category:
+    is_a: association slot
+    description: >-
+      Used to hold the biolink class/category of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: false
+    domain: association
+    range: ontology class
+    examples:
+      - value: "biolink:Disease"
+        description: >-
+            The object category of the association between the gene
+            'BRCA1' and the disease 'breast cancer' is 'biolink:Disease'.
+    annotations:
+      denormalized: true
+
+  subject category closure:
+    is_a: association slot
+    description: >-
+      Used to hold the subject category closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    range: ontology class
+    examples:
+      - value: ['biolink:Gene", "biolink:NamedThing']
+        description: >-
+          The subject category closure of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is the set of all
+          biolink classes that are ancestors of 'biolink:Gene' in the
+          biolink model.  Note: typically the "subclass of" and "part of" 
+          relations are used to construct the closure, but other relations
+          may be used as well.
+    annotations:
+      denormalized: true
+
+  object category closure:
+    is_a: association slot
+    description: >-
+      Used to hold the object category closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    range: ontology class
+    examples:
+      - value: ['biolink:Disease", "biolink:NamedThing']
+        description: >-
+          The object category closure of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is the set of all
+          biolink classes that are ancestors of 'biolink:Disease' in the
+          biolink model.  Note: typically the "subclass of" and "part of" 
+          relations are used to construct the closure, but other relations
+          may be used as well.
+    annotations:
+      denormalized: true
+
+  subject label closure:
+    is_a: association slot
+    description: >-
+      Used to hold the subject label closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    range: string
+    examples:
+      - value: ["BRACA1"]
+        description: >-
+          The subject label closure of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is the set of all
+          labels that are ancestors of 'BRCA1' in the
+          biolink model.
+    annotations:
+      denormalized: true
+
+  object label closure:
+    is_a: association slot
+    description: >-
+      Used to hold the object label closure of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: true
+    domain: association
+    range: string
+    examples:
+      - value: ["breast cancer", "cancer"]
+        description: >-
+          The object label closure of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is the set of all
+          labels that are ancestors of 'breast cancer' in the
+          biolink model.
+    annotations:
+      denormalized: true
+
+  subject namespace:
+    aliases: ["subject prefix"]
+    is_a: association slot
+    description: >-
+      Used to hold the subject namespace of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: false
+    domain: association
+    range: string
+    examples:
+      - value: "NCBIGene"
+        description: >-
+          The subject namespace of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is 'NCBIGene'.
+    annotations:
+      denormalized: true
+
+  object namespace:
+    aliases: ["object prefix"]
+    is_a: association slot
+    description: >-
+      Used to hold the object namespace of an association. This is a denormalized 
+      field used primarily in the SQL serialization of a knowledge graph via KGX.
+    multivalued: false
+    domain: association
+    range: string
+    examples:
+      - value: "MONDO"
+        description: >-
+          The object namespace of the association between the gene
+          'BRCA1' and the disease 'breast cancer' is 'MONDO'.
+    annotations:
+      denormalized: true
+
+  subject:
+    is_a: association slot
+    local_names:
+      ga4gh: annotation subject
+      neo4j: node with outgoing relationship
+    description: >-
+      connects an association to the subject of the association.
+      For example, in a gene-to-phenotype association, the gene is subject and phenotype is object.
+    required: true
+    domain: association
+    range: named thing
+    slot_uri: rdf:subject
+    exact_mappings:
+      - owl:annotatedSource
+      - OBAN:association_has_subject
+
+  object:
+    is_a: association slot
+    description: >-
+      connects an association to the object of the association.
+      For example, in a gene-to-phenotype association, the gene is subject and phenotype is object.
+    required: true
+    domain: association
+    range: named thing
+    local_names:
+      ga4gh: descriptor
+      neo4j: node with incoming relationship
+    slot_uri: rdf:object
+    exact_mappings:
+      - owl:annotatedTarget
+      - OBAN:association_has_object
+
+  predicate:
+    is_a: association slot
+    description: >-
+      A high-level grouping for the relationship type. AKA minimal predicate.
+      This is analogous to category for nodes.
+    domain: association
+    notes: >-
+      Has a value from the Biolink related_to hierarchy. In RDF,  this
+      corresponds to rdf:predicate and in Neo4j this corresponds to the
+      relationship type. The convention is for an edge label in snake_case
+      form. For example, biolink:related_to, biolink:causes, biolink:treats
+    range: predicate type
+    required: true
+    local_names:
+      ga4gh: annotation predicate
+      translator: predicate
+    slot_uri: rdf:predicate
+    exact_mappings:
+      - owl:annotatedProperty
+      - OBAN:association_has_predicate
+
+  relation:
+    deprecated: true
+
+  negated:
+    is_a: association slot
+    range: boolean
+    description: >-
+      if set to true, then the association is negated i.e. is not true
+
+  has confidence level:
+    is_a: association slot
+    range: confidence level
+    description: >-
+      connects an association to a qualitative term denoting the level of confidence
+
+  has evidence:
+    is_a: association slot
+    range: evidence type
+    description: >-
+      connects an association to an instance of supporting evidence
+    exact_mappings:
+      - RO:0002558
+    multivalued: true
+
+  has supporting study result:
+    is_a: association slot
+    description: >-
+      connects an association to an instance of supporting study result
+    
+  mechanism of action:
+    is_a: association slot
+    range: boolean
+    description: >-
+      a boolean flag to indicate if the edge is part of a path or subgraph of a knowledge graph that constitutes
+      the mechanism of action for a result.
+    exact_mappings:
+      - NCIT:C54680
+      - MI:2044
+      - LOINC:MTHU019741
+
+  knowledge source:
+    is_a: association slot
+    description: >-
+      An Information Resource from which the knowledge expressed in an Association was
+      retrieved, directly or indirectly. This can be any resource through which the
+      knowledge passed on its way to its currently serialized form. In practice,
+      implementers should use one of the more specific subtypes of this generic property.
+    range: information resource
+    close_mappings:
+      - pav:providedBy
+
+  provided by:
+    is_a: node property
+    description: >-
+      The value in this node property represents the knowledge provider that created or assembled the
+      node and all of its attributes.  Used internally to represent how a particular node made its way into a
+      knowledge provider or graph.
+    multivalued: true
+
+  primary knowledge source:
+    is_a: knowledge source
+    description: >-
+      The most upstream source of the knowledge expressed in an Association that an
+      implementer can identify.  Performing a rigorous analysis of upstream data providers is expected; every effort
+      is made to catalog the most upstream source of data in this property.  Only one data source should be declared
+      primary in any association.  "aggregator knowledge source" can be used to capture non-primary sources.
+    range: information resource
+    notes: >-
+      For example: a single ChemicalToGene Edge originally curated by ClinicalTrials.org, is aggregated by ChEMBL, then 
+      incorporated into the MolePro KP, then sent via TRAPI message to the ARAGORN ARA, and finally sent to 
+      the NCATS ARS. The retrieval path for this Edge is as follows: 
+      ARS--retrieved_from-->  ARAGORN  --retrieved_from-->   MolePro  --retrieved_from--> ChEMBL --retrieved_from-->  ClinicalTrials.gov
+      The "primary knowledge source" for this edge is "infores:clinical-trials-gov".  "infores:chembl" and "infores:molecular_data_provider"
+      are listed in the "aggregator knowledge source" property.
+    multivalued: false
+
+  aggregator knowledge source:
+    is_a: knowledge source
+    description: >-
+      An intermediate aggregator resource from which knowledge expressed in an Association was
+      retrieved downstream of the original source, on its path to its current serialized form.
+    range: information resource
+    multivalued: true
+    notes: >-
+      For example, in this Feature Variable Association Edge generated by the Exposure Agent’s ICEES KP, 
+      through statistical analysis of clinical and environmental data supplied by the UNC Clinical Data Warehouse, 
+      the Edge is passed to the Ranking Agent’s ARAGORN ARA, 
+      and then on to the ARS. The retrieval path for this Edge is as follows:
+      ARS--retrieved_from-->  ARAGORN  --retrieved_from-->   ICEES --supporting_data_from-->  UNC Data Warehouse
+      This example illustrates how to represent the source provenance of KP-generated knowledge, including the source of 
+      data from which the knowledge was derived.   
+      The "primary knowledge source" for this edge is "infores:icees-asthma". A "supporting data source" for this KP-
+      generated knowledge is "infores:unc-cdw-health."  The "aggregator knowledge source" for this data is "infores:aragorn-ara"
+
+  supporting data source:
+    is_a: association slot
+    description: >-
+      An Information Resource from which data was retrieved and subsequently used as
+      evidence to generate the knowledge expressed in an Association (e.g. through
+      computation on, reasoning or inference over the retrieved data).
+    range: information resource
+    multivalued: true
+    notes: >-
+      For example, in this Feature Variable Association Edge generated by the Exposure Agent’s ICEES KP, 
+      through statistical analysis of clinical and environmental data supplied by the UNC Clinical Data Warehouse, 
+      the Edge is passed to the Ranking Agent’s ARAGORN ARA, 
+      and then on to the ARS. The retrieval path for this Edge is as follows:
+      ARS--retrieved_from-->  ARAGORN  --retrieved_from-->   ICEES --supporting_data_from-->  UNC Data Warehouse
+      This example illustrates how to represent the source provenance of KP-generated knowledge, including the source of 
+      data from which the knowledge was derived.   
+      The "primary knowledge source" for this edge is "infores:icees-asthma". A "supporting data source" for this KP-
+      generated knowledge is "infores:unc-cdw-health."  The "aggregator knowledge source" for this data is "infores:aragorn-ara"
+
+  supporting data set:
+    is_a: association slot
+    description: >-
+      A set of data used as evidence to generate the knowledge expressed in an Association (e.g. through
+      computation on, reasoning or inference over the retrieved data).
+    range: information resource
+    multivalued: true
+
+  chi squared statistic:
+    is_a: association slot
+    range: float
+    description: >-
+      represents the chi-squared statistic computed from observations
+    exact_mappings:
+      - STATO:0000030
+
+  p value:
+    aliases: ['unadjusted p value']
+    is_a: association slot
+    range: float
+    description: >-
+      A quantitative confidence value that represents the probability of
+      obtaining a result at least as extreme as that actually obtained,
+      assuming that the actual value was the result of chance alone.
+    exact_mappings:
+      - OBI:0000175
+      - NCIT:C44185
+      - EDAM-DATA:1669
+
+  evidence count:
+    is_a: association slot
+    description: >-
+      The number of evidence instances that are connected to an association.
+    range: integer
+
+  concept count subject:
+    is_a: association slot
+    description: >-
+      The number of instances in a dataset/cohort whose records contain
+      the concept in the subject slot of an association.
+    range: integer
+    examples:
+      - value: 489
+
+  concept count object:
+    is_a: association slot
+    description: >-
+      The number of instances in a dataset/cohort whose records contain
+      the concept in the object slot of an association.
+    range: integer
+
+  concept pair count:
+    is_a: association slot
+    description: >-
+      The number of instances in a dataset/cohort whose records contain
+      both the subject and object concept of an association.
+    range: integer
+    examples:
+      - value: 1731
+
+  expected count:
+    is_a: association slot
+    description: >-
+      The expected (calculated) number of instances in a dataset/cohort whose records contain both the subject and 
+      object concept of an association if the subject and object concepts are independent.
+
+  relative frequency subject:
+    is_a: association slot
+    description: >-
+      The frequency at which subject and object concepts co-occur in 
+      records within a dataset/cohort, relative to the frequency at which the subject
+      concept appears in these same records.
+    range: float
+    examples:
+      - value: 0.01840490798
+
+  relative frequency object:
+    is_a: association slot
+    description: >-
+      The frequency at which subject and object concepts co-occur in 
+      records within a dataset/cohort, relative to the frequency at which the object
+      concept appears in these same records.
+    range: string
+
+  relative frequency subject confidence interval:
+    is_a: association slot
+    description: >-
+      The 99% confidence interval for the relative_frequency_subject calculation
+      (i.e. the range of values within which the true value has a 99% chance of falling)
+    range: string
+
+  relative frequency object confidence interval:
+    is_a: association slot
+    description: >-
+      The 99% confidence interval for the relative_frequency_object calculation
+      (i.e. the range of values within which the true value has a 99% chance of falling)
+    range: string
+
+  adjusted p value:
+    is_a: p value
+    description: >-
+      The adjusted p-value is the probability of obtaining test results
+      at least as extreme as the results actually observed, under the assumption that
+      the null hypothesis is correct, adjusted for multiple comparisons.  
+      P is always italicized and capitalized. The actual P value* should be expressed (P=. 04) 
+      rather than expressing a statement of inequality (P<. 05), unless P<.
+    range: float
+
+  bonferonni adjusted p value:
+    is_a: adjusted p value
+    description: >-
+      The Bonferroni correction is an adjustment made to P values when several dependent or independent 
+      statistical tests are being performed simultaneously on a single data set. To perform a Bonferroni 
+      correction, divide the critical P value (α) by the number of comparisons being made.  P is always italicized and 
+      capitalized. The actual P value* should be expressed (P=. 04) rather than expressing a statement of inequality 
+      (P<. 05), unless P<.
+    range: float
+    examples:
+      - value: 0.018
+
+  supporting text:
+    is_a: association slot
+    description: The segment of text from a document that supports the mined assertion.
+    multivalued: true
+    range: string
+    examples:
+      - value: The administration of 50g/ml bupivacaine promoted maximum breast cancer.
+
+  supporting documents:
+    deprecated: true
+    is_a: association slot
+    description: >-
+      One or more referenceable documents that report the statement expressed in an Association, or provide 
+      information used as evidence supporting this statement.
+    range: uriorcurie
+    multivalued: true
+    examples:
+      - value: PMID:12345678
+
+  subject location in text:
+    is_a: association slot
+    description: >-
+      Character offsets for the text span(s) in the supporting text corresponding
+      to the subject concept of the extracted assertion.
+    range: integer
+    examples:
+      - value: 15
+    multivalued: true
+
+  object location in text:
+    is_a: association slot
+    description: >-
+      Character offsets for the text span(s) in the supporting text corresponding
+      to the object concept of the extracted assertion
+    range: integer
+    examples:
+      - value: 15
+    multivalued: true
+
+  extraction confidence score:
+    is_a: association slot
+    description: >-
+      A quantitative confidence value that represents the probability of
+      obtaining a result at least as extreme as that actually obtained,
+      assuming that the actual value was the result of chance alone.
+    range: integer
+    examples:
+      - value: 15
+
+  supporting document type:
+    is_a: association slot
+    description: >-
+      The document type (e.g., Journal Article, Case Study, Preprint) for
+      the supporting document used in a Text Mining Result.
+    range: string
+    examples:
+      - value: Journal Article
+
+  supporting document year:
+    is_a: association slot
+    description: >-
+      The document year (typically the publication year) for the supporting
+      document used in a Text Mining Result.
+    range: integer
+    examples:
+      - value: 1999
+
+  supporting text section type:
+    is_a: association slot
+    description: >-
+      The section of the supporting text of a Text Mining Result within
+      the supporting document. This is in the form of the name of the document section
+      (e.g., Abstract, Introduction) that contains the supporting text.
+    range: string
+    examples:
+      - value: Introduction
+
+  ln ratio:
+    is_a: association slot
+    description: the natural log of the ratio of co-occurrence to expected
+    range: float
+    examples:
+      - value: 2.922827136
+
+  ln ratio confidence interval:
+    is_a: association slot
+    description: >-
+      The 99% confidence interval for the ln_ratio calculation
+      (i.e. the range of values within which the true value has a 99% chance of falling)
+    range: float
+    examples:
+      - value: 2.922827136
+
+  publications:
+    aliases: ['supporting publications', 'supporting documents']
+    description: >-
+      One or more publications that report the statement expressed in an 
+      Association, or provide information used as evidence supporting this statement.
+    comments: >-
+        The notion of a ‘Publication’ is considered broadly to include any 
+        document made available for public consumption. It covers journal issues, 
+        individual articles, and books - and also things like article pre-prints, 
+        white papers, patents, drug labels, web pages, protocol documents, etc. 
+    is_a: association slot
+    multivalued: true
+    range: publication
+
+
+  supporting study metadata:
+    is_a: association slot
+    description: >-
+      Information about a study used to generate information used as evidence to support the knowledge expressed in an 
+      Association. In practice, data creators should use one of the more specific subtypes of this property.
+    abstract: true
+
+  supporting study method type:
+    is_a: supporting study metadata
+    description: >-
+      A type of method that was applied in a study used to generate the information used as evidence (e.g. a type of 
+      experimental assay, or statistical calculation, or computational analysis).
+    range: uriorcurie
+
+  supporting study method description:
+    is_a: supporting study metadata
+    description: >-
+      A uri or curie pointing to information about the methodology used to generate data supporting an Association.
+    range: uriorcurie
+
+  supporting study size:
+    is_a: supporting study metadata
+    description: >-
+      The sample size used in a study that provided evidence for the association (e.g. 'n' of a cohort for a 
+      clinical study).
+    range: integer
+
+  supporting study cohort:
+    is_a: supporting study metadata
+    description: >-
+      A description of a study population/cohort that was interrogated to provide evidence for the association 
+      (e.g. the inclusion and exclusion criteria).
+    range: string
+
+  supporting study date range:
+    is_a: supporting study metadata
+    description: >-
+      The date range over which data was collected in a study that provided evidence for an Association.
+    range: string
+
+  supporting study context:
+    is_a: supporting study metadata
+    description: >-
+      A term or terms describing the experimental setting/context in which evidence supporting the Association was 
+      generated ('context' may be defined by many factors, including taxon, model system (e.g. cell line type), tissue 
+      type, disease, etc.).
+    range: string
+
+classes:
+  mapping collection:
+    description: >-
+      A collection of deprecated mappings.
+    abstract: true
+    slots:
+      - predicate mappings
+    tree_root: true
+
+  predicate mapping:
+    description: >-
+      A deprecated predicate mapping object contains the deprecated predicate and an example of the rewiring that should
+      be done to use a qualified statement in its place.
+    slots:
+      - mapped predicate
+      - subject aspect qualifier
+      - subject direction qualifier
+      - subject form or variant qualifier
+      - subject part qualifier
+      - subject derivative qualifier
+      - subject context qualifier
+      - predicate
+      - qualified predicate
+      - object aspect qualifier
+      - object direction qualifier
+      - object form or variant qualifier
+      - object part qualifier
+      - object derivative qualifier
+      - object context qualifier
+      #- causal mechanism qualifier
+      #- anatomical context qualifier
+      #- species context qualifier
+      - exact match
+      - narrow match
+      - broad match
+
+
+   ## ----------
+   ## ATTRIBUTES
+   ## ----------
+
+   ## Ontology Classes
+
+  ontology class:
+    mixin: true
+    slots:
+      - id
+    description: >-
+      a concept or class in an ontology, vocabulary or thesaurus. Note that nodes in
+      a biolink compatible KG can be considered both instances of biolink classes, and
+      OWL classes in their own right. In general you should not need to use this class directly.
+      Instead, use the appropriate biolink class. For example, for the GO concept of endocytosis (GO:0006897),
+      use bl:BiologicalProcess as the type.
+    exact_mappings:
+      - owl:Class
+      - schema:Class
+    comments:
+      - >-
+        This is modeled as a mixin. 'ontology class' should not be the primary type of a
+        node in the KG. Instead you should use an informative bioloink category, such as AnatomicalEntity
+        (for Uberon classes), ChemicalSubstance (for CHEBI or CHEMBL), etc
+      - >-
+        Note that formally this is a metaclass. Instances of this class are instances in the graph,
+        but can be the object of 'type' edges. For example, if we had a node in the graph representing
+        a specific brain of a specific patient (e.g brain001), this could have a category of bl:Sample,
+        and by typed more specifically with an ontology class UBERON:nnn, which has as category bl:AnatomicalEntity
+    see_also:
+      - https://github.com/biolink/biolink-model/issues/486
+    examples:
+      - value: UBERON:0000955
+        description: >-
+          the class 'brain' from the Uberon anatomy ontology
+    id_prefixes:
+      - MESH
+      - UMLS
+      - KEGG.BRITE  ## br/ko number
+  
+  annotation:
+    description: >-
+      Biolink Model root class for entity annotations.
+    abstract: true
+
+  quantity value:
+    is_a: annotation
+    description: >-
+      A value of an attribute that is quantitative and measurable,
+      expressed as a combination of a unit and a numeric value
+    slots:
+      - has unit
+      - has numeric value
+
+   # Alignment attempted of the biolink:Attribute model
+   # to the proposed TRAPI Release 1.1 Attribute schema, i.e.
+   #
+   # attribute_name: "assertionAuthoredBy",
+   # attribute_type: SEPIO:0000130,
+   # value: "ORCID:12345",
+   # value_type: "wd:Q51044",
+   # value_type_name: "ORCID ID"
+   # url: https://orcid.org/12345
+   # source: ORCID
+
+  attribute:
+    is_a: named thing
+    mixins:
+      - ontology class
+    description: >-
+      A property or characteristic of an entity.
+      For example, an apple may have properties such as color, shape, age, crispiness.
+      An environmental sample may have attributes such as depth, lat, long, material.
+    slots:
+      - name                    # 'attribute_name'
+      - has attribute type      # 'attribute_type'
+       # 'value', 'value_type', 'value_type_name'
+       # extracted from either of the next two slots
+      - has quantitative value
+      - has qualitative value
+      - iri                     # 'url'
+    slot_usage:
+      name:
+        description: >-
+          The human-readable 'attribute name' can be set to a string which reflects its context of
+          interpretation, e.g. SEPIO evidence/provenance/confidence annotation or it can default
+          to the name associated with the 'has attribute type' slot ontology term.
+    id_prefixes:
+      - EDAM-DATA
+      - EDAM-FORMAT
+      - EDAM-OPERATION
+      - EDAM-TOPIC
+    exact_mappings:
+      - SIO:000614
+    in_subset:
+      - samples
+
+  relationship quantifier:
+    mixin: true
+
+  sensitivity quantifier:
+    is_a: relationship quantifier
+    mixin: true
+
+  specificity quantifier:
+    is_a: relationship quantifier
+    mixin: true
+
+   ## ------
+   ## THINGS
+   ## ------
+
+  entity:
+    description: >-
+      Root Biolink Model class for all things and informational relationships, real or imagined.
+    abstract: true
+    slots:
+      - id
+      - iri
+      - category
+      - type    # rdf:type
+      - name
+      - description
+      - has attribute
+       # evidence code(s)?
+
+  named thing:
+    is_a: entity
+    description: "a databased entity or concept/class"
+    slots:
+      - provided by
+      - xref
+    slot_usage:
+      category:
+        required: true
+        pattern: '^biolink:[A-Z][A-Za-z]+$'
+    exact_mappings:
+      - BFO:0000001
+      - WIKIDATA:Q35120
+       # UMLS Semantic Group "Objects"
+      - UMLSSG:OBJC
+       # Entity
+      - STY:T071
+      - dcid:Thing
+
+  relationship type:
+    is_a: ontology class
+    description: >-
+      An OWL property used as an edge label
+
+  taxonomic rank:
+    description: >-
+      A descriptor for the rank within a taxonomic classification.
+      Example instance: TAXRANK:0000017 (kingdom)
+    is_a: ontology class
+    id_prefixes:
+      - TAXRANK
+    mappings:
+      - WIKIDATA:Q427626
+
+  organism taxon:
+    aliases: ['taxon', 'taxonomic classification']
+    description: >-
+      A classification of a set of organisms. Example instances:
+      NCBITaxon:9606 (Homo sapiens), NCBITaxon:2 (Bacteria).
+      Can also be used to represent strains or subspecies.
+    is_a: named thing
+    slot_usage:
+      has taxonomic rank:
+        range: taxonomic rank
+        multivalued: false
+        mappings:
+          - WIKIDATA:P105
+    values_from:
+      - NCBITaxon
+    exact_mappings:
+      - WIKIDATA:Q16521
+      - STY:T001
+      - bioschemas:Taxon
+    narrow_mappings:
+      - dcid:BiologicalSpecies
+    id_prefixes:
+      - NCBITaxon
+      - MESH
+      - UMLS
+    in_subset:
+      - model_organism_database
+  
+   ## Temporal Entities
+  
+  event:
+    is_a: named thing
+    description: >-
+      Something that happens at a given place and time.
+    exact_mappings:
+      - NCIT:C25499
+       # UMLS "Event"
+      - STY:T051
+
+   ## Administrative Entities
+
+  administrative entity:
+    is_a: named thing
+    abstract: true
+
+  study result:
+    abstract: true
+    description: >- 
+      A collection of data items from a study that are about a particular study subject or experimental unit (the 
+      'focus' of the Result) - optionally with context/provenance metadata that may be relevant to the interpretation
+      of this data as evidence.
+    notes:
+      The data/metadata included in a Study Result object are typically a subset of data from a larger study data set, 
+      that are selected by a curator because they may be useful as evidence for deriving knowledge about a specific 
+      focus of the study. The notion of a 'study' here is defined broadly to include any research activity at any 
+      scale that is aimed at generating knowledge or hypotheses. This may include a single assay or computational 
+      analyses, or a larger scale clinical trial or experimental research investigation.
+    is_a: information content entity
+
+  study:
+    description: a detailed investigation and/or analysis
+    is_a: activity
+    exact_mappings:
+      - NCIT:C63536
+    close_mappings:
+      - SIO:001066
+      - SEPIO:0000004
+    narrow_mappings:
+      - SIO:000994
+
+  study variable:
+    is_a: information content entity
+    description: a variable that is used as a measure in the investigation of a study
+    narrow_mappings:
+      - NCIT:C142192  # specifies clinical study
+    close_mappings:
+      - STATO:0000258
+      - SIO:000367
+
+  common data element:
+    is_a: information content entity
+    description: >- 
+      A Common Data Element (CDE) is a standardized, precisely defined question, paired with a set of allowable 
+      responses, used systematically across different sites, studies, or clinical trials to ensure consistent 
+      data collection. Multiple CDEs (from one or more Collections) can be curated into Forms. 
+      (https://cde.nlm.nih.gov/home)
+    close_mappings:
+      - NCIT:C19984
+
+   ## epc result sets
+  concept count analysis result:
+    is_a: study result
+    description: >-
+      A result of a concept count analysis.
+
+  observed expected frequency analysis result:
+    is_a: study result
+    description: >-
+      A result of a observed expected frequency analysis.
+
+  relative frequency analysis result:
+    is_a: study result
+    description: >-
+      A result of a relative frequency analysis.
+
+  text mining result:
+    is_a: study result
+    description: >-
+      A result of text mining.
+
+  chi squared analysis result:
+    is_a: study result
+    description: >-
+      A result of a chi squared analysis.
+
+  agent:
+    is_a: administrative entity
+    aliases: ['group']
+    description: >-
+      person, group, organization or project that provides
+      a piece of information (i.e. a knowledge association)
+    slots:
+      - affiliation
+      - address
+    exact_mappings:
+      - prov:Agent
+      - dct:Agent
+    narrow_mappings:
+       # Organization
+      - UMLSSG:ORGA
+      - STY:T092
+       # Health Care Related Organization
+      - STY:T093
+       # Professional Society
+      - STY:T094
+       # Self-help or Relief Organization
+      - STY:T095
+       # Group
+      - STY:T096
+    slot_usage:
+      id:
+        required: true
+        description: >-
+          Different classes of agents have distinct preferred identifiers.
+          For publishers, use the ISBN publisher code.
+          See https://grp.isbn-international.org/ for publisher code lookups.
+          For editors, authors and  individual providers, use the individual's
+          ORCID if available; Otherwise, a ScopusID, ResearchID or
+          Google Scholar ID ('GSID') may be used if the author ORCID is unknown.
+          Institutional agents could be identified by an
+          International Standard Name Identifier ('ISNI') code.
+        values_from:
+           # CURIE space for publishers
+          - isbn
+           # CURIE space for authors
+          - ORCID
+          - ScopusID
+          - ResearchID
+          - GSID
+           # Institutional agents
+          - isni
+      name:
+        description: >-
+          it is recommended that an author's 'name' property
+          be formatted as "surname, firstname initial."
+    id_prefixes:
+      - isbn
+      - ORCID
+      - ScopusID
+      - ResearchID
+      - GSID
+      - isni
+
+   ## General Information Entities
+
+  information content entity:
+    aliases: ['information', 'information artefact', 'information entity']
+    abstract: true
+    is_a: named thing
+    description: >-
+      a piece of information that typically describes
+      some topic of discourse or is used as support.
+    slots:
+      - license
+      - rights
+      - format
+      - creation date
+    id_prefixes:
+      - doi
+    exact_mappings:
+      - IAO:0000030
+    narrow_mappings:
+       # UMLS Semantic Group "Concepts & Ideas"
+      - UMLSSG:CONC
+       # Conceptual Entity
+      - STY:T077
+       # Idea or Concept
+      - STY:T078
+       # Temporal Concept
+      - STY:T079
+       # Qualitative Concept
+      - STY:T080
+       # Quantitative Concept
+      - STY:T081
+       # Spatial Concept
+      - STY:T082
+       # Regulation or Law
+      - STY:T089
+       # Group Attribute
+      - STY:T102
+       # Functional Concept
+      - STY:T169
+       # Language
+      - STY:T171
+       # Classification
+      - STY:T185
+
+  dataset:
+    description: >-
+      an item that refers to a collection of data from a data source.
+    is_a: information content entity
+    exact_mappings:
+      - IAO:0000100
+      - dctypes:Dataset
+      - schema:dataset
+      - dcid:Dataset
+
+  dataset distribution:
+    is_a: information content entity
+    description: >-
+      an item that holds distribution level information about a dataset.
+    slots:
+      - distribution download url
+    exact_mappings:
+      - dcat:Distribution
+
+  dataset version:
+    description: >-
+      an item that holds version level information about a dataset.
+    is_a: information content entity
+    slots:
+      - has dataset
+      - ingest date
+      - has distribution
+
+  dataset summary:
+    description: >-
+      an item that holds summary level information about a dataset.
+    is_a: information content entity
+    slots:
+      - source web page
+      - source logo
+
+  confidence level:
+    is_a: information content entity
+    description: >-
+      Level of confidence in a statement
+    values_from:
+      - cio
+    exact_mappings:
+      - CIO:0000028
+       # statement confidence
+      - SEPIO:0000187
+    close_mappings:
+       # assertion confidence levels
+      - SEPIO:0000167
+
+  evidence type:
+    is_a: information content entity
+    aliases: ['evidence code']
+    description: >-
+      Class of evidence that supports an association
+    values_from:
+      - eco
+    exact_mappings:
+      - ECO:0000000
+
+  information resource:
+    is_a: information content entity
+    aliases: ['knowledgebase']
+    description: >-
+      A database or knowledgebase and its supporting ecosystem of interfaces 
+      and services that deliver content to consumers (e.g. web portals, APIs, 
+      query endpoints, streaming services, data downloads, etc.).
+      A single Information Resource by this definition may span many different datasets or
+      databases, and include many access endpoints and user
+      interfaces. Information Resources include project-specific resources
+      such as a Translator Knowledge Provider, and community knowledgebases like ChemBL, OMIM, or DGIdb.
+    in_subset:
+      - translator_minimal
+
+
+   ## Publications
+
+   # TODO: to review additional ontology relating to Publications, such as http://www.sparontologies.net/ontologies
+  publication:
+    is_a: information content entity
+    description: >-
+      Any ‘published’ piece of information. Publications are considered broadly 
+      to include any document or document part made available in print or on the 
+      web - which may include scientific journal issues, individual articles, and 
+      books - as well as things like pre-prints, white papers, patents, drug 
+      labels, web pages, protocol documents,  and even a part of a publication if 
+      of significant knowledge scope (e.g. a figure, figure legend, or section 
+      highlighted by NLP). 
+    slots:
+      - authors
+      - pages
+      - summary
+      - keywords
+      - mesh terms
+      - xref
+     # In addition to embedded slots, instances of 'contributor association'
+     # may be used to more extensively document publisher, editor and author details
+    slot_usage:
+      id:
+        description: >-
+          Different kinds of publication subtypes will have different preferred
+          identifiers (curies when feasible). Precedence of identifiers for
+          scientific articles is as follows: PMID if available; DOI if not; actual
+          alternate CURIE otherwise. Enclosing publications (i.e. referenced by
+          'published in' node property) such as books and journals, should have
+          industry-standard identifier such as from ISBN and ISSN.
+      name:
+        description: >-
+          the 'title' of the publication is generally recorded in the 'name'
+          property (inherited from NamedThing). The field name 'title' is now also
+          tagged as an acceptable alias for the node property 'name' (just in case).
+      publication type:
+        required: true
+      pages:
+        multivalued: true
+        description: >-
+          When a 2-tuple of page numbers are provided, they represent
+          the start and end page of the publication within its parent publication context.
+          For books, this may be set to the total number of pages of the book.
+    exact_mappings:
+      - IAO:0000311
+    narrow_mappings:
+      - IAO:0000013
+       # UMLS Semantic Type "Intellectual Product"
+      - STY:T170
+    id_prefixes:
+      - NLMID
+    in_subset:
+      - model_organism_database
+
+  book:
+    is_a: publication
+    description: >-
+      This class may rarely be instantiated except if use cases
+      of a given knowledge graph support its utility.
+    slot_usage:
+      id:
+        required: true
+        description: >-
+          Books should have industry-standard identifier such as from ISBN.
+      type:
+        description: >-
+          Should generally be set to an ontology class defined term for 'book'.
+    id_prefixes:
+      - isbn
+      - NLMID
+    in_subset:
+      - model_organism_database
+
+  book chapter:
+    is_a: publication
+    slots:
+      - published in
+      - volume
+      - chapter
+    slot_usage:
+      published in:
+        required: true
+        description: >-
+          The enclosing parent book containing the chapter
+          should have industry-standard identifier from ISBN.
+    in_subset:
+      - model_organism_database
+
+  serial:
+    aliases: ['journal']
+    is_a: publication
+    description: >-
+      This class may rarely be instantiated except if use cases
+      of a given knowledge graph support its utility.
+    slots:
+      - iso abbreviation
+      - volume
+      - issue
+    slot_usage:
+      id:
+        required: true
+        description: >-
+          Serials (journals) should have industry-standard identifier such as from ISSN.
+      type:
+        description: >-
+          Should generally be set to an ontology class defined term for 'serial' or 'journal'.
+    id_prefixes:
+      - issn
+      - NLMID
+    in_subset:
+      - model_organism_database
+
+  article:
+    is_a: publication
+    description: >-
+      a piece of writing on a particular topic presented as a stand-alone 
+      section of a larger publication	  
+    slots:
+      - published in
+      - iso abbreviation
+      - volume
+      - issue
+    slot_usage:
+      published in:
+        required: true
+        description: >-
+          The enclosing parent serial containing the article should
+          have industry-standard identifier from ISSN.
+      iso abbreviation:
+        description: >-
+          Optional value, if used locally as a convenience, is set
+          to the iso abbreviation of the 'published in' parent.
+    exact_mappings:
+      - SIO:000154
+      - fabio:article
+    id_prefixes:
+       # By inheritance, a DOI may be used as a publication identifier; there may be other relevant namespaces
+      - PMID
+    in_subset:
+      - model_organism_database
+
+  journal article:
+    is_a: article
+    description: >-
+      an article, typically presenting results of research, that is published 
+      in an issue of a scientific journal.
+    exact_mappings:
+      - IAO:0000013
+      - fabio:JournalArticle
+    id_prefixes:
+      - PMID
+      - PMCID
+      - doi
+     
+  patent:
+    is_a: publication
+    description: >-
+      a legal document granted by a patent issuing authority which confers upon 
+      the patenter the sole right to make, use and sell an invention for a set
+      period of time. 
+    exact_mappings:
+      - SIO:000153
+      - IAO:0000313
+      - fabio:Patent
+
+  web page:
+    is_a: publication
+    description: >-
+      a document that is published according to World Wide Web standards, which 
+      may incorporate text, graphics, sound, and/or other features.
+    exact_mappings:
+      - SIO:000302
+      - NCIT-OBO:C142749
+      - fabio:WebPage
+      
+  preprint publication:
+    is_a: publication
+    description: >-
+      a document reresenting an early version of an author's original scholarly work, 
+      such as a research paper or a review, prior to formal peer review and publication 
+      in a peer-reviewed scholarly or scientific journal.
+    exact_mappings:
+      - EFO:0010558
+      - fabio:Preprint
+
+  drug label:
+    is_a: publication
+    description: >-
+      a document accompanying a drug or its container that provides written, printed or
+      graphic information about the drug, including drug contents, specific instructions 
+      or warnings for administration, storage and disposal instructions, etc. 
+    broad_mappings:
+      - NCIT-OBO:C41203
+
+  retrieval source:
+    is_a: information content entity
+    description: >-
+      Provides information about how a particular InformationResource
+      served as a source from which knowledge expressed in an Edge, or
+      data used to generate this knowledge, was retrieved.
+    slots:
+      - resource id
+      - resource role
+      - upstream resource ids
+      - xref
+    slot_usage:
+      resource id:
+        required: true
+        description: >-
+          The InformationResource that served as a source for the
+          knowledge expressed in an Edge, or data used to generate this knowledge.
+      resource role:
+        required: true
+        description: >-
+            The role of the InformationResource in the retrieval of the
+            knowledge expressed in an Edge, or data used to generate this knowledge.
+      upstream resource ids:
+        description: >-
+          The InformationResources that served as a source for the
+          InformationResource that served as a source for the knowledge
+          expressed in an Edge, or data used to generate this knowledge.
+
+   ## Top Level Abstractions of Material & Process Entities
+
+  physical essence or occurrent:
+    description: >-
+      Either a physical or processual entity.
+    mixin: true
+
+  physical essence:
+    description: >-
+      Semantic mixin concept.  Pertains to entities that have
+      physical properties such as mass, volume, or charge.
+    is_a: physical essence or occurrent
+    mixin: true
+
+  physical entity:
+    is_a: named thing
+    mixins:
+      - physical essence
+    description: >-
+      An entity that has material reality (a.k.a. physical essence).
+    exact_mappings:
+       # Physical Object
+      - STY:T072
+    narrow_mappings:
+       # Manufactured Object
+      - STY:T073
+
+  occurrent:
+    description: >-
+      A processual entity.
+     # biolink:Occurrent is most consistently used as a mixin thus it should
+     # be declared as such and cannot inherit from the non-mixin biolink:NamedThing
+    is_a: physical essence or occurrent
+    mixin: true
+    exact_mappings:
+      - BFO:0000003
+
+  activity and behavior:
+    is_a: occurrent
+    mixin: true
+    description: >-
+      Activity or behavior of any independent integral living,
+      organization or mechanical actor in the world
+    exact_mappings:
+       # Activities & Behaviors
+      - UMLSSG:ACTI
+
+  activity:
+    is_a: named thing
+    mixins:
+      - activity and behavior
+    description: >-
+      An activity is something that occurs over a period of time and acts upon
+      or with entities; it may include consuming, processing, transforming,
+      modifying, relocating, using, or generating entities.
+    exact_mappings:
+      - prov:Activity
+      - NCIT:C43431
+       # Activity
+      - STY:T052
+    narrow_mappings:
+       # Daily or Recreational Activity
+      - STY:T056
+       # Occupational Activity
+      - STY:T057
+       # Governmental or Regulatory Activity
+      - STY:T064
+       # Machine Activity
+      - STY:T066
+       # Research Activity
+      - STY:T062
+       # Educational Activity
+      - STY:T065
+       # Health Care Activity
+      - STY:T058
+
+  procedure:
+    is_a: named thing
+    mixins:
+      - activity and behavior
+    description: >-
+      A series of actions conducted in a certain order or manner
+    exact_mappings:
+       # Procedures
+      - UMLSSG:PROC
+      - dcid:MedicalProcedure
+    narrow_mappings:
+       # Laboratory Procedure
+      - STY:T059
+       # Diagnostic Procedure
+      - STY:T060
+       # Therapeutic or Preventive Procedure
+      - STY:T061
+       # Molecular Biology Research Technique
+      - STY:T063
+    id_prefixes:
+      - CPT
+
+  phenomenon:
+    is_a: named thing
+    mixins:
+      - occurrent
+    description: >-
+      a fact or situation that is observed to exist or happen,
+      especially one whose cause or explanation is in question
+    broad_mappings:
+       # the inclusion of 'process' in the definition of these
+       # terms broadens them, relative to 'phenomenon'
+       # Phenomenon or Process
+      - STY:T067
+       # Human-caused Phenomenon or Process
+      - STY:T068
+       # Natural Phenomenon or Process
+      - STY:T070
+    exact_mappings:
+       # Phenomena
+      - UMLSSG:PHEN
+    narrow_mappings:
+       # Laboratory or Test Result
+      - STY:T034
+       # Biologic Function
+      - STY:T038
+       # Environmental Effect of Humans
+      - STY:T069
+
+  device:
+    is_a: named thing
+    description: >-
+      A thing made or adapted for a particular purpose, especially
+      a piece of mechanical or electronic equipment
+    narrow_mappings:
+      # Devices
+      - UMLSSG:DEVI
+      # Medical Device
+      - STY:T074
+      # Research Device
+      - STY:T075
+      # Drug Delivery Device
+      - STY:T203
+      # Biomedical or Dental Material
+      - STY:T122
+
+
+   ## Scientific Studies
+
+  subject of investigation:
+    mixin: true
+    description: >-
+      An entity that has the role of being studied in an investigation, study, or experiment
+
+
+     ## Biological Sciences
+
+  thing with taxon:
+    mixin: true
+    description: >-
+      A mixin that can be used on any entity that can be taxonomically classified.
+      This includes individual organisms; genes, their products and other molecular
+      entities; body parts; biological processes
+    slots:
+      - in taxon
+
+  biological entity:
+    is_a: named thing
+    aliases: ['bioentity']
+    abstract: true
+    mixins:
+      - thing with taxon
+    narrow_mappings:
+      - WIKIDATA:Q28845870
+       # UMLS Semantic Type "Experimental Model of Disease"
+      - STY:T050
+       # SIO term is 'biological entity' but less inclusive than the Biolink scope
+      - SIO:010046
+      - STY:T129  # (imft, full name: Immunologic Factor
+
+
+    ## Biological Entities
+  
+  organismal entity:
+    description: >-
+      A named entity that is either a part of an organism, a whole organism,
+      population or clade of organisms, excluding chemical entities
+    abstract: true
+    is_a: biological entity
+    mixins:
+      - subject of investigation
+    slot_usage:
+      has attribute:
+        description: >-
+          may often be an organism attribute
+    exact_mappings:
+      - WIKIDATA:Q7239
+        # UMLS Semantic Group "Living Beings"
+        # Several of the associated semantic types here are probably not
+      # that relevant to the Biolink world, but we keep them here for now.
+      - UMLSSG:LIVB
+      - CARO:0001010
+    narrow_mappings:
+      - STY:T008  # animal
+
+  bacterium:
+    is_a: organismal entity
+    description: >-
+      A member of a group of unicellular microorganisms lacking a nuclear membrane,
+      that reproduce by binary fission and are often motile.
+    exact_mappings:
+      - NCBITaxon:1869227
+      - STY:T007  # Bacterium
+
+  virus:
+    is_a: organismal entity
+    mixins:
+      - subject of investigation
+    description: >-
+      A virus is a microorganism that replicates itself as a microRNA
+      and infects the host cell.
+    exact_mappings:
+      - NCBITaxon:10239
+      - STY:T005  # Virus
+
+  cellular organism:
+    is_a: organismal entity
+    mixins:
+      - subject of investigation
+    description: >-
+    exact_mappings:
+      - NCBITaxon:131567
+
+  fungus:
+    is_a: cellular organism
+    description: >-
+      A kingdom of eukaryotic, heterotrophic organisms that live as saprobes or parasites, 
+      including mushrooms, yeasts, smuts, molds, etc. They reproduce either sexually or
+      asexually, and have life cycles that range from simple to complex. Filamentous 
+      fungi refer to those that grow as multicellular colonies (mushrooms and molds).
+    exact_mappings:
+      - STY:T004
+      - NCIT:C14209
+      - FOODON:03411261
+    narrow_mappings:
+      - FOODON:03315605  # fungus (edible)
+      - NCBITaxon:1670606  # fungus metagenome
+
+
+  disease or phenotypic feature:
+    aliases: ['phenome']
+    is_a: biological entity
+    description: >-
+      Either one of a disease or an individual phenotypic feature.
+      Some knowledge resources such as Monarch treat these as
+      distinct, others such as MESH conflate.  Please see definitions of phenotypic feature and disease in this model
+      for their independent descriptions.  This class is helpful to enforce domains and ranges  
+      that may involve either a disease or a phenotypic feature.
+    union_of:
+      - disease
+      - phenotypic feature
+    narrow_mappings:
+      # UMLS Semantic Type "Finding" - more specialized use of 'disease or phenotypic feature'
+      - STY:T033
+
+  disease:
+    aliases: ['condition', 'disorder', 'medical condition']
+    description: >-
+      A disorder of structure or function, especially one that produces specific 
+      signs, phenotypes or symptoms or that affects a specific location and is not simply a 
+      direct result of physical injury.  A disposition to undergo pathological processes that exists in an 
+      organism because of one or more disorders in that organism.
+    is_a: disease or phenotypic feature
+    exact_mappings:
+      - MONDO:0000001
+      - DOID:4
+      - NCIT:C2991
+      - WIKIDATA:Q12136
+      - SIO:010299
+       # UMLS Semantic Group "Disorders"
+      - UMLSSG:DISO
+       # Disease or Syndrome
+      - STY:T047
+      - dcid:Disease
+    narrow_mappings:
+       # Congenital Abnormality
+      - STY:T019
+       # Acquired Abnormality
+      - STY:T020
+       # Mental or Behavioral Dysfunction
+      - STY:T048
+       # Cell or Molecular Dysfunction
+      - STY:T049
+       # Anatomical Abnormality
+      - STY:T190
+       # Neoplastic Process
+      - STY:T191
+       # disease susceptibility
+      - MONDO:0042489
+    id_prefixes:
+      - MONDO
+      - DOID
+      - OMIM
+      - OMIM.PS
+      - orphanet
+      - EFO
+      - UMLS
+      - MESH
+      - MEDDRA
+      - NCIT
+      - SNOMEDCT
+      - medgen
+      - ICD10
+      - ICD9
+      - KEGG.DISEASE  ## H number
+      - HP
+      - MP
+      - PHARMGKB.DISEASE
+    in_subset:
+      - model_organism_database
+      - translator_minimal
+
+  phenotypic feature:
+    aliases: ['sign', 'symptom', 'phenotype', 'trait', 'endophenotype']
+    is_a: disease or phenotypic feature
+    description: >-
+      A combination of entity and quality that makes up a phenotyping statement. An observable characteristic of an 
+      individual resulting from the interaction of its genotype with its molecular and physical environment.
+    examples:
+      - value: MP:0001262
+        description: decreased body weight
+    exact_mappings:
+      - UPHENO:0001001
+      - SIO:010056
+      - WIKIDATA:Q104053
+      - UMLS:C4021819
+      - NCIT:C16977
+      - SNOMEDCT:8116006  # documented as phenotypic finding and phenotype, also referred to as "SCTID:8116006" at SNOMEDCT
+      - MESH:D010641  # phenotype
+    narrow_mappings:
+      - STY:T184  # Sign or Symptom
+      - WIKIDATA:Q169872  # Sign or Symptom
+       # presentation of a disease in clinical medicine
+      - WIKIDATA:Q25203551
+      - ZP:00000000  # zebrafish phenotype
+      - FBcv:0001347  # fly phenotype
+      - HP:0000118  # human phenotype
+      - MP:0000001  # mouse phenotype
+      - WBPhenotype:0000886  # worm phenotype
+      - XPO:00000000  # frog phenotype
+      - FYPO:0000001  # fission yeast phenotype
+      - APO:0000017  # phenotype
+      - TO:0000387  # more narrowly defined here for plants; our definition conflates trait and phenotype.
+    broad_mappings:
+      - BFO:0000019  # quality
+      - PATO:0000001  # quality
+    id_prefixes:
+      - HP
+      - EFO  # covered by BFO quality mapping
+      - NCIT
+      - UMLS
+      - MEDDRA  # can not find a mapping
+      - MP
+      - ZP
+      - UPHENO
+      - APO
+      - FBcv
+      - WBPhenotype
+      - SNOMEDCT
+      - MESH
+      - XPO
+      - FYPO
+      - TO
+    in_subset:
+      - model_organism_database
+
+
+
+   ## ------------
+   ## ASSOCIATIONS
+   ## ------------
+
+  association:
+    is_a: entity
+    description: >-
+      A typed association between two entities, supported by evidence
+    comments:
+      - This is roughly the model used by biolink and ontobio at the moment
+    slots:
+      - subject
+      - predicate
+      - object
+      - negated
+      - qualifiers
+      - publications
+      - has evidence
+      - knowledge source
+      - primary knowledge source
+      - aggregator knowledge source
+      - timepoint
+      - original subject
+      - original predicate
+      - original object
+       # denormalized fields
+      - subject category
+      - object category
+      - subject closure
+      - object closure
+      - subject category closure
+      - object category closure
+      - subject namespace
+      - object namespace
+      - subject label closure
+      - object label closure
+      - retrieval source ids
+    slot_usage:
+      type:
+        description: rdf:type of biolink:Association should be fixed at rdf:Statement
+      category:
+        range: category type
+        required: false
+    exact_mappings:
+      - OBAN:association
+      - rdf:Statement
+      - owl:Axiom
+
+  contributor association:
+    is_a: association
+    defining_slots:
+      - subject
+      - predicate
+      - object
+    description: >-
+      Any association between an entity (such as a publication)
+      and various agents that contribute to its realisation
+    slot_usage:
+      subject:
+        range: information content entity
+        description: >-
+          information content entity which an agent has helped realise
+      predicate:
+        subproperty_of: contributor
+        description: >-
+          generally one of the predicate values 'provider', 'publisher', 'editor' or 'author'
+      object:
+        range: agent
+        description: >-
+          agent helping to realise the given entity (e.g. such as a publication)
+      qualifiers:
+        description: >-
+          this field can be used to annotate special characteristics of an
+          agent relationship, such as the fact that a given author agent of
+          a publication is the 'corresponding author'
+
+  information content entity to named thing association:
+    description: >-
+      association between a named thing and a information content entity where the specific context
+      of the relationship between that named thing and the publication is unknown. For
+      example, model organisms databases often capture the knowledge that a gene is found in a
+      journal article, but not specifically the context in which that gene was documented in the article.
+      In these cases, this association with the accompanying predicate 'mentions' could be used.
+      Conversely, for more specific associations (like 'gene to disease association', the publication should
+      be captured as an edge property).
+    is_a: association
+    defining_slots:
+      - subject
+      - object
+    slot_usage:
+      subject:
+        domain: publication
+      object:
+        range: named thing
+      predicate:
+        subproperty_of: mentions
+    in_subset:
+      - model_organism_database
+
+
+enums:
+
+
+  ResourceRoleEnum:
+    description: >-
+      The role played by the information reource in serving as a
+      source for an edge in a TRAPI message. Note that a given Edge should have one
+      and only one 'primary' source, and may have any number of
+      'aggregator' or 'supporting data' sources.  This enumeration
+      is found in Biolink Model, but is repeated here for convenience.
+    permissible_values:
+      "primary_knowledge_source":
+      "aggregator_knowledge_source":
+      "supporting_data_source":
+    in_subset:
+      - translator_minimal
+
+  DirectionQualifierEnum:
+    permissible_values:
+      increased:
+      upregulated:
+        is_a: increased
+        close_mappings:
+          - RO:0002336
+        exact_mappings:
+          - RO:0002213
+        narrow_mappings:
+          - RO:0004032
+          - RO:0004034
+          - RO:0002629
+      decreased:
+      downregulated:
+        is_a: decreased
+        exact_mappings:
+          - RO:0004035
+          - RO:0002212
+        close_mappings:  # This RTX contributed term is tagged as an inverse of this Biolink predicate
+          - RO:0002335
+        broad_mappings:  # This term is slightly broader in that it includes that A acts within B as well
+          - RO:0004033
+  
+  ReactionSideEnum:
+    permissible_values:
+      left:
+      right:
