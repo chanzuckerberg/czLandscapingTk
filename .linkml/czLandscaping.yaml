@@ -32,7 +32,7 @@ slots:
 
   orcid:
     description: >-
-      An ORCID for an entity. This is determined by the id using expansion rules.
+      An ORCID for an entity. 
     id_prefixes:
       - ORCID
 
