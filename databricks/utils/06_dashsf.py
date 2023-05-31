@@ -79,7 +79,7 @@ from nbdev import *
 
 # COMMAND ----------
 
-#|export
+#| export
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -94,7 +94,7 @@ import re
 
 # COMMAND ----------
 
-#|export
+#| export
 
 class Snowflake():
   '''

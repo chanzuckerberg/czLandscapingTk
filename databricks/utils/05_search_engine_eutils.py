@@ -410,6 +410,8 @@ class EuroPMCQuery():
 
     def run_empc_query(self, q, page_size=1000, timeout=60, extra_columns=[]):
         EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize='+str(page_size)+'&synonym=TRUE'
+        if len(extra_columns)>0:
+            EMPC_API_URL += '&resultType=core'
         url = EMPC_API_URL + '&query=' + q
         r = requests.get(url, timeout=timeout)
         data = json.loads(r.text)
