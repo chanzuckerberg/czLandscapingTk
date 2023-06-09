@@ -135,64 +135,6 @@ class DashboardDb:
     sdf = spark.sql(sql)
     return sdf.toPandas()
 
-  def upload_df(self, df2, table_name):
-    spark.sql('USE '+self.catalog+'.'+self.database+';')
-    df3 = df2.replace({r'\s+$': '', r'^\s+': ''}, regex=True).replace(r'\n',  ' ', regex=True)
-    df3.to_csv(self.loc+'/'+table_name+'.tsv', index=False, header=True, sep='\t')
-    spark.sql('DROP TABLE IF EXISTS '+table_name+';')
-    cols = [re.sub(' ','_',c).lower() for c in df3.columns if c is not None]
-    cols = [c+' INT AUTOINCREMENT' if c=='ID' else c+' STRING' for c in cols]
-    spark.sql('CREATE TABLE '+table_name+'('+', '.join(cols)+');')
-    print(self.loc +'/'+table_name+'.tsv')
-    loc2 = re.sub('/dbfs/','/',self.loc)
-    spark.sql("copy into "+table_name+" from \'"+loc2+"/"+table_name+".tsv\' FILEFORMAT=CSV FORMAT_OPTIONS ('sep'= '\t', 'header' = 'true')")
-    os.unlink(self.loc +'/'+table_name+'.tsv')
-        
-  '''def build_core_tables_from_pmids(self, cs=None):
-    if cs is None: 
-      cs = self.get_cursor()
-    print('PAPER_NOTES')
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "PAPER_NOTES")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_PAPER_NOTES))
-    print('PAPER_OPEN_ACCESS')
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "PAPER_OPEN_ACCESS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_PAPER_OPEN_ACCESS))
-    print('COLLABORATIONS')
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "COLLABORATIONS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_COLLABORATIONS))
-    print('ALL KNOWN AUTHOR LOCATIONS')
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "AUTHOR_LOCATION")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_AUTHOR_LOCATION))
-    print('CITATION COUNTS')
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CITATION_COUNTS")
-    cs.execute(re.sub('PREFIX_', self.prefix, czLandscapingTk.dashdbQueries.BUILD_DASHBOARD_CITATION_COUNTS))
-
-    
-  def drop_database(self, cs=None):
-    if cs is None: 
-      cs = self.get_cursor()
-    cs.execute("BEGIN")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "AUTHOR_LOCATION")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CITATION_COUNTS")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "COLLABORATIONS")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "PAPER_NOTES")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS")
-    cs.execute("DROP TABLE IF EXISTS " + self.prefix + "CORPUS_TO_PAPER")
-    cs.execute("COMMIT")
-
-def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
-    cs = self.get_cursor()
-    cs.execute("BEGIN")
-    if delete_db:
-      self.drop_database(cs=cs)
-    self.upload_wb(query_df, 'CORPUS', cs=cs)
-    self.upload_wb(corpus_paper_df, 'CORPUS_TO_PAPER', cs=cs)
-    if subquery_df is not None:
-      self.upload_wb(subquery_df, 'SUB_CORPUS', cs=cs)
-    self.build_core_tables_from_pmids(cs=cs)
-    cs.execute('COMMIT')
-  '''
-
   def execute_pubmed_queries_on_sections(self, qt, qt2, api_key='', sections=['tiab']):
     corpus_paper_list = []
     errors = []
@@ -261,3 +203,85 @@ def build_db(self, query_df, corpus_paper_df, subquery_df=None,):
         (is_ok, t2, c) = pmq._check_query_phrase(t)
         check_table[t] = (is_ok, c)
     return check_table
+
+def run_empc_query(self, q, page_size=1000, timeout=60, extra_columns=[]):
+    EMPC_API_URL = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=JSON&pageSize='+str(page_size)+'&synonym=TRUE'
+    if len(extra_columns)>0:
+        EMPC_API_URL += '&resultType=core'
+    url = EMPC_API_URL + '&query=' + q
+    r = requests.get(url, timeout=timeout)
+    data = json.loads(r.text)
+    numFound = data['hitCount']
+    print(url + ', ' + str(numFound) + ' European PMC PAPERS FOUND')
+    results = []
+    cursorMark = '*'
+    for i in tqdm(range(0, numFound, page_size)):
+        url = EMPC_API_URL + '&cursorMark=' + cursorMark + '&query=' + q
+        r = requests.get(url, timeout=timeout)
+        data = json.loads(r.text)
+        #print(data)
+        if data.get('nextCursorMark'):
+            cursorMark = data['nextCursorMark']
+            for d in data['resultList']['result']:
+                results.append(d)
+    results = sorted(list(results), key = lambda x: x['id'])
+    print(' Returning '+str(len(results)))
+    return (numFound, results)
+
+def execute_epmc_queries(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
+    corpus_paper_list = []
+    epmc_errors = []
+    (corpus_ids, epmc_queries) = qt.generate_queries(QueryType.epmc, sections=sections)
+    if qt2:
+        (subset_ids, epmc_subset_queries) = qt2.generate_queries(QueryType.epmc, sections=sections)
+    else: 
+        (subset_ids, epmc_subset_queries) = ([0],[''])
+    for (i, q) in zip(corpus_ids, epmc_queries):
+        for (j, sq) in zip(subset_ids, epmc_subset_queries):
+            query = q
+            if query is None or query=='nan' or len(query)==0: 
+                continue
+            if len(sq) > 0:
+                query = '(%s) AND (%s)'%(q, sq) 
+            #try:
+            numFound, tuples = run_empc_query(query)
+            for tup in tqdm(tuples):
+                corpus_paper_list.append(tup)
+            #except Exception as e:
+            #  epmc_errors.append((i, j, query, e))
+    return corpus_paper_list, epmc_errors
+    
+def airtable_to_corpus_dataframes(self, at_key, at_sheets):
+    atu = AirtableUtils(at_key)
+    df1 = pd.DataFrame()
+    results = 
+    for sn, id_col, query_col, col_map, sections in at_sheets: 
+        cdf = atu.read_airtable(at_file, sn)
+        cdf = cdf.rename(columns={id_col:'ID', query_col:'QUERY'})
+        cdf = cdf.rename(columns=col_map)
+        cdf = cdf.fillna('').rename(
+            columns={c:re.sub('[\s\(\)]','_', c.upper()) for c in cdf.columns}
+            )
+        cdf.QUERY = [re.sub('^http[s]*://', '', r.QUERY) if r.QUERY[:4]=='http' else r.QUERY 
+                     for i,r in cdf.iterrows()] 
+        cdf.QUERY = [re.sub('/$', '', r.QUERY.strip())  
+                        for i,r in cdf.iterrows()] 
+        df1 = pd.concat([df1, cdf])
+        qt = QueryTranslator(cdf, 'ID', 'QUERY')
+        paper_list, errors = self.execute_epmc_queries(qt, None, sections=sections)
+        l = [tup if re.match('\d',tup[0]) else (-1, tup[1], tup[2], tup[3], tup[4]) for tup in paper_list]
+        cols = ['ID_PAPER', 'ID_CORPUS', 'SOURCE', 'SUBSET_CODE', 'DOI']
+        cols.extend(extra_columns)
+        temp = pd.DataFrame(paper_list, columns=cols)
+        df2 = pd.concat([df2, temp.drop(columns=extra_columns).drop_duplicates()])
+        if len(extra_columns)>0:
+            df3 = pd.concat([df3, temp.drop(columns=['ID_CORPUS','SOURCE', 'SUBSET_CODE']).drop_duplicates()])
+
+    df1.fillna('', inplace=True)
+    df1 = df1.reset_index(drop=True)
+    df2.fillna('', inplace=True)
+    df2 = df2.reset_index(drop=True)
+    df3.fillna('', inplace=True)
+    df3 = df3.reset_index(drop=True).drop_duplicates()
+    
+    return df1, df2, df3
