@@ -5,8 +5,8 @@ import re
 import ipynb_convert_databricks as conv
 
 def main():
-   for root, dirs, files in os.walk("databricks/", topdown=False):
-      new_root = re.sub('^databricks/', 'nbdev/databricks/', root)
+   for root, dirs, files in os.walk("databricks/nbdev/", topdown=False):
+      new_root = re.sub('^databricks/nbdev/', 'nbdev/', root)
       if os.path.exists(new_root) is False:
          os.makedirs(new_root)
       for name in files:

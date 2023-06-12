@@ -3,7 +3,7 @@ project:
 
 website:
   title: "czLandscapingTk"
-  site-url: "https://GullyBurns.github.io/czLandscapingTk/"
-  description: "Public facing expression of libraries for Landscaping analysis within the Chan Zuckerberg Initiative"
+  site-url: "https://chanzuckerberg.github.io/czLandscapingTk/"
+  description: "Execute scientific landscaping analysis based on integrated data from multiple sources of scientific knowledge"
   repo-branch: master
-  repo-url: "https://github.com/GullyBurns/czLandscapingTk/tree/master/"
+  repo-url: "https://github.com/chanzuckerberg/czLandscapingTk"

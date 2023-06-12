@@ -1,5 +1,5 @@
 .jekyll-cache/
-Gemfile.lock  
+Gemfile.lock
 *.bak
 .gitattributes
 .last_checked
@@ -146,3 +146,4 @@ checklink/cookies.txt
 _docs/
 _proc/
 .databricks
+/.luarc.json

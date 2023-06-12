@@ -2,20 +2,15 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - section: utils
-        contents:
-          - utils/00_databricks_utils.ipynb
-          - utils/01_general_utils.ipynb
-          - utils/02_query_translator.ipynb
-          - utils/03_airtable_utils.ipynb
-          - utils/04_curated_data_utils.ipynb
-          - utils/05_search_engine_eutils.ipynb
-          - utils/06_dashdb.ipynb
-          - utils/06_dashsf.ipynb
-          - utils/06a_dashdb_queries.ipynb
-          - utils/07_networkxS2AG.ipynb
-          - utils/08_bioLinkUtils.ipynb
-          - utils/09_centaurLabUtils.ipynb
-          - utils/10_hfDocClassify.ipynb
-          - utils/11_disease_research_state_model.ipynb
-          - utils/12_knowledge_corpora.ipynb
+      - 02_query_translator.ipynb
+      - 03_airtable_utils.ipynb
+      - 04_curated_data_utils.ipynb
+      - 05_search_engine_eutils.ipynb
+      - 06_dashdb.ipynb
+      - 07_networkxS2AG.ipynb
+      - 08_bioLinkUtils.ipynb
+      - 09_centaurLabUtils.ipynb
+      - 10_hfDocClassify.ipynb
+      - 11_disease_research_state_model.ipynb
+      - 12_knowledge_corpora.ipynb
+      - 13_berttopic.ipynb

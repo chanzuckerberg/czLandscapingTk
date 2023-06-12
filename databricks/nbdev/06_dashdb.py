@@ -254,7 +254,6 @@ def execute_epmc_queries(self, qt, qt2, sections=['paper_title', 'ABSTRACT']):
 def airtable_to_corpus_dataframes(self, at_key, at_sheets):
     atu = AirtableUtils(at_key)
     df1 = pd.DataFrame()
-    results = 
     for sn, id_col, query_col, col_map, sections in at_sheets: 
         cdf = atu.read_airtable(at_file, sn)
         cdf = cdf.rename(columns={id_col:'ID', query_col:'QUERY'})

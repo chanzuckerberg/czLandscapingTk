@@ -117,8 +117,8 @@ def convert_databricks_nb(in_file, out_file):
       with open(in_file, 'r') as f:
          py_str = f.read()
 
-      # We only convert nbdev notebooks - must have
-      nbdev_pattern = "from nbdev import \*"
+      # We only convert nbdev notebooks - must have a default export defined
+      nbdev_pattern = "#| default_exp*"
       if re.search(nbdev_pattern, py_str):
          print('Converting ' + in_file)
          notebook = py2nb(py_str)
