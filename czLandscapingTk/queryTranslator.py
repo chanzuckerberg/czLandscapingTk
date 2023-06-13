@@ -30,7 +30,8 @@ class QueryType(Enum):
 
 class QueryTranslator(): 
   def __init__(self, df, id_col, query_col):
-    """This class allows a user to define a set of logical boolean queries in a Pandas dataframe and then convert them to a variety of formats for use on various online API systems.<BR>
+    """This class allows a user to define a set of logical boolean queries in a Pandas dataframe 
+    and then convert them to a variety of formats for use on various online API systems.<BR>
     Functionality includes:
       * Specify queries as a table using '|' and '&' symbols
       * generate search strings to be used in API calls for PMID, SOLR, and European PMC

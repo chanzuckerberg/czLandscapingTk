@@ -18,7 +18,7 @@ responsibly disclose by contacting us at <security@chanzuckerberg.com>.
 
 ## Install
 
-`pip install git+https://github.com/GullyBurns/czLandscapingTk.git`
+`pip install git+https://github.com/chanzuckerberg/czLandscapingTk.git`
 
 ## How this system was built:
 

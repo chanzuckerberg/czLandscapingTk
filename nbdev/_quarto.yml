@@ -3,7 +3,8 @@ project:
 
 format:
   html:
-    theme: simplex
+    theme: journal
+    css: styles.css
     toc: true
 
 website:

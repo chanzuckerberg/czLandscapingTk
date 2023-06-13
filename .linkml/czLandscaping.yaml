@@ -205,7 +205,7 @@ classes:
 
   Work:
     description:
-      A published  
+      A published work 
     is_a: InformationContentEntity
     slots:
       - id
