@@ -1,0 +1,135 @@
+[
+  {
+    "objectID": "airtable_utils.html",
+    "href": "airtable_utils.html",
+    "title": "Airtable Utilities",
+    "section": "",
+    "text": "source\n\nAirtableUtils\n\n AirtableUtils (api_key)\n\nThis class permits simple input / output from airtable\nAttributes: * api_key: an API key obtained from Airtable to provide authentication"
+  },
+  {
+    "objectID": "knowledge_corpora.html",
+    "href": "knowledge_corpora.html",
+    "title": "Knowledge Corpora",
+    "section": "",
+    "text": "source\n\nKnowledgeCorpus\n\n KnowledgeCorpus (dashdb, corpus_id, name, mondo_id, event_lines=[])\n\nThis class provides a model of the state of research over a particular knowledge corpus. It makes use of functionality within the CZ Landscaping Toolkit to search online sources, classify the data it finds, and run analyses over that data.\nThis version is based on some assumptions: (1) data pertaining to a single disease is linked to an entry in a PREFIX_CORPUS table; (2) papers for that disease/corpus are indexed in the PREFIX_CORPUS_PAPERS table; (3) Codes denoting the type of each paper are stored in the PREFIX_DRSM table.\nNote that the time series computation is also simply the difference between matched curves over the publishing timeframe of the analysis.\n\nsource\n\n\nKnowledgeCorpusCollection\n\n KnowledgeCorpusCollection (study_name, corpora_df,\n                            name_col='CORPUS_NAME',\n                            mondo_col='MONDO_CURI', query_col='QUERY')\n\nThis class generates and supports analysis the research landscape over a collection of knowledge corpora."
+  },
+  {
+    "objectID": "query_translator.html",
+    "href": "query_translator.html",
+    "title": "Query Translation Tools",
+    "section": "",
+    "text": "source\n\nQueryTranslator\n\n QueryTranslator (df, id_col, query_col)\n\nThis class allows a user to define a set of logical boolean queries in a Pandas dataframe and then convert them to a variety of formats for use on various online API systems.\nFunctionality includes:\n\nSpecify queries as a table using ‘|’ and ‘&’ symbols\ngenerate search strings to be used in API calls for PMID, SOLR, and European PMC\n\nAttributes:\n\ndf: The dataframe of queries to be processed (note: this dataframe must have a numerical ID column specified)\nquery_col: the column in the data frame where the query is specified\n\n\nsource\n\n\nQueryType\n\n QueryType (value, names=None, module=None, qualname=None, type=None,\n            start=1)\n\nAn enumeration that permits conversion of complex boolean queries to different formats"
+  },
+  {
+    "objectID": "dashdb.html",
+    "href": "dashdb.html",
+    "title": "Building databases of published works",
+    "section": "",
+    "text": "Tabulate queries in a spreadsheet and generate a database based on the data from those queries.\nExample: Define a dataframe with an id column and a query column (expressing a search query in Boolean Logic):\n\n\n\n\n\n\n\n\n\nID\nDISEASE NAME\nMONDO_ID\nQUERY\n\n\n\n\n1\nAdult Polyglucosan Body Disease\nMONDO:0009897\nadult polyglucosan body disease | adult polyglucosan body neuropathy\n\n\n2\nAGAT deficiency\nMONDO:0012996\n“GATM deficiency” | “AGAT deficiency” | “arginine:glycine amidinotransferase deficiency” | “L-arginine:glycine amidinotransferase deficiency”\n\n\n3\nGuanidinoacetate methyltransferase deficiency\nMONDO:0012999\n“guanidinoacetate methyltransferase deficiency” | “GAMT deficiency”\n\n\n4\nCLOVES Syndrome\nMONDO:0013038\n“CLOVES syndrome | (congenital lipomatous overgrowth) & (vascular malformation epidermal) & (nevi-spinal) & syndrome | (congenital lipomatous overgrowth) & (vascular malformations) & (Epidermal nevi) & ((skeletal|spinal) & abnormalities) | CLOVE syndrome | (congenital lipomatous overgrowth) & (vascular malformation) & (epidermal nevi)\n\n\n\n\nsource\n\nDashboardDb\n\n DashboardDb (catalog, database, loc)\n\nThis class permits the construction of a database of resources generated from combining a list of queries with a list of subqueries on multiple online repositories.\nFunctionality includes:\n\nDefine a spreadsheet with a column of queries expressed in boolean logic\nOptional: Define a secondary spreadsheet with a column of subqueries expressed in boolean logic\nIterate over different sources (Pubmed + European Pubmed) to execute all combinations of queries and subqueries\nStore extended records for all papers - including full text where available from CZI’s internal data repo."
+  },
+  {
+    "objectID": "networkxs2ag.html",
+    "href": "networkxs2ag.html",
+    "title": "Key Opinion Leader Analysis",
+    "section": "",
+    "text": "source\n\nNetworkxS2AG\n\n NetworkxS2AG (x_api_key)\n\nThis class permits the construction of a local NetworkX graph that copies the basic organization of S2AG data.\nFunctionality includes:\n\nquery all papers, references, and cited papers of a single individual\nbuild an author-to-author citation graph\nrun eigenfactor analysis over the author graph\n\nAttributes:\n\nx_api_key: an API key obtained from Semantic Scholar (https://www.semanticscholar.org/product/api)\nauthor_stem_url, paper_stem_url: urls for API endpoints in S2AG\nfeatures: a regular expression expressed as a string to provide a simple filter for papers in the graph [preliminary]\ng: the networkx graph representing the citation / authorship network\nadded_papers: papers that have had all citations and references added to graph"
+  },
+  {
+    "objectID": "berttopic.html",
+    "href": "berttopic.html",
+    "title": "Topic Analysis of Scientific Sentences",
+    "section": "",
+    "text": "source\n\nSentenceClusterAnalysis\n\n SentenceClusterAnalysis ()\n\nTopic-based analysis functions for a corpus made up of sentences. The goal is to use discourse models (BACKGROUND, OBJECTIVES, METHODS, RESULTS, CONCLUSIONS) to filter each set and then look for semantic patterns / clusters in each subtype to drive analysis.\n\nsource\n\n\nDiscourseType\n\n DiscourseType (value, names=None, module=None, qualname=None, type=None,\n                start=1)\n\nSimple enumeration of different discourse types\n\nBACKGROUND = 0\nOBJECTIVE = 1\nMETHODS = 2\nRESULTS = 2\nCONCLUSIONS = 2\n\n\nsource\n\n\nload_from_file\n\n load_from_file (fpath)\n\nSimple pickle function to load SentenceClusterAnalysis objects.\n\nsource\n\n\nsave_to_file\n\n save_to_file (obj, fpath)\n\nSimple pickle function to save SentenceClusterAnalysis objects."
+  },
+  {
+    "objectID": "hfdocclassify.html",
+    "href": "hfdocclassify.html",
+    "title": "Document Classification",
+    "section": "",
+    "text": "This library contains a single utility class and several functions to make it easy to run a simple document classifier for scientific papers.\nAn example code run through (that leverages the ‘Disease Research State Model’, see https://github.com/chanzuckerberg/DRSM-corpus) is as follows:\n# DRSM BASIC TRAINING ANALYSIS  \nimport datasets\nfrom czLandscapingTk.docClassify import HF_trainer_wrapper,run_HF_trainer_expt,run_HF_trainer_kfold_crossvalidation,get_folds_from_dataframe\nimport pandas as pd\n\ncolumn_names =['ID_PAPER', 'Labeling_State', 'Comments', 'Explanation', 'Correct_Label', 'Agreement', 'TRIMMED_TEXT']\ntext_columns = ['TRIMMED_TEXT']\nlabel_column = 'Correct_Label'\ndrsm_categories = ['characteristics or disease pathology',\n               'therapeutics in the clinic', \n               'disease mechanism', \n               'patient-based therapeutics', \n               'other',\n               'irrelevant']\n\n# Load data into a dataframe\n# see https://github.com/chanzuckerberg/DRSM-corpus/blob/main/v1/drsm_corpus_v1.tsv\nml_df =  pd.read_csv('/path/to/train/test/data.csv')\ncolumn_names =['Origin', 'Labeling_State', 'Correct_Label', 'Agreement', 'Title', 'Abstract']\ntext_columns = ['Title', 'Abstract']\nlabel_column = 'Correct_Label'\ncategories = sorted(ml_df[label_column].unique())\nfolds = get_folds_from_dataframe(ml_df, 'Origin', 'Correct_Label', 8)\n\n# set up training / validation / test split\ntrain_test_valid = ds_temp['train'].train_test_split(0.1)\ntest_valid = train_test_valid['test'].train_test_split(0.5)\n\n#  load the data into a DatasetDict \ndrsm_ds = datasets.DatasetDict({\n     'train': train_test_valid['train'],\n     'test': test_valid['test'],\n     'valid': test_valid['train']})\n \n\nrun_name = 'drsm_experiment_pubmed_bert'\nmodel_input = 'microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract'\nmodel_path = '/path/to/model/single_pubmedbert_model'\nlog_path = '/path/to/logs/single_pubmedbert_model'\nepochs = 6\n\ndf_results = run_HF_trainer_kfold_crossvalidation(folds, text_columns, label_column, categories, \n                                                     run_name, model_input, model_path, log_path, epochs,\n                                                     batch_size=8, problem_type='single_label_classification')\n                                                     \ndf_results.to_csv(model_path+'/run_data.tsv', sep='\\t')\ndf_results # to see the results\n\nsource\n\nHF_trainer_wrapper\n\n HF_trainer_wrapper (run_name, model_ckpt, output_dir, logging_dir,\n                     epochs, max_length=512,\n                     problem_type='multi_label_classification')\n\nClass to provide support training and experimenting with simple document classification tools under either a multi-label or multi-class classification paradigm.\n\nsource\n\n\nrun_HF_trainer_expt\n\n run_HF_trainer_expt (ds, text_columns, label_column, categories,\n                      run_name, model_input, model_path, log_path, epochs,\n                      batch_size=8, transfer_model=None,\n                      problem_type='multi_label_classification',\n                      run_training=True, freeze_layers=False)\n\nRuns an single experiment with\n\nsource\n\n\nget_folds_from_dataframe\n\n get_folds_from_dataframe (df, id_col, category_col, n_splits)\n\n\nsource\n\n\nrun_HF_trainer_kfold_crossvalidation\n\n run_HF_trainer_kfold_crossvalidation (folds, text_columns, label_column,\n                                       categories, run_name, model_input,\n                                       model_path, log_path, epochs,\n                                       batch_size=8, problem_type='multi_l\n                                       abel_classification',\n                                       transfer_model=None,\n                                       run_training=True,\n                                       freeze_layers=False)"
+  },
+  {
+    "objectID": "curated_data_utils.html",
+    "href": "curated_data_utils.html",
+    "title": "Curated Dataframe Utilities",
+    "section": "",
+    "text": "source\n\nCuratedDataUtils\n\n CuratedDataUtils (df, doc_id_column, category_column, curator_column,\n                   distance_function=&lt;function masi_distance&gt;)\n\nThis class permits generation of curation statistics and merged, consensus dataframes.\nAttributes: * df: The dataframe being processed * doc_id_column: column in df that denotes document IDs * category_column: column in df that denotes curated category * curator_column: column in df that denotes curator * docs: the document set being curated * curators: the curators performing the curation work * categories: the set of categories being used to annotate the documents * doc_task: a low-level nltk task object\n\nsource\n\n\nno_maybe_yes_distance\n\n no_maybe_yes_distance (label1, label2)\n\nSimple distance for no / maybe / yes scale used to denote curation task.\nLookup table d(0,0) = 0.0 d(1,1) = 0.0 d(2,2) = 0.0 d(0,1) = 3.0 d(1,2) = 1.0 d(0,2) = 5.0\n\nsource\n\n\nordinal_distance\n\n ordinal_distance (label1, label2)\n\nKrippendorff’s ordinal distance metric Modified from Wikipedia page: https://en.wikipedia.org/wiki/Krippendorff%27s_alpha#Difference_functions"
+  },
+  {
+    "objectID": "disease_research_state_model.html",
+    "href": "disease_research_state_model.html",
+    "title": "Disease Research State Model",
+    "section": "",
+    "text": "source\n\nDRSM\n\n DRSM (dashdb, corpus_id, name, mondo_id, event_lines=[])\n\nThis class provides a model of the state of research into a particular disease (‘Disease Research State Model’) based on broad subtypes of research article present in the literature. It makes use of functionality within the CZ Landscaping Toolkit to search online sources, classify the data it finds, and run analyses over that data.\nThis version is based on some assumptions: (1) data pertaining to a single disease is linked to an entry in a PREFIX_CORPUS table; (2) papers for that disease/corpus are indexed in the PREFIX_CORPUS_PAPERS table; (3) Codes denoting the type of each paper are stored in the PREFIX_DRSM table.\nNote that the time series computation is also simply the difference between matched curves over the publishing timeframe of the analysis.\n\nsource\n\n\nDRSMCollection\n\n DRSMCollection (study_name, corpora_df, name_col='CORPUS_NAME',\n                 mondo_col='MONDO_CURI', query_col='QUERY')\n\nThis class generates and supports analysis the research landscape over a collection of diseases."
+  },
+  {
+    "objectID": "centaurlabutils.html",
+    "href": "centaurlabutils.html",
+    "title": "CentaurLab Utility Tools",
+    "section": "",
+    "text": "source\n\nCentaurLabsDownmUtils\n\n CentaurLabsDownmUtils (centaur_df, html_df)\n\nTools to process and evaluate data downloaded from CentaurLabs’ curation systems\nAttributes: * centaur_df: The dataframe downloaded from Centaurlabs. These have a standard format. * text_df: The dataframe uploaded to Centaurlabs (formatted to hmtl)\n\nsource\n\n\nCentaurLabsUploadUtils\n\n CentaurLabsUploadUtils (df, id_col='ID_PAPER', title_col='Title',\n                         abs_col='Abstract', year_col='YEAR',\n                         dis_col='DISEASE', label_col='LABEL')\n\nTools to provide capabilities to interface dashboard databases with CentaurLabs’ curation systems\nDocumentation: https://docs.centaurlabs.com/\nNote - this requires that an appropriate scispacy language model be loaded.\n%pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.4.0/en_core_sci_lg-0.4.0.tar.gz\nAttributes: * df: The dataframe being processed - expected columns are (A) ID, (B) title, (C) abstract, (D) year, (E) disease, (F) label. These can be specified with other class attributes"
+  },
+  {
+    "objectID": "search_engine_eutils.html",
+    "href": "search_engine_eutils.html",
+    "title": "Search Engine Tools",
+    "section": "",
+    "text": "source\n\n\n\n ESearchQuery (api_key=None, oa=False, db='pubmed')\n\nClass to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids) Each instance of this class executes queries of a given type\n\nsource\n\n\n\n\n NCBI_Database_Type (value, names=None, module=None, qualname=None,\n                     type=None, start=1)\n\nSimple enumeration of the different NCBI databases supported by this tool\n\nsource\n\n\n\n\n EFetchQuery (api_key=None, db='pubmed')\n\nClass to provide query interface for EFetch (i.e., query based on a list of ids) Each instance of this class executes queries of a given type"
+  },
+  {
+    "objectID": "search_engine_eutils.html#ncbi-tools",
+    "href": "search_engine_eutils.html#ncbi-tools",
+    "title": "Search Engine Tools",
+    "section": "",
+    "text": "source\n\n\n\n ESearchQuery (api_key=None, oa=False, db='pubmed')\n\nClass to provide query interface for ESearch (i.e., query terms in elaborate ways, return a list of ids) Each instance of this class executes queries of a given type\n\nsource\n\n\n\n\n NCBI_Database_Type (value, names=None, module=None, qualname=None,\n                     type=None, start=1)\n\nSimple enumeration of the different NCBI databases supported by this tool\n\nsource\n\n\n\n\n EFetchQuery (api_key=None, db='pubmed')\n\nClass to provide query interface for EFetch (i.e., query based on a list of ids) Each instance of this class executes queries of a given type"
+  },
+  {
+    "objectID": "search_engine_eutils.html#europmcquery",
+    "href": "search_engine_eutils.html#europmcquery",
+    "title": "Search Engine Tools",
+    "section": "EuroPMCQuery",
+    "text": "EuroPMCQuery\n\nsource\n\nEuroPMCQuery\n\n EuroPMCQuery (oa=False, db='pubmed')\n\nA class that executes search queries on the European PMC API"
+  },
+  {
+    "objectID": "biolinkutils.html",
+    "href": "biolinkutils.html",
+    "title": "BioLink Query Tools",
+    "section": "",
+    "text": "source\n\nBioLinkUtils\n\n BioLinkUtils (local_files=None)\n\nInitialize self. See help(type(self)) for accurate signature."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Chan Zuckerberg Landscaping Toolkit",
+    "section": "",
+    "text": "In scientific work, context is provided by knowledge of prior work in the field. Traditionally, the repository of that information is the crucible of the published scientific literature, but more recently other online sources may potentially play a role.\nThis project is concerned with the tools needed to build representations of contextual knowledge for CZI’s SciTech and Program efforts as ‘Landscaping’ work. The design goals of this work is to make our tools modular, tailored to the needs of our colleagues, lightweight, and effective. We rely on low-tech, low-lift pieces that we can build on to make more sophisticated systems. We also drive this work as open source development."
+  },
+  {
+    "objectID": "index.html#goal",
+    "href": "index.html#goal",
+    "title": "Chan Zuckerberg Landscaping Toolkit",
+    "section": "Goal",
+    "text": "Goal\nAn analytic task, where we attempt to answer a question by (A) surveying existing data sources, (B) compiling an intermedical knowledge corpus drawn from those sources, (C) analysing that corpus to yield an answer to the question."
+  },
+  {
+    "objectID": "index.html#typical-example",
+    "href": "index.html#typical-example",
+    "title": "Chan Zuckerberg Landscaping Toolkit",
+    "section": "Typical Example",
+    "text": "Typical Example\n\nIdentifying a set of Key Opinion Leaders (KOLs) with specialized expertise in an understudied area.\nPerforming a systematic review of available treatments for a specific rare disease\nDeveloping (and using) reproducible impact metrics for a funded scientific program to study what is working and what is not."
+  },
+  {
+    "objectID": "index.html#terminology-implementation-design",
+    "href": "index.html#terminology-implementation-design",
+    "title": "Chan Zuckerberg Landscaping Toolkit",
+    "section": "Terminology + Implementation Design",
+    "text": "Terminology + Implementation Design\n\nQuestion - A natural language expression of the research question that is the objective of the task\nStudy Data Sources - List of avaiable information sources that can be interrogated by executors of the task\nInformation Retrieval Query (IR Query) - A list of logically-defined queries that can be run over the data sources\nInclusion / Exclusion Criteria - Logical operators to determine if retrieved data should be included in the study\nIntermediate Corpus - Schema and Data of the collection of documents gathered from external information sources\nAnalysis - Workflow specification of analyses to be performed over the intermediate corpus to generate an Answer\nAnswer - The answer to the question expressed in natural language with a full explanation of the provenance of how the answer was computed."
+  },
+  {
+    "objectID": "index.html#organizational-model",
+    "href": "index.html#organizational-model",
+    "title": "Chan Zuckerberg Landscaping Toolkit",
+    "section": "Organizational Model",
+    "text": "Organizational Model\n\n\n\nGeneral proposed workflow for Landscaping systems\n\n\nImage source on LucidDraw: Link\nAdopting the CommonKADS knowledge engineering design process, we consider the interplay between agents (swimlanes), processes, and items in the figure. In particular, we seek to characterize how knowledge is needed, used, or derived in the workflow.\nThe goal of this project is to provide code to execute the processes described above to provide an extensible set of executable computational tools to automate the process shown."
+  }
+]
