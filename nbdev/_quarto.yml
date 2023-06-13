@@ -3,8 +3,7 @@ project:
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme: simplex
     toc: true
 
 website:
